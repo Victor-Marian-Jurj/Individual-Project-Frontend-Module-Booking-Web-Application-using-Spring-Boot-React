@@ -1,0 +1,95 @@
+.book-cover-container {
+  position: relative;
+}
+
+.book-cover {
+  opacity: 1;
+  display: block;
+  transition: 0.5s ease;
+  backface-visibility: hidden;
+}
+
+.book-cover-width {
+  width: 7rem;
+}
+
+.book-cover-height {
+  height: 13rem;
+}
+
+/* Extra small devices (portrait phones) */
+/* No need for media query here, as it's the default styling. */
+
+/* Small devices (landscape phones) */
+@media (min-width: 600px) {
+  /* styles for sm breakpoint */
+  .book-cover-width {
+    width: 8rem;
+  }
+
+  .book-cover-height {
+    height: 13rem;
+  }
+}
+
+/* Medium devices (tablets) */
+@media (min-width: 960px) {
+  .book-cover-width {
+    width: 13rem;
+  }
+
+  .book-cover-height {
+    height: 20rem;
+  }
+  /* styles for md breakpoint */
+}
+
+/* Large devices (desktops, less than 1200px) */
+@media (min-width: 1280px) {
+  .book-cover-width {
+    width: 13rem;
+  }
+
+  .book-cover-height {
+    height: 20rem;
+  }
+  /* styles for lg breakpoint */
+}
+
+/* Extra large devices (large desktops) */
+@media (min-width: 1920px) {
+  .book-cover-width {
+    width: 13rem;
+  }
+
+  .book-cover-height {
+    height: 20rem;
+  }
+  /* styles for xl breakpoint */
+}
+
+.middle {
+  transition: 0.5s ease;
+  opacity: 0;
+  position: absolute;
+  top: 85%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.book-cover-container:hover .book-cover {
+  opacity: 0.3;
+}
+
+.book-cover-container:hover .middle {
+  opacity: 1;
+}
+
+.center-flex-container {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
