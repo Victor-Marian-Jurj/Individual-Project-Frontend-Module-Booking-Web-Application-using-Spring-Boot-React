@@ -1,20 +1,20 @@
-.book-cover-container {
+.hotel-cover-container {
   position: relative;
 }
 
-.book-cover {
+.hotel-cover {
   opacity: 1;
   display: block;
   transition: 0.5s ease;
   backface-visibility: hidden;
 }
 
-.book-cover-width {
-  width: 7rem;
+.hotel-cover-width {
+  width: 10rem;
 }
 
-.book-cover-height {
-  height: 13rem;
+.hotel-cover-height {
+  height: 10rem;
 }
 
 /* Extra small devices (portrait phones) */
@@ -23,22 +23,26 @@
 /* Small devices (landscape phones) */
 @media (min-width: 600px) {
   /* styles for sm breakpoint */
-  .book-cover-width {
+  .hotel
+-cover-width {
     width: 8rem;
   }
 
-  .book-cover-height {
+  .hotel
+-cover-height {
     height: 13rem;
   }
 }
 
 /* Medium devices (tablets) */
 @media (min-width: 960px) {
-  .book-cover-width {
+  .hotel
+-cover-width {
     width: 13rem;
   }
 
-  .book-cover-height {
+  .hotel
+-cover-height {
     height: 20rem;
   }
   /* styles for md breakpoint */
@@ -46,11 +50,13 @@
 
 /* Large devices (desktops, less than 1200px) */
 @media (min-width: 1280px) {
-  .book-cover-width {
+  .hotel
+-cover-width {
     width: 13rem;
   }
 
-  .book-cover-height {
+  .hotel
+-cover-height {
     height: 20rem;
   }
   /* styles for lg breakpoint */
@@ -58,11 +64,13 @@
 
 /* Extra large devices (large desktops) */
 @media (min-width: 1920px) {
-  .book-cover-width {
+  .hotel
+-cover-width {
     width: 13rem;
   }
 
-  .book-cover-height {
+  .hotel
+-cover-height {
     height: 20rem;
   }
   /* styles for xl breakpoint */
@@ -79,11 +87,11 @@
   text-align: center;
 }
 
-.book-cover-container:hover .book-cover {
+.hotel-cover-container:hover .hotel-cover {
   opacity: 0.3;
 }
 
-.book-cover-container:hover .middle {
+.hotel-cover-container:hover .middle {
   opacity: 1;
 }
 

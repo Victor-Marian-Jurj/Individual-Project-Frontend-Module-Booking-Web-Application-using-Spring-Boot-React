@@ -15,7 +15,7 @@ export default function HotelItem({ hotel: hotel }) {
       <div className="hotel-cover-container">
         <img
           className="hotel-cover hotel-cover-width hotel-cover-height"
-          src={`../../images/${hotel.id}.jpg`}
+          src={`../../images/${hotel.hotelId}.jpg`}
           loading="lazy"
           alt="Hotel cover"
         />

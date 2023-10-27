@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import BooksList from "../pages/book/BooksList";
+import HotelsList from "../pages/hotel/HotelsList";
 
 const MainView = () => {
   return (
@@ -8,10 +8,9 @@ const MainView = () => {
       sx={{
         margin: "3rem",
         mt: "5rem",
-        width: "100%",
       }}
     >
-      <BooksList />
+      <HotelsList />
     </Box>
   );
 };

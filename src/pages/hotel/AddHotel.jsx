@@ -3,21 +3,27 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 
-const AddBook = ({ onAddBook }) => {
-  const [title, handleTitleChange] = useInput();
-  const [author, handleAuthorChange] = useInput();
-  const [year, handleYearChange] = useInput();
-  const [isbn, handleISBNChange] = useInput();
+const AddHotel = ({ onAddHotel }) => {
+  const [hotelLocation, handleHotelLocationChange] = useInput();
+  const [hotelName, handleHotelNameChange] = useInput();
+  const [rating, handleRatingChange] = useInput();
+  const [breakfast, handleBreakfastChange] = useInput();
+  const [wifiConnection, handleWifiConnectionChange] = useInput();
+  const [privateParking, handlePrivateParkingChange] = useInput();
+  const [minibar, handleMinibarChange] = useInput();
 
-  const handleAddBook = () => {
-    const book = {
-      title: title,
-      author: author,
-      year: year,
-      isbn: isbn,
+  const handleAddHotel = () => {
+    const Hotel = {
+      hotelLocation: hotelLocation,
+      hotelName: hotelName,
+      rating: rating,
+      breakfast: breakfast,
+      wifiConnection: wifiConnection,
+      privateParking: privateParking,
+      minibar: minibar,
     };
 
-    onAddBook(book);
+    onAddHotel(Hotel);
   };
 
   return (

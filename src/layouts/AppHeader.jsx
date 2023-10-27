@@ -34,7 +34,7 @@ const AppHeader = ({ width, onDrawerToggle }) => {
         </IconButton>
 
         <Typography variant="h6" noWrap component="div">
-          Books
+          Hotels
         </Typography>
       </Toolbar>
     </AppBar>

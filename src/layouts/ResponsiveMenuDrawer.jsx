@@ -30,8 +30,8 @@ const ResponsiveMenuDrawer = () => {
             <UserAvatar />
           </ListItemAvatar>
           <ListItemText
-            primary="Connor Davidson"
-            secondary="connor.davidson@example.com"
+            primary="MarianS"
+            secondary="stoicamarian@yahoo.com"
           />
         </ListItem>
       </List>
@@ -71,7 +71,7 @@ const ResponsiveMenuDrawer = () => {
         }}
       >
         <Button variant="contained" startIcon={<AddIcon />}>
-          New book
+          New Hotel
         </Button>
       </Box>
     </div>

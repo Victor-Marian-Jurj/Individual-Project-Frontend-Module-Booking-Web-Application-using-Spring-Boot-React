@@ -13,7 +13,7 @@ const HotelsList = () => {
     fetch("http://localhost:8080/hotels")
       .then((res) => res.json())
       .then((data) => {
-        const sortedHotels = data.hotel.slice(); // Create a copy to avoid modifying the original data
+        const sortedHotels = data.hotel.slice();
         sortedHotels.sort((a, b) => {
           const aSecondWord = a.hotelName.split(" ")[1];
           const bSecondWord = b.hotelName.split(" ")[1];

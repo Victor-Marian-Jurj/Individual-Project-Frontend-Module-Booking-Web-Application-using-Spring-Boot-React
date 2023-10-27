@@ -14,7 +14,7 @@ const UserAvatar = () => {
       color="success"
       sx={{ marginRight: "8px" }}
     >
-      <Avatar alt="Connor Davidson" src="/static/images/avatar/1.jpg" />
+      <Avatar alt="MarianS" src="/static/images/avatar/1.jpg" />
     </Badge>
   );
 };
