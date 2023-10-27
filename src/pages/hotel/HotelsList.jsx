@@ -8,11 +8,19 @@ import "../../styles/HotelsList.css";
 const HotelsList = () => {
   const [hotels, setHotels] = useState([]);
 
-  //get hotels data on component mount
+  // Get hotels data on component mount
   useEffect(() => {
     fetch("http://localhost:8080/hotels")
       .then((res) => res.json())
-      .then((data) => setHotels(data.hotels.filter((hotel) => hotel.wifiConnection)));
+      .then((data) => {
+        const sortedHotels = data.hotel.slice(); // Create a copy to avoid modifying the original data
+        sortedHotels.sort((a, b) => {
+          const aSecondWord = a.hotelName.split(" ")[1];
+          const bSecondWord = b.hotelName.split(" ")[1];
+          return aSecondWord.localeCompare(bSecondWord);
+        });
+        setHotels(sortedHotels);
+      });
   }, []);
 
   return (
@@ -24,11 +32,13 @@ const HotelsList = () => {
       }}
     >
       {hotels.length === 0 ? (
-        <Box className="center-flex-container ">
+        <Box className="center-flex-container">
           <CircularProgress />
         </Box>
       ) : (
-        hotels.map((hotel) => <HotelItem hotel={hotel} key={hotel.id} />)
+        hotels.map((hotel) => (
+          <HotelItem hotel={hotel} key={hotel.hotelName} />
+        ))
       )}
     </Stack>
   );
