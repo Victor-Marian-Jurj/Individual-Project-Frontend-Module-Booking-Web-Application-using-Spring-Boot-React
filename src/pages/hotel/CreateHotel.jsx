@@ -1,29 +1,50 @@
+import { Snackbar } from "@mui/material";
 import { useInput } from "../../hooks/useInput";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
 
-const AddHotel = ({ onAddHotel }) => {
+const CreateHotel = () => {
   const [hotelLocation, handleHotelLocationChange] = useInput();
   const [hotelName, handleHotelNameChange] = useInput();
   const [rating, handleRatingChange] = useInput();
   const [breakfast, handleBreakfastChange] = useInput();
-  const [wifiConnection, handleWifiConnectionChange] = useInput();
   const [privateParking, handlePrivateParkingChange] = useInput();
   const [minibar, handleMinibarChange] = useInput();
+  const [isOpen, setIsOpen] = useState(false);
 
-  const handleAddHotel = () => {
-    const Hotel = {
+  const navigate = useNavigate();
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  const handleAddHotel = async () => {
+
+    const hotel = {
       hotelLocation: hotelLocation,
       hotelName: hotelName,
-      rating: rating,
+      rating: Number(rating),
       breakfast: breakfast,
-      wifiConnection: wifiConnection,
       privateParking: privateParking,
       minibar: minibar,
     };
 
-    onAddHotel(Hotel);
+    try {
+      await axios.post(
+        "http://localhost:8080/hotels",
+        hotel
+      );
+
+      navigate("/hotels");
+      setIsOpen(true);
+    } catch (error) {
+      console.error(error);
+    } finally {
+    }
   };
 
   return (
@@ -37,6 +58,12 @@ const AddHotel = ({ onAddHotel }) => {
         justifyContent: "center",
       }}
     >
+      <Snackbar
+        open={isOpen}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="Hotel saved successfully!"
+      />
       <h1>Add Hotel</h1>
       <TextField
         variant="outlined"
@@ -46,8 +73,8 @@ const AddHotel = ({ onAddHotel }) => {
       />
       <TextField
         variant="outlined"
-        label="Author"
-        value={author}
+        label="Location"
+        value={hotelLocation}
         onChange={handleHotelLocationChange}
       />
       <TextField
@@ -62,12 +89,12 @@ const AddHotel = ({ onAddHotel }) => {
         value={breakfast}
         onChange={handleBreakfastChange}
       />
-      <TextField
+      {/* <TextField
         variant="outlined"
         label="wificonnection"
         value={wifiConnection}
         onChange={handleWifiConnectionChange}
-      />
+      /> */}
       <TextField
         variant="outlined"
         label="private parking"
@@ -93,4 +120,4 @@ const AddHotel = ({ onAddHotel }) => {
   );
 };
 
-export default AddHotel;
+export default CreateHotel;

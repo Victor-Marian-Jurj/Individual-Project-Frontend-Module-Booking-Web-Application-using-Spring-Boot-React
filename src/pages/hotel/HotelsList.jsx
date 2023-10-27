@@ -4,23 +4,31 @@ import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import HotelItem from "./HotelItem";
 import "../../styles/HotelsList.css";
+import axios from "axios";
 
 const HotelsList = () => {
   const [hotels, setHotels] = useState([]);
 
-  // Get hotels data on component mount
-  useEffect(() => {
-    fetch("http://localhost:8080/hotels")
-      .then((res) => res.json())
-      .then((data) => {
-        const sortedHotels = data.hotel.slice();
-        sortedHotels.sort((a, b) => {
-          const aSecondWord = a.hotelName.split(" ")[1];
-          const bSecondWord = b.hotelName.split(" ")[1];
-          return aSecondWord.localeCompare(bSecondWord);
-        });
-        setHotels(sortedHotels);
+  const getHotels = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/hotels");
+      const data = response.data;
+      const sortedHotels = data.hotel.slice();
+      sortedHotels.sort((a, b) => {
+        const aWords = a.hotelName.split(" ");
+        const bWords = b.hotelName.split(" ");
+        const aSecondWord = aWords[1] || "";
+        const bSecondWord = bWords[1] || "";
+        return aSecondWord.localeCompare(bSecondWord);
       });
+      setHotels(sortedHotels);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    getHotels();
   }, []);
 
   return (
@@ -43,5 +51,6 @@ const HotelsList = () => {
     </Stack>
   );
 };
+
 
 export default HotelsList;

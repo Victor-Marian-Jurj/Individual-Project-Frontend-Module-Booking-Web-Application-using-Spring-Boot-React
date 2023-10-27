@@ -1,8 +1,9 @@
-import { Link, Stack, Typography } from "@mui/material";
+import { Stack, Typography } from "@mui/material";
 import CircleBackgroundIcon from "../../components/CircleBackgroundIcon";
 import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
+import { Link } from "react-router-dom";
 
 export default function HotelItem({ hotel: hotel }) {
   return (
@@ -25,14 +26,18 @@ export default function HotelItem({ hotel: hotel }) {
           spacing={4}
           className="middle"
         >
+          <Link to={`/hotels/${hotel.hotelId}`}>
           <CircleBackgroundIcon icon={VisibilityIcon} color="white" />
+          </Link>
+          <Link to={`/hotels/${hotel.hotelId}/edit`}>
           <CircleBackgroundIcon icon={EditIcon} color="white" />
+          </Link>
           <CircleBackgroundIcon icon={DeleteSharpIcon} color="white" />
         </Stack>
       </div>
 
       <Typography sx={{ fontWeight: "bold" }}>
-        <Link color="black" href="#" underline="none">
+        <Link to={"/hotels/" + hotel.hotelId}>
           {hotel.hotelName} - {hotel.hotelLocation}
         </Link>
       </Typography>
