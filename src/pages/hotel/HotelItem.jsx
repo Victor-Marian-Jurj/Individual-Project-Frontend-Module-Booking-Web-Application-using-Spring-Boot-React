@@ -4,8 +4,39 @@ import DeleteSharpIcon from "@mui/icons-material/DeleteSharp";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import EditIcon from "@mui/icons-material/Edit";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import ConfirmDeleteHotelDialog from "./ConfirmDeleteHotelDialog";
+import { deleteHotel } from "../../service/HotelService";
 
-export default function HotelItem({ hotel: hotel }) {
+export default function HotelItem({ hotel, onGetHotels }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [src, setSrc] = useState(`../../images/${hotel.hotelId}.jpg`);
+
+  const handleImgError = () => {
+    setSrc("../../images/no-image.jpg");
+  };
+
+  const handleOpenDialog = () => {
+    setIsOpen(true);
+  };
+
+  const handleCloseDialog = () => {
+    setIsOpen(false);
+  };
+
+  const handleDeleteHotel = async () => {
+    const hotelId = hotel.hotelId;
+
+    try {
+      await deleteHotel(hotelId);
+      onGetHotels();
+    } catch (err) {
+      console.error(err);
+    } finally {
+      handleCloseDialog();
+    }
+  };
+
   return (
     <Stack
       direction="column"
@@ -16,7 +47,8 @@ export default function HotelItem({ hotel: hotel }) {
       <div className="hotel-cover-container">
         <img
           className="hotel-cover hotel-cover-width hotel-cover-height"
-          src={`../../images/${hotel.hotelId}.jpg`}
+          src={src}
+          onError={handleImgError}
           loading="lazy"
           alt="Hotel cover"
         />
@@ -32,7 +64,17 @@ export default function HotelItem({ hotel: hotel }) {
           <Link to={`/hotels/${hotel.hotelId}/edit`}>
           <CircleBackgroundIcon icon={EditIcon} color="white" />
           </Link>
-          <CircleBackgroundIcon icon={DeleteSharpIcon} color="white" />
+          <CircleBackgroundIcon
+            icon={DeleteSharpIcon}
+            color="white"
+            onClick={handleOpenDialog}
+          />
+          <ConfirmDeleteHotelDialog
+            hotel={hotel}
+            isOpen={isOpen}
+            onDelete={handleDeleteHotel}
+            onClose={handleCloseDialog}
+          />
         </Stack>
       </div>
 

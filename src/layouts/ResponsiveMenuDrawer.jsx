@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 
 const ResponsiveMenuDrawer = () => {
   const menuItems = [
-    { text: "Dashboard", icon: DashboardIcon, path: "/books" },
+    { text: "Dashboard", icon: DashboardIcon, path: "/hotels" },
     { text: "Admin", icon: AdminPanelSettingsIcon, path: "/admin" },
   ];
 

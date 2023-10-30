@@ -1,27 +1,18 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import { useHotelById } from "../../hooks/useHotelById";
+import { CircularProgress } from "@mui/material";
+import HotelForm from "./HotelForm";
 
 const ViewHotel = () => {
   const { hotelId } = useParams();
-  const [hotel, setHotel] = useState({});
+  const { hotel } = useHotelById(hotelId);
 
-  useEffect(() => {
-    const getHotelById = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/hotels/${hotelId}`
-        );
-        setHotel(response.data);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-
-    getHotelById();
-  }, [hotelId]);
-
-  return <div>View hotel with title: {hotel.title} </div>;
+  return hotel ? (
+    <HotelForm formTitle="View hotel" hotel={hotel} isReadonly={true} />
+  ) : (
+    <CircularProgress />
+  );
 };
 
 export default ViewHotel;
