@@ -16,7 +16,7 @@ import {
   
     return (
       <Dialog open={isOpen} onClose={onClose}>
-        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogTitle>Confirm Delete?</DialogTitle>
         <DialogContent>
           <Typography>{`Are you sure you want to delete this hotel:`}</Typography>
           <Typography sx={{ fontWeight: "bold" }}>{hotel.hotelName}</Typography>

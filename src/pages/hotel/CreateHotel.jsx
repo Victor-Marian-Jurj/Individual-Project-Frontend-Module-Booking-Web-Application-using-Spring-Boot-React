@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { postHotel } from "../../service/HotelService";
 import HotelForm from "./HotelForm";
+import { openSnackbar } from "../../stores/snackbarSlice";
+import { useDispatch } from "react-redux";
 
 const CreateHotel = () => {
   const initialHotel = {
@@ -14,7 +16,7 @@ const CreateHotel = () => {
   };
 
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
 
   const handleAddHotel = async (hotelName, hotelLocation, rating, breakfast, privateParking, minibar) => {
     const hotel = {
@@ -28,6 +30,7 @@ const CreateHotel = () => {
 
     try {
       await postHotel(hotel);
+      dispatch(openSnackbar({ text: "Hotel added successfully" }));
       navigate("/hotels");
     } catch (error) {
       console.error(error);

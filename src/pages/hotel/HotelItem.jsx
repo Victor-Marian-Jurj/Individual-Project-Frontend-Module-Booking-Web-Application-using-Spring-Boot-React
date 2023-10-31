@@ -7,10 +7,14 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import ConfirmDeleteHotelDialog from "./ConfirmDeleteHotelDialog";
 import { deleteHotel } from "../../service/HotelService";
+import { useDispatch } from "react-redux";
+import { openSnackbar } from "../../stores/snackbarSlice";
 
 export default function HotelItem({ hotel, onGetHotels }) {
   const [isOpen, setIsOpen] = useState(false);
   const [src, setSrc] = useState(`../../images/${hotel.hotelId}.jpg`);
+
+  const dispatch = useDispatch();
 
   const handleImgError = () => {
     setSrc("../../images/no-image.jpg");
@@ -29,9 +33,13 @@ export default function HotelItem({ hotel, onGetHotels }) {
 
     try {
       await deleteHotel(hotelId);
+      dispatch(openSnackbar({ text: "Hotel deleted successfully" }));
       onGetHotels();
     } catch (err) {
       console.error(err);
+      dispatch(
+        openSnackbar({ text: "Error deleting hotel", severity: "error" })
+      );
     } finally {
       handleCloseDialog();
     }
@@ -55,7 +63,7 @@ export default function HotelItem({ hotel, onGetHotels }) {
         <Stack
           direction="row"
           alignItems="center"
-          spacing={4}
+          spacing={2}
           className="middle"
         >
           <Link to={`/hotels/${hotel.hotelId}`}>
@@ -74,7 +82,11 @@ export default function HotelItem({ hotel, onGetHotels }) {
             isOpen={isOpen}
             onDelete={handleDeleteHotel}
             onClose={handleCloseDialog}
-          />
+          /><CircleBackgroundIcon
+          icon={AddHotelReservation}
+          color="white"
+          onClick={handleHotelReservation}
+        />
         </Stack>
       </div>
 
@@ -83,6 +95,13 @@ export default function HotelItem({ hotel, onGetHotels }) {
           {hotel.hotelName} - {hotel.hotelLocation}
         </Link>
       </Typography>
+
+      <ConfirmDeleteHotelDialog
+        hotel={hotel}
+        isOpen={isOpen}
+        onDelete={handleDeleteHotel}
+        onClose={handleCloseDialog}
+      />
     </Stack>
   );
 }

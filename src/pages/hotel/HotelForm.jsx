@@ -1,5 +1,6 @@
 import { Box, TextField, Button } from "@mui/material";
 import { useInput } from "../../hooks/useInput";
+import { useSelector } from "react-redux";
 
 const HotelForm = ({ hotel, formTitle, onSaveHotel, buttonLabel, isReadonly }) => {
   const [hotelLocation, handleHotelLocationChange] = useInput();
@@ -9,6 +10,9 @@ const HotelForm = ({ hotel, formTitle, onSaveHotel, buttonLabel, isReadonly }) =
   const [breakfast, handleBreakfastChange] = useInput();
   const [privateParking, handlePrivateParkingChange] = useInput();
   const [minibar, handleMinibarChange] = useInput();
+
+  const hotels = useSelector((state) => state.hotelReducer.hotels);
+  console.log(hotels);
 
   return (
     <Box
