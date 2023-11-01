@@ -1,5 +1,5 @@
 import Box from "@mui/material/Box";
-import HotelsList from "../pages/hotel/HotelsList";
+import { Outlet } from "react-router-dom";
 
 const MainView = () => {
   return (
@@ -10,7 +10,7 @@ const MainView = () => {
         mt: "5rem",
       }}
     >
-      <HotelsList />
+      <Outlet />
     </Box>
   );
 };

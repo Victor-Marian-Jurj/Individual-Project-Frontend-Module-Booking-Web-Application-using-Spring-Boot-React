@@ -13,14 +13,16 @@ import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import AddIcon from "@mui/icons-material/Add";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import { Link } from "react-router-dom";
 
 const ResponsiveMenuDrawer = () => {
   const menuItems = [
-    { text: "Dashboard", icon: DashboardIcon },
-    { text: "Admin", icon: AdminPanelSettingsIcon },
+    { text: "Dashboard", icon: DashboardIcon, path: "/hotels" },
+    { text: "Admin", icon: AdminPanelSettingsIcon, path: "/admin" },
   ];
 
-  const accountMenuItems = [{ text: "My account", icon: AccountBoxIcon }];
+  const accountMenuItems = [{ text: "My account", icon: AccountBoxIcon, to: "/account" },
+];
 
   return (
     <div>
@@ -37,26 +39,30 @@ const ResponsiveMenuDrawer = () => {
       </List>
       <Divider />
       <List>
-        {menuItems.map(({ text, icon: ItemIcon }) => (
+        {menuItems.map(({ text, icon: ItemIcon, path }) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 <ItemIcon />
               </ListItemIcon>
+              <Link to={path}>
               <ListItemText primary={text} />
+              </Link>
             </ListItemButton>
           </ListItem>
         ))}
       </List>
       <Divider />
       <List>
-        {accountMenuItems.map(({ text, icon: ItemIcon }) => (
+        {accountMenuItems.map(({ text, icon: ItemIcon, to }) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
               <ListItemIcon>
                 <ItemIcon />
               </ListItemIcon>
+              <Link to={to}>
               <ListItemText primary={text} />
+              </Link>
             </ListItemButton>
           </ListItem>
         ))}
@@ -70,9 +76,11 @@ const ResponsiveMenuDrawer = () => {
           mt: "16px",
         }}
       >
+        <Link to="/hotels/create">
         <Button variant="contained" startIcon={<AddIcon />}>
           New Hotel
         </Button>
+        </Link>
       </Box>
     </div>
   );

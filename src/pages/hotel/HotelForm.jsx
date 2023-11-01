@@ -1,30 +1,18 @@
+import { Box, TextField, Button } from "@mui/material";
 import { useInput } from "../../hooks/useInput";
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
+import { useSelector } from "react-redux";
 
-const AddHotel = ({ onAddHotel }) => {
+const HotelForm = ({ hotel, formTitle, onSaveHotel, buttonLabel, isReadonly }) => {
   const [hotelLocation, handleHotelLocationChange] = useInput();
   const [hotelName, handleHotelNameChange] = useInput();
   const [rating, handleRatingChange] = useInput();
+  // const [wifiConnection, handleWifiConnectionChange] = useInput();
   const [breakfast, handleBreakfastChange] = useInput();
-  const [wifiConnection, handleWifiConnectionChange] = useInput();
   const [privateParking, handlePrivateParkingChange] = useInput();
   const [minibar, handleMinibarChange] = useInput();
 
-  const handleAddHotel = () => {
-    const Hotel = {
-      hotelLocation: hotelLocation,
-      hotelName: hotelName,
-      rating: rating,
-      breakfast: breakfast,
-      wifiConnection: wifiConnection,
-      privateParking: privateParking,
-      minibar: minibar,
-    };
-
-    onAddHotel(Hotel);
-  };
+  const hotels = useSelector((state) => state.hotelReducer.hotels);
+  console.log(hotels);
 
   return (
     <Box
@@ -37,60 +25,68 @@ const AddHotel = ({ onAddHotel }) => {
         justifyContent: "center",
       }}
     >
-      <h1>Add Hotel</h1>
+      <h1>{formTitle}</h1>
       <TextField
         variant="outlined"
+        disabled={isReadonly}
         label="Name"
         value={hotelName}
         onChange={handleHotelNameChange}
       />
       <TextField
         variant="outlined"
-        label="Author"
-        value={author}
+        disabled={isReadonly}
+        label="Location"
+        value={hotelLocation}
         onChange={handleHotelLocationChange}
       />
       <TextField
         variant="outlined"
+        disabled={isReadonly}
         label="Rating"
         value={rating}
         onChange={handleRatingChange}
       />
       <TextField
         variant="outlined"
-        label="breakfast"
+        disabled={isReadonly}
+        label="Breakfast"
         value={breakfast}
         onChange={handleBreakfastChange}
       />
-      <TextField
+      {/* <TextField
         variant="outlined"
         label="wificonnection"
         value={wifiConnection}
         onChange={handleWifiConnectionChange}
-      />
+      /> */}
       <TextField
         variant="outlined"
-        label="private parking"
+        disabled={isReadonly}
+        label="Private parking"
         value={privateParking}
         onChange={handlePrivateParkingChange}
       />
       <TextField
         variant="outlined"
-        label="minibar"
+        disabled={isReadonly}
+        label="Minibar"
         value={minibar}
         onChange={handleMinibarChange}
       />
-      <Button
-        variant="contained"
-        onClick={handleAddHotel}
-        sx={{
-          maxWidth: "100px",
-        }}
-      >
-        Add
-      </Button>
+      {!!buttonLabel && (
+        <Button
+          variant="contained"
+          onClick={() => onSaveHotel(hotelName, hotelLocation, rating, breakfast, privateParking, minibar)}
+          sx={{
+            maxWidth: "100px",
+          }}
+        >
+          {buttonLabel}
+        </Button>
+      )}
     </Box>
   );
 };
 
-export default AddHotel;
+export default HotelForm;
