@@ -9,6 +9,8 @@ import ConfirmDeleteHotelDialog from "./ConfirmDeleteHotelDialog";
 import { deleteHotel } from "../../service/HotelService";
 import { useDispatch } from "react-redux";
 import { openSnackbar } from "../../stores/snackbarSlice";
+import { AddBoxOutlined } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
 export default function HotelItem({ hotel, onGetHotels }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,6 +46,12 @@ export default function HotelItem({ hotel, onGetHotels }) {
       handleCloseDialog();
     }
   };
+
+const navigate = useNavigate();
+
+  const handleHotelReservation = () => {
+    navigate(`/hotels/${hotel.hotelId}/reservation`)
+  }
 
   return (
     <Stack
@@ -83,7 +91,7 @@ export default function HotelItem({ hotel, onGetHotels }) {
             onDelete={handleDeleteHotel}
             onClose={handleCloseDialog}
           /><CircleBackgroundIcon
-          icon={AddHotelReservation}
+          icon={AddBoxOutlined}
           color="white"
           onClick={handleHotelReservation}
         />

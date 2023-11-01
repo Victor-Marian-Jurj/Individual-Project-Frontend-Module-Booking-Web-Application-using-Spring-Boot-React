@@ -4,6 +4,7 @@ import App from "./App";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import HotelsList from "./pages/hotel/HotelsList";
 import CreateHotel from "./pages/hotel/CreateHotel";
+import CreateReservation from "./pages/reservation/CreateReservation";
 import ViewHotel from "./pages/hotel/ViewHotel";
 import EditHotel from "./pages/hotel/EditHotel";
 import AdminPage from "./pages/admin/AdminPage";
