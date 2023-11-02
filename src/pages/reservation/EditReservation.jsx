@@ -1,6 +1,6 @@
 import { Button, CircularProgress } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import ReservationFormUpdate from "./ReservationFormUpdate";
+import ReservationForm from "./ReservationForm";
 import { useReservationById } from "../../hooks/useReservationById";
 import { patchReservation } from "../../service/ReservationService";
 
@@ -8,14 +8,30 @@ const EditReservation = () => {
   const params = useParams();
   const navigate = useNavigate();
   const { reservation } = useReservationById(params.reservationId);
+  console.log(reservation);
 
   const handleCancelClick = () => {
-
-    navigate("/reservations");
+    navigate("/admin");
   };
 
-  const handleSaveReservation = async (userId, hotelId, roomId, checkInDate, checkOutDate, paymentMethod, totalPayment) => {
-    const reservation = {userId ,hotelId ,roomId, checkInDate, checkOutDate, paymentMethod, totalPayment };
+  const handleSaveReservation = async (
+    userId,
+    hotelId,
+    roomId,
+    checkInDate,
+    checkOutDate,
+    paymentMethod,
+    totalPayment
+  ) => {
+    const reservation = {
+      userId,
+      hotelId,
+      roomId,
+      checkInDate,
+      checkOutDate,
+      paymentMethod,
+      totalPayment,
+    };
 
     //TODO: implement PATCH in backend
     try {
@@ -23,15 +39,14 @@ const EditReservation = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      navigate("/hotels/reservation");
+      navigate("/admin");
     }
   };
 
   return reservation ? (
     <div>
       Edit reservation with id: {params.reservationId}
-
-      <ReservationFormUpdate
+      <ReservationForm
         formTitle="Edit reservation"
         reservation={reservation}
         buttonLabel="Edit"

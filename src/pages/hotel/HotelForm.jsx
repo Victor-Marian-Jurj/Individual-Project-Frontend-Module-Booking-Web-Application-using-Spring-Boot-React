@@ -3,13 +3,13 @@ import { useInput } from "../../hooks/useInput";
 import { useSelector } from "react-redux";
 
 const HotelForm = ({ hotel, formTitle, onSaveHotel, buttonLabel, isReadonly }) => {
-  const [hotelLocation, handleHotelLocationChange] = useInput();
-  const [hotelName, handleHotelNameChange] = useInput();
-  const [rating, handleRatingChange] = useInput();
+  const [hotelName, handleHotelNameChange] = useInput(hotel.hotelName);
+  const [hotelLocation, handleHotelLocationChange] = useInput(hotel.hotelLocation);
+  const [rating, handleRatingChange] = useInput(hotel.rating);
   // const [wifiConnection, handleWifiConnectionChange] = useInput();
-  const [breakfast, handleBreakfastChange] = useInput();
-  const [privateParking, handlePrivateParkingChange] = useInput();
-  const [minibar, handleMinibarChange] = useInput();
+  const [breakfast, handleBreakfastChange] = useInput(hotel.breakfast);
+  const [privateParking, handlePrivateParkingChange] = useInput(hotel.privateParking);
+  const [minibar, handleMinibarChange] = useInput(hotel.minibar);
 
   const hotels = useSelector((state) => state.hotelReducer.hotels);
   console.log(hotels);
