@@ -10,11 +10,15 @@ const EditHotel = () => {
   const { hotel } = useHotelById(params.hotelId);
 
   const handleCancelClick = () => {
-
     navigate("/hotels");
   };
 
-  const handleSaveHotel = async (rating, breakfast, privateParking, minibar) => {
+  const handleSaveHotel = async (
+    rating,
+    breakfast,
+    privateParking,
+    minibar
+  ) => {
     const hotel = { rating, breakfast, privateParking, minibar };
 
     //TODO: implement PATCH in backend
@@ -30,7 +34,6 @@ const EditHotel = () => {
   return hotel ? (
     <div>
       Edit hotel with id: {params.hotelId}
-
       <HotelFormEditHotel
         formTitle="Edit hotel"
         hotel={hotel}

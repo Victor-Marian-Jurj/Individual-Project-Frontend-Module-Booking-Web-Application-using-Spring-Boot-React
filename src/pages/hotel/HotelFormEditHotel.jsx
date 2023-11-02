@@ -1,12 +1,22 @@
 import { Box, TextField, Button } from "@mui/material";
 import { useInput } from "../../hooks/useInput";
 
-const HotelFormEditHotel = ({ hotel, formTitle, onSaveHotel, buttonLabel, isReadonly }) => {
-  const [rating, handleRatingChange] = useInput();
-  const [breakfast, handleBreakfastChange] = useInput();
-  const [wifiConnection, handleWifiConnectionChange] = useInput();
-  const [privateParking, handlePrivateParkingChange] = useInput();
-  const [minibar, handleMinibarChange] = useInput();
+const HotelFormEditHotel = ({
+  hotel,
+  formTitle,
+  onSaveHotel,
+  buttonLabel,
+  isReadonly,
+}) => {
+  const [rating, handleRatingChange] = useInput(hotel.rating);
+  const [breakfast, handleBreakfastChange] = useInput(hotel.breakfast);
+  const [wifiConnection, handleWifiConnectionChange] = useInput(
+    hotel.wifiConnection
+  );
+  const [privateParking, handlePrivateParkingChange] = useInput(
+    hotel.privateParking
+  );
+  const [minibar, handleMinibarChange] = useInput(hotel.minibar);
 
   return (
     <Box
@@ -18,7 +28,7 @@ const HotelFormEditHotel = ({ hotel, formTitle, onSaveHotel, buttonLabel, isRead
         alignItem: "center",
         justifyContent: "center",
       }}
-      >
+    >
       <TextField
         variant="outlined"
         disabled={isReadonly}
@@ -57,7 +67,15 @@ const HotelFormEditHotel = ({ hotel, formTitle, onSaveHotel, buttonLabel, isRead
       {!!buttonLabel && (
         <Button
           variant="contained"
-          onClick={() => onSaveHotel(rating, breakfast, wifiConnection, privateParking, minibar)}
+          onClick={() =>
+            onSaveHotel(
+              rating,
+              breakfast,
+              wifiConnection,
+              privateParking,
+              minibar
+            )
+          }
           sx={{
             maxWidth: "100px",
           }}

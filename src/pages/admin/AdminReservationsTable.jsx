@@ -116,8 +116,12 @@ const AdminReservationsTable = () => {
               <TableCell align="right">{reservation.lastName}</TableCell>
               <TableCell align="right">{reservation.hotelName}</TableCell>
               <TableCell align="right">{reservation.hotelLocation}</TableCell>
-              <TableCell align="right">{reservation.checkInDate}</TableCell>
-              <TableCell align="right">{reservation.checkOutDate}</TableCell>
+              <TableCell align="right">
+                {new Date(reservation.checkInDate).toISOString().split("T")[0]}
+              </TableCell>
+              <TableCell align="right">
+                {new Date(reservation.checkOutDate).toISOString().split("T")[0]}
+              </TableCell>
               <TableCell align="right">{reservation.roomNumber}</TableCell>
               <TableCell align="right">{reservation.roomType}</TableCell>
               <TableCell align="right">{reservation.roomPrice}</TableCell>
