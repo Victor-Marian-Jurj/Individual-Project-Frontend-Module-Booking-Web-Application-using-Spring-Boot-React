@@ -28,9 +28,9 @@ const AdminReservationsTable = () => {
 
       if (Array.isArray(reservationsData)) {
         reservationsData.sort((a, b) => {
-          const ratingA = a.hotelId;
-          const ratingB = b.hotelId;
-          return ratingA - ratingB;
+          const usernameA = a.username.toLowerCase();
+          const usernameB = b.username.toLowerCase();
+          return usernameA.localeCompare(usernameB);
         });
 
         setReservations([...reservationsData]);
@@ -87,12 +87,17 @@ const AdminReservationsTable = () => {
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Title</TableCell>
-            <TableCell align="right">User Id</TableCell>
-            <TableCell align="right">Hotel Id</TableCell>
-            <TableCell align="right">Room Id</TableCell>
+            {/* <TableCell>Title</TableCell> */}
+            <TableCell align="right">Username</TableCell>
+            <TableCell align="right">First Name</TableCell>
+            <TableCell align="right">Last Name</TableCell>
+            <TableCell align="right">Hotel Name</TableCell>
+            <TableCell align="right">Hotel Location</TableCell>
             <TableCell align="right">Check-in Date</TableCell>
             <TableCell align="right">Check-out Date</TableCell>
+            <TableCell align="right">Room Number</TableCell>
+            <TableCell align="right">Room Type</TableCell>
+            <TableCell align="right">Room Price</TableCell>
             <TableCell align="right">Payment Method</TableCell>
             <TableCell align="right">Total Payment</TableCell>
           </TableRow>
@@ -103,14 +108,19 @@ const AdminReservationsTable = () => {
               key={reservation.reservationId}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
-              <TableCell component="th" scope="row">
-                {reservation.title}
-              </TableCell>
-              <TableCell align="right">{reservation.userId}</TableCell>
-              <TableCell align="right">{reservation.hotelId}</TableCell>
-              <TableCell align="right">{reservation.roomId}</TableCell>
+              {/* <TableCell component="th" scope="row">
+                Registered reservation
+              </TableCell> */}
+              <TableCell align="right">{reservation.username}</TableCell>
+              <TableCell align="right">{reservation.firstName}</TableCell>
+              <TableCell align="right">{reservation.lastName}</TableCell>
+              <TableCell align="right">{reservation.hotelName}</TableCell>
+              <TableCell align="right">{reservation.hotelLocation}</TableCell>
               <TableCell align="right">{reservation.checkInDate}</TableCell>
               <TableCell align="right">{reservation.checkOutDate}</TableCell>
+              <TableCell align="right">{reservation.roomNumber}</TableCell>
+              <TableCell align="right">{reservation.roomType}</TableCell>
+              <TableCell align="right">{reservation.roomPrice}</TableCell>
               <TableCell align="right">{reservation.paymentMethod}</TableCell>
               <TableCell align="right">{reservation.totalPayment}</TableCell>
               <TableCell align="right">
