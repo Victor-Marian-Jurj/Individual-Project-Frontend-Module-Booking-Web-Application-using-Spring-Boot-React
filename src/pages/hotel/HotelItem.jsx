@@ -47,11 +47,11 @@ export default function HotelItem({ hotel, onGetHotels }) {
     }
   };
 
-const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const handleHotelReservation = () => {
-    navigate(`/hotels/${hotel.hotelId}/reservation`)
-  }
+    navigate(`/hotels/${hotel.hotelId}/reservation`);
+  };
 
   return (
     <Stack
@@ -75,10 +75,10 @@ const navigate = useNavigate();
           className="middle"
         >
           <Link to={`/hotels/${hotel.hotelId}`}>
-          <CircleBackgroundIcon icon={VisibilityIcon} color="white" />
+            <CircleBackgroundIcon icon={VisibilityIcon} color="white" />
           </Link>
           <Link to={`/hotels/${hotel.hotelId}/edit`}>
-          <CircleBackgroundIcon icon={EditIcon} color="white" />
+            <CircleBackgroundIcon icon={EditIcon} color="white" />
           </Link>
           <CircleBackgroundIcon
             icon={DeleteSharpIcon}
@@ -90,11 +90,12 @@ const navigate = useNavigate();
             isOpen={isOpen}
             onDelete={handleDeleteHotel}
             onClose={handleCloseDialog}
-          /><CircleBackgroundIcon
-          icon={AddBoxOutlined}
-          color="white"
-          onClick={handleHotelReservation}
-        />
+          />
+          <CircleBackgroundIcon
+            icon={AddBoxOutlined}
+            color="white"
+            onClick={handleHotelReservation}
+          />
         </Stack>
       </div>
 
