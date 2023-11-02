@@ -1,6 +1,6 @@
 import { Button, CircularProgress } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
-import HotelFormUpdate from "./HotelFormUpdate";
+import HotelFormEditHotel from "./HotelFormEditHotel";
 import { useHotelById } from "../../hooks/useHotelById";
 import { patchHotel } from "../../service/HotelService";
 
@@ -31,7 +31,7 @@ const EditHotel = () => {
     <div>
       Edit hotel with id: {params.hotelId}
 
-      <HotelFormUpdate
+      <HotelFormEditHotel
         formTitle="Edit hotel"
         hotel={hotel}
         buttonLabel="Edit"

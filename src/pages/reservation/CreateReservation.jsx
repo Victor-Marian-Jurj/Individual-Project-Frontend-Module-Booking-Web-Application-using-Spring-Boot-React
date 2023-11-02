@@ -23,25 +23,33 @@ const CreateReservation = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-const handleCancelClick = () => {
+  const handleCancelClick = () => {
+    navigate("/hotels");
+  };
 
-}
-
-  const handleAddReservation = async (userId, hotelId, roomId, checkInDate, checkOutDate, paymentMethod, totalPayment) => {
+  const handleAddReservation = async (
+    userId,
+    hotelId,
+    roomId,
+    checkInDate,
+    checkOutDate,
+    paymentMethod,
+    totalPayment
+  ) => {
     const reservation = {
-      userId: Number(userId),
-      hotelId: Number(hotelId),
-      roomId: Number(roomId),
-      checkInDate: Date(checkInDate),
-      checkOutDate: Date(checkOutDate),
+      userId: userId,
+      hotelId: hotelId,
+      roomId: roomId,
+      checkInDate: checkInDate,
+      checkOutDate: checkOutDate,
       paymentMethod: paymentMethod,
-      totalPayment: Number(totalPayment),
+      totalPayment: totalPayment,
     };
 
     try {
       await postReservation(reservation);
       dispatch(openSnackbar({ text: "Reservation added successfully" }));
-      navigate("/hotels/reservation");
+      navigate("/hotels");
     } catch (error) {
       console.error(error);
     } finally {
@@ -52,9 +60,9 @@ const handleCancelClick = () => {
     <div>
       Add reservation for hotel with id: {params.hotelId}
       <ReservationForm
-        formTitle="Edit Reservation"
+        formTitle="Add Reservation"
         reservation={reservation}
-        buttonLabel="Edit"
+        buttonLabel="Add"
         onSaveReservation={handleAddReservation}
       />
       <Button

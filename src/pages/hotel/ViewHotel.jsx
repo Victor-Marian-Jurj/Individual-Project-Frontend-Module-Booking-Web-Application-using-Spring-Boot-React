@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { useHotelById } from "../../hooks/useHotelById";
 import { CircularProgress } from "@mui/material";

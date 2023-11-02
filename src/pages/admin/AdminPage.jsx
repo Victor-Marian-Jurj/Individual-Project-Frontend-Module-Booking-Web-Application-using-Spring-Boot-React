@@ -1,7 +1,7 @@
-import AdminHotelsTable from "./AdminHotelsTable";
+import AdminResevationsTable from "./AdminReservationsTable";
 
 const AdminPage = () => {
-  return <AdminHotelsTable />;
+  return <AdminResevationsTable />;
 };
 
 export default AdminPage;

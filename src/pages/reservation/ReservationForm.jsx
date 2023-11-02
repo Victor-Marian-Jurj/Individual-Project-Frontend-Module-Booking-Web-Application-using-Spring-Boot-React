@@ -2,16 +2,32 @@ import { Box, TextField, Button } from "@mui/material";
 import { useInput } from "../../hooks/useInput";
 import { useSelector } from "react-redux";
 
-const ReservationForm = ({ reservation, formTitle, onSaveReservation, buttonLabel, isReadonly }) => {
-  const [userId, handleUserIdChange] = useInput();
-  const [hotelId, handleHotelIdChange] = useInput();
-  const [roomId, handleRoomIdChange] = useInput();
-  const [checkInDate, handleCheckInDateChange] = useInput();
-  const [checkOutDate, handleCheckOutDateChange] = useInput();
-  const [paymentMethod, handlePaymentMethodChange] = useInput();
-  const [totalPayment, handleTotalPaymentChange] = useInput();
+const ReservationForm = ({
+  reservation,
+  formTitle,
+  onSaveReservation,
+  buttonLabel,
+  isReadonly,
+}) => {
+  const [userId, handleUserIdChange] = useInput(reservation.userId);
+  const [hotelId, handleHotelIdChange] = useInput(reservation.hotelId);
+  const [roomId, handleRoomIdChange] = useInput(reservation.roomId);
+  const [checkInDate, handleCheckInDateChange] = useInput(
+    reservation.checkInDate
+  );
+  const [checkOutDate, handleCheckOutDateChange] = useInput(
+    reservation.checkOutDate
+  );
+  const [paymentMethod, handlePaymentMethodChange] = useInput(
+    reservation.paymentMethod
+  );
+  const [totalPayment, handleTotalPaymentChange] = useInput(
+    reservation.totalPayment
+  );
 
-  const reservations = useSelector((state) => state.reservationReducer.reservations);
+  const reservations = useSelector(
+    (state) => state.reservationReducer.reservations
+  );
   console.log(reservations);
 
   return (
@@ -78,7 +94,17 @@ const ReservationForm = ({ reservation, formTitle, onSaveReservation, buttonLabe
       {!!buttonLabel && (
         <Button
           variant="contained"
-          onClick={() => onSaveReservation(userId, hotelId, roomId, checkInDate, checkOutDate, paymentMethod, totalPayment)}
+          onClick={() =>
+            onSaveReservation(
+              userId,
+              hotelId,
+              roomId,
+              checkInDate,
+              checkOutDate,
+              paymentMethod,
+              totalPayment
+            )
+          }
           sx={{
             maxWidth: "100px",
           }}

@@ -1,7 +1,7 @@
 import { Box, TextField, Button } from "@mui/material";
 import { useInput } from "../../hooks/useInput";
 
-const HotelFormUpdate = ({ hotel, formTitle, onSaveHotel, buttonLabel, isReadonly }) => {
+const HotelFormEditHotel = ({ hotel, formTitle, onSaveHotel, buttonLabel, isReadonly }) => {
   const [rating, handleRatingChange] = useInput();
   const [breakfast, handleBreakfastChange] = useInput();
   const [wifiConnection, handleWifiConnectionChange] = useInput();
@@ -69,4 +69,4 @@ const HotelFormUpdate = ({ hotel, formTitle, onSaveHotel, buttonLabel, isReadonl
   );
 };
 
-export default HotelFormUpdate;
+export default HotelFormEditHotel;

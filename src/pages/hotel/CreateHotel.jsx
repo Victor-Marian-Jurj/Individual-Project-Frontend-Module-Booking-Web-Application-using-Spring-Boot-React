@@ -45,6 +45,7 @@ const CreateHotel = () => {
       buttonLabel="Add"
       onSaveHotel={handleAddHotel}
     />
+    
   );
 };
 

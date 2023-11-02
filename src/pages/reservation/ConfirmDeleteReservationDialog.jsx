@@ -19,7 +19,7 @@ import {
         <DialogTitle>Confirm Delete?</DialogTitle>
         <DialogContent>
           <Typography>{`Are you sure you want to delete this reservation:`}</Typography>
-          <Typography sx={{ fontWeight: "bold" }}>{reservation.reservationName}</Typography>
+          <Typography sx={{ fontWeight: "bold" }}>{reservation.reservationId}</Typography>
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}>Cancel</Button>
