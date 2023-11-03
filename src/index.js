@@ -28,8 +28,8 @@ const router = createBrowserRouter([
         path: "/reservations/:reservationId/edit",
         element: <EditReservation />,
       },
-      { path: "/admin", element: <AdminPage /> },
-      { path: "/account", element: <div>Account</div> },
+      { path: "/reservations", element: <AdminPage /> },
+      // { path: "/account", element: <div>Account</div> },
     ],
   },
 ]);

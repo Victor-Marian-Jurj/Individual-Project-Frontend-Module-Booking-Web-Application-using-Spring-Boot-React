@@ -85,21 +85,45 @@ const AdminReservationsTable = () => {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
-        <TableHead>
+        <TableHead sx={{ backgroundColor: "black" }}>
           <TableRow>
             {/* <TableCell>Title</TableCell> */}
-            <TableCell align="right">Username</TableCell>
-            <TableCell align="right">First Name</TableCell>
-            <TableCell align="right">Last Name</TableCell>
-            <TableCell align="right">Hotel Name</TableCell>
-            <TableCell align="right">Hotel Location</TableCell>
-            <TableCell align="right">Check-in Date</TableCell>
-            <TableCell align="right">Check-out Date</TableCell>
-            <TableCell align="right">Room Number</TableCell>
-            <TableCell align="right">Room Type</TableCell>
-            <TableCell align="right">Room Price</TableCell>
-            <TableCell align="right">Payment Method</TableCell>
-            <TableCell align="right">Total Payment</TableCell>
+            <TableCell align="right" sx={{ color: "white" }}>
+              Username
+            </TableCell>
+            <TableCell align="right" sx={{ color: "white" }}>
+              First Name
+            </TableCell>
+            <TableCell align="right" sx={{ color: "white" }}>
+              Last Name
+            </TableCell>
+            <TableCell align="right" sx={{ color: "white" }}>
+              Hotel Name
+            </TableCell>
+            <TableCell align="right" sx={{ color: "white" }}>
+              Hotel Location
+            </TableCell>
+            <TableCell align="right" sx={{ color: "white" }}>
+              Check-in Date
+            </TableCell>
+            <TableCell align="right" sx={{ color: "white" }}>
+              Check-out Date
+            </TableCell>
+            <TableCell align="right" sx={{ color: "white" }}>
+              Room Number
+            </TableCell>
+            <TableCell align="right" sx={{ color: "white" }}>
+              Room Type
+            </TableCell>
+            <TableCell align="right" sx={{ color: "white" }}>
+              Room Price
+            </TableCell>
+            <TableCell align="right" sx={{ color: "white" }}>
+              Payment Method
+            </TableCell>
+            <TableCell align="right" sx={{ color: "white" }}>
+              Total Payment
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
