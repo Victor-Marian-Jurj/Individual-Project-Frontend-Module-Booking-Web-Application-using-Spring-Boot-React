@@ -9,20 +9,22 @@ import Button from "@mui/material/Button";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import UserAvatar from "../components/UserAvatar";
 
-import AccountBoxIcon from "@mui/icons-material/AccountBox";
+// import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import AddIcon from "@mui/icons-material/Add";
-import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
-import DashboardIcon from "@mui/icons-material/Dashboard";
+import HotelIcon from "@mui/icons-material/Hotel";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+// import DashboardIcon from "@mui/icons-material/Dashboard";
 import { Link } from "react-router-dom";
 
 const ResponsiveMenuDrawer = () => {
   const menuItems = [
-    { text: "Dashboard", icon: DashboardIcon, path: "/hotels" },
-    { text: "Admin", icon: AdminPanelSettingsIcon, path: "/admin" },
+    { text: "Hotels", icon: HotelIcon, path: "/hotels" },
+    { text: "Reservations", icon: CheckCircleIcon, path: "/reservations" },
   ];
 
-  const accountMenuItems = [{ text: "My account", icon: AccountBoxIcon, to: "/account" },
-];
+  const accountMenuItems = [
+    // { text: "My account", icon: AccountBoxIcon, to: "/account" },
+  ];
 
   return (
     <div>
@@ -31,10 +33,7 @@ const ResponsiveMenuDrawer = () => {
           <ListItemAvatar>
             <UserAvatar />
           </ListItemAvatar>
-          <ListItemText
-            primary="MarianS"
-            secondary="stoicamarian@yahoo.com"
-          />
+          <ListItemText primary="MarianS" secondary="stoicamarian@yahoo.com" />
         </ListItem>
       </List>
       <Divider />
@@ -46,7 +45,7 @@ const ResponsiveMenuDrawer = () => {
                 <ItemIcon />
               </ListItemIcon>
               <Link to={path}>
-              <ListItemText primary={text} />
+                <ListItemText primary={text} />
               </Link>
             </ListItemButton>
           </ListItem>
@@ -61,7 +60,7 @@ const ResponsiveMenuDrawer = () => {
                 <ItemIcon />
               </ListItemIcon>
               <Link to={to}>
-              <ListItemText primary={text} />
+                <ListItemText primary={text} />
               </Link>
             </ListItemButton>
           </ListItem>
@@ -77,9 +76,9 @@ const ResponsiveMenuDrawer = () => {
         }}
       >
         <Link to="/hotels/create">
-        <Button variant="contained" startIcon={<AddIcon />}>
-          New Hotel
-        </Button>
+          <Button variant="contained" startIcon={<AddIcon />}>
+            New Hotel
+          </Button>
         </Link>
       </Box>
     </div>
