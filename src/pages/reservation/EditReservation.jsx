@@ -11,7 +11,7 @@ const EditReservation = () => {
   console.log(reservation);
 
   const handleCancelClick = () => {
-    navigate("/admin");
+    navigate("/reservations");
   };
 
   const handleSaveReservation = async (
@@ -39,7 +39,7 @@ const EditReservation = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      navigate("/admin");
+      navigate("/reservations");
     }
   };
 
