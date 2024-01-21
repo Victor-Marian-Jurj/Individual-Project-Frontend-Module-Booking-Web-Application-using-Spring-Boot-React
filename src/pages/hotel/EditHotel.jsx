@@ -16,10 +16,17 @@ const EditHotel = () => {
   const handleSaveHotel = async (
     rating,
     breakfast,
+    wifiConnection,
     privateParking,
     minibar
   ) => {
-    const hotel = { rating, breakfast, privateParking, minibar };
+    const hotel = {
+      rating,
+      breakfast,
+      wifiConnection,
+      privateParking,
+      minibar,
+    };
 
     //TODO: implement PATCH in backend
     try {
