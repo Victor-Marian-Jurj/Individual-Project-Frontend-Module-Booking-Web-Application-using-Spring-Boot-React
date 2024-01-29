@@ -13,6 +13,10 @@ const HotelForm = ({
   const [hotelLocation, handleHotelLocationChange] = useInput(
     hotel.hotelLocation
   );
+  const [latitude, handleLatitudeChange] = useInput(hotel.latitude);
+
+  const [longitude, handleLongitudeChange] = useInput(hotel.longitude);
+
   const [rating, handleRatingChange] = useInput(hotel.rating);
   const [wifiConnection, handleWifiConnectionChange] = useInput(
     hotel.wifiConnection
@@ -52,6 +56,23 @@ const HotelForm = ({
         value={hotelLocation}
         onChange={handleHotelLocationChange}
       />
+
+      <TextField
+        variant="outlined"
+        disabled={isReadonly}
+        label="Latitude"
+        value={latitude}
+        onChange={handleLatitudeChange}
+      />
+
+      <TextField
+        variant="outlined"
+        disabled={isReadonly}
+        label="Longitude"
+        value={longitude}
+        onChange={handleLongitudeChange}
+      />
+
       <TextField
         variant="outlined"
         disabled={isReadonly}
@@ -94,6 +115,8 @@ const HotelForm = ({
             onSaveHotel(
               hotelName,
               hotelLocation,
+              latitude,
+              longitude,
               rating,
               breakfast,
               wifiConnection,
