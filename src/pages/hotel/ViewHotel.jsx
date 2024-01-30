@@ -1,32 +1,50 @@
-// import { useParams } from "react-router-dom";
-import { useHotelById } from "../../hooks/useHotelById";
-// import { CircularProgress } from "@mui/material";
-import HotelForm from "./HotelForm";
+import React from "react";
 import { Button, CircularProgress } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
+import HotelForm from "./HotelForm";
+import MapComponent from "../../components/GoogleMap";
+import { useHotelById } from "../../hooks/useHotelById";
 
 const ViewHotel = () => {
   const { hotelId } = useParams();
-  const { hotel } = useHotelById(hotelId);
+  const { hotel, loading } = useHotelById(hotelId);
   const navigate = useNavigate();
 
   const handleCancelClick = () => {
     navigate("/hotels");
   };
 
-  return hotel ? (
-    <div>
-      <HotelForm formTitle="View hotel" hotel={hotel} isReadonly={true} />
-      <Button
-        variant="outlined"
-        onClick={handleCancelClick}
-        sx={{ mt: "16px" }}
-      >
-        Cancel
-      </Button>
+  return (
+    <div style={{ display: "flex" }}>
+      {loading ? (
+        <CircularProgress />
+      ) : hotel ? (
+        <>
+          <div style={{ flex: 1, marginRight: "16px", marginBottom: "16px" }}>
+            <HotelForm formTitle="View hotel" hotel={hotel} isReadonly={true} />
+            <Button
+              variant="outlined"
+              onClick={handleCancelClick}
+              sx={{ mt: "16px" }}
+            >
+              Cancel
+            </Button>
+          </div>
+          <div style={{ flex: 1, marginLeft: "100px", marginTop: "100px" }}>
+            <MapComponent
+              latitude={hotel.latitude}
+              longitude={hotel.longitude}
+              containerElement={
+                <div style={{ height: "620px", width: "400px" }} />
+              }
+              mapElement={<div style={{ height: "100%" }} />}
+            />
+          </div>
+        </>
+      ) : (
+        <p>Hotel not found.</p>
+      )}
     </div>
-  ) : (
-    <CircularProgress />
   );
 };
 
