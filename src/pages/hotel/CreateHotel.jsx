@@ -3,25 +3,42 @@ import { postHotel } from "../../service/HotelService";
 import HotelForm from "./HotelForm";
 import { openSnackbar } from "../../stores/snackbarSlice";
 import { useDispatch } from "react-redux";
+import { Button } from "@mui/material";
 
 const CreateHotel = () => {
   const initialHotel = {
     Name: "",
     Location: "",
+    Latitude: "",
+    Longitude: "",
     Rating: "",
     Breakfast: "",
     PrivateParking: "",
     Minibar: "",
-    
   };
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const handleAddHotel = async (hotelName, hotelLocation, rating, breakfast, privateParking, minibar) => {
+  const handleCancelClick = () => {
+    navigate("/hotels");
+  };
+
+  const handleAddHotel = async (
+    hotelName,
+    hotelLocation,
+    latitude,
+    longitude,
+    rating,
+    breakfast,
+    privateParking,
+    minibar
+  ) => {
     const hotel = {
       hotelName: hotelName,
       hotelLocation: hotelLocation,
+      latitude: Number(latitude),
+      longitude: Number(longitude),
       rating: Number(rating),
       breakfast: breakfast,
       privateParking: privateParking,
@@ -39,13 +56,21 @@ const CreateHotel = () => {
   };
 
   return (
-    <HotelForm
-      formTitle="Add hotel"
-      hotel={initialHotel}
-      buttonLabel="Add"
-      onSaveHotel={handleAddHotel}
-    />
-    
+    <div>
+      <HotelForm
+        formTitle="Add hotel"
+        hotel={initialHotel}
+        buttonLabel="Add"
+        onSaveHotel={handleAddHotel}
+      />
+      <Button
+        variant="outlined"
+        onClick={handleCancelClick}
+        sx={{ mt: "16px" }}
+      >
+        Cancel
+      </Button>
+    </div>
   );
 };
 

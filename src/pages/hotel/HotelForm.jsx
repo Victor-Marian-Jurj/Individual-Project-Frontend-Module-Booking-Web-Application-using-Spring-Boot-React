@@ -2,13 +2,29 @@ import { Box, TextField, Button } from "@mui/material";
 import { useInput } from "../../hooks/useInput";
 import { useSelector } from "react-redux";
 
-const HotelForm = ({ hotel, formTitle, onSaveHotel, buttonLabel, isReadonly }) => {
+const HotelForm = ({
+  hotel,
+  formTitle,
+  onSaveHotel,
+  buttonLabel,
+  isReadonly,
+}) => {
   const [hotelName, handleHotelNameChange] = useInput(hotel.hotelName);
-  const [hotelLocation, handleHotelLocationChange] = useInput(hotel.hotelLocation);
+  const [hotelLocation, handleHotelLocationChange] = useInput(
+    hotel.hotelLocation
+  );
+  const [latitude, handleLatitudeChange] = useInput(hotel.latitude);
+
+  const [longitude, handleLongitudeChange] = useInput(hotel.longitude);
+
   const [rating, handleRatingChange] = useInput(hotel.rating);
-  // const [wifiConnection, handleWifiConnectionChange] = useInput();
+  const [wifiConnection, handleWifiConnectionChange] = useInput(
+    hotel.wifiConnection
+  );
   const [breakfast, handleBreakfastChange] = useInput(hotel.breakfast);
-  const [privateParking, handlePrivateParkingChange] = useInput(hotel.privateParking);
+  const [privateParking, handlePrivateParkingChange] = useInput(
+    hotel.privateParking
+  );
   const [minibar, handleMinibarChange] = useInput(hotel.minibar);
 
   const hotels = useSelector((state) => state.hotelReducer.hotels);
@@ -40,6 +56,23 @@ const HotelForm = ({ hotel, formTitle, onSaveHotel, buttonLabel, isReadonly }) =
         value={hotelLocation}
         onChange={handleHotelLocationChange}
       />
+
+      <TextField
+        variant="outlined"
+        disabled={isReadonly}
+        label="Latitude"
+        value={latitude}
+        onChange={handleLatitudeChange}
+      />
+
+      <TextField
+        variant="outlined"
+        disabled={isReadonly}
+        label="Longitude"
+        value={longitude}
+        onChange={handleLongitudeChange}
+      />
+
       <TextField
         variant="outlined"
         disabled={isReadonly}
@@ -54,12 +87,13 @@ const HotelForm = ({ hotel, formTitle, onSaveHotel, buttonLabel, isReadonly }) =
         value={breakfast}
         onChange={handleBreakfastChange}
       />
-      {/* <TextField
+      <TextField
         variant="outlined"
-        label="wificonnection"
+        disabled={isReadonly}
+        label="Wifi connection"
         value={wifiConnection}
         onChange={handleWifiConnectionChange}
-      /> */}
+      />
       <TextField
         variant="outlined"
         disabled={isReadonly}
@@ -77,7 +111,19 @@ const HotelForm = ({ hotel, formTitle, onSaveHotel, buttonLabel, isReadonly }) =
       {!!buttonLabel && (
         <Button
           variant="contained"
-          onClick={() => onSaveHotel(hotelName, hotelLocation, rating, breakfast, privateParking, minibar)}
+          onClick={() =>
+            onSaveHotel(
+              hotelName,
+              hotelLocation,
+              latitude,
+              longitude,
+              rating,
+              breakfast,
+              wifiConnection,
+              privateParking,
+              minibar
+            )
+          }
           sx={{
             maxWidth: "100px",
           }}

@@ -47,7 +47,7 @@ const HotelFormEditHotel = ({
         variant="outlined"
         disabled={isReadonly}
         label="WiFi connection"
-        value={true}
+        value={wifiConnection}
         onChange={handleWifiConnectionChange}
       />
       <TextField
