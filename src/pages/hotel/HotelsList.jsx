@@ -325,7 +325,7 @@ const HotelsList = () => {
           ))
         )}
       </Stack>
-      <GeneratePDFButton savedData={filteredHotels} />
+      <GeneratePDFButton getFilteredHotels={getFilteredHotels} />
     </div>
   );
 };

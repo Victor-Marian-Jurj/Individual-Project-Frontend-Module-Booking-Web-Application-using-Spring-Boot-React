@@ -9,6 +9,7 @@ import {
   StyleSheet,
   pdf,
 } from "@react-pdf/renderer";
+import { Typography } from "@mui/material";
 
 const styles = StyleSheet.create({
   page: {
@@ -58,12 +59,12 @@ const MyDocument = ({ data }) => (
         <View style={styles.table}>
           {/* Table Header */}
           <View style={styles.tableRow}>
-            <Text style={styles.tableHeader}>Hotel Name</Text>
-            <Text style={styles.tableHeader}>Location</Text>
+            <Text style={styles.tableHeader}>Hotel name</Text>
+            <Text style={styles.tableHeader}>Hotel location</Text>
             <Text style={styles.tableHeader}>Rating</Text>
             <Text style={styles.tableHeader}>Breakfast</Text>
-            <Text style={styles.tableHeader}>WiFi</Text>
-            <Text style={styles.tableHeader}>Parking</Text>
+            <Text style={styles.tableHeader}>Wifi connection</Text>
+            <Text style={styles.tableHeader}>Private parking</Text>
             <Text style={styles.tableHeader}>Minibar</Text>
           </View>
           {/* Table Body */}
@@ -73,16 +74,16 @@ const MyDocument = ({ data }) => (
               <Text style={styles.tableCell}>{hotel.hotelLocation}</Text>
               <Text style={styles.tableCell}>{hotel.rating}</Text>
               <Text style={styles.tableCell}>
-                {hotel.breakfast ? "Yes" : "No"}
+                {hotel.breakfast ? "True" : "False"}
               </Text>
               <Text style={styles.tableCell}>
-                {hotel.wifiConnection ? "Yes" : "No"}
+                {hotel.wifiConnection ? "True" : "False"}
               </Text>
               <Text style={styles.tableCell}>
-                {hotel.privateParking ? "Yes" : "No"}
+                {hotel.privateParking ? "True" : "False"}
               </Text>
               <Text style={styles.tableCell}>
-                {hotel.minibar ? "Yes" : "No"}
+                {hotel.minibar ? "True" : "False"}
               </Text>
             </View>
           ))}
@@ -92,9 +93,9 @@ const MyDocument = ({ data }) => (
   </Document>
 );
 
-const GeneratePDFButton = ({ savedData }) => {
+const GeneratePDFButton = ({ getFilteredHotels }) => {
   const handleGeneratePDF = () => {
-    const pdfContent = <MyDocument data={savedData} />;
+    const pdfContent = <MyDocument data={getFilteredHotels()} />;
 
     // Convert the react-pdf component to blob
     pdf(pdfContent)
@@ -107,9 +108,15 @@ const GeneratePDFButton = ({ savedData }) => {
 
   return (
     <div>
-      <Button variant="contained" onClick={handleGeneratePDF}>
-        Generate PDF
-      </Button>
+      <Typography variant="body2">
+        <Button
+          variant="contained"
+          onClick={handleGeneratePDF}
+          sx={{ width: "20%", display: "block" }}
+        >
+          Generate PDF with Filtered Hotels
+        </Button>
+      </Typography>
     </div>
   );
 };
