@@ -9,6 +9,7 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
+import GeneratePDFButton from "./GeneratePDFButton"; // Import GeneratePDFButton component
 
 const HotelsList = () => {
   const [nameFilterOptions, setNameFilterOptions] = useState([""]);
@@ -21,6 +22,7 @@ const HotelsList = () => {
   const [breakfastFilter, setBreakfastFilter] = useState("");
   const [parkingFilter, setParkingFilter] = useState("");
   const [minibarFilter, setMinibarFilter] = useState("");
+  const [filteredHotels, setFilteredHotels] = useState([]); // State variable to hold filtered hotel data
 
   const fetchHotelData = async () => {
     try {
@@ -148,6 +150,38 @@ const HotelsList = () => {
     // Get distinct values based on the current filter settings and location
     const distinctRatings = getDistinctValues("rating", options);
     setRatingFilterOptions(["All", ...distinctRatings]);
+  };
+
+  useEffect(() => {
+    fetchHotelData();
+  }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [
+    hotels,
+    locationFilter,
+    nameFilter,
+    ratingFilter,
+    breakfastFilter,
+    wifiFilter,
+    parkingFilter,
+    minibarFilter,
+  ]);
+
+  const applyFilters = () => {
+    const filtered = hotels.filter((hotel) => {
+      return (
+        (!locationFilter || hotel.hotelLocation.includes(locationFilter)) &&
+        (!nameFilter || hotel.hotelName.includes(nameFilter)) &&
+        (!ratingFilter || hotel.rating.toString() === ratingFilter) &&
+        (!breakfastFilter || hotel.breakfast.toString() === breakfastFilter) &&
+        (!wifiFilter || hotel.wifiConnection.toString() === wifiFilter) &&
+        (!parkingFilter || hotel.privateParking.toString() === parkingFilter) &&
+        (!minibarFilter || hotel.minibar.toString() === minibarFilter)
+      );
+    });
+    setFilteredHotels(filtered);
   };
 
   return (
@@ -291,6 +325,7 @@ const HotelsList = () => {
           ))
         )}
       </Stack>
+      <GeneratePDFButton savedData={filteredHotels} />
     </div>
   );
 };
