@@ -35,7 +35,7 @@ const ViewHotel = () => {
               latitude={hotel.latitude}
               longitude={hotel.longitude}
               containerElement={
-                <div style={{ height: "620px", width: "400px" }} />
+                <div style={{ height: "540px", width: "400px" }} />
               }
               mapElement={<div style={{ height: "100%" }} />}
             />
