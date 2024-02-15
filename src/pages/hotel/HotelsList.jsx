@@ -9,6 +9,7 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
+import GeneratePDFButton from "./GeneratePDFButton"; // Import GeneratePDFButton component
 
 const HotelsList = () => {
   const [nameFilterOptions, setNameFilterOptions] = useState([""]);
@@ -21,6 +22,7 @@ const HotelsList = () => {
   const [breakfastFilter, setBreakfastFilter] = useState("");
   const [parkingFilter, setParkingFilter] = useState("");
   const [minibarFilter, setMinibarFilter] = useState("");
+  const [filteredHotels, setFilteredHotels] = useState([]); // State variable to hold filtered hotel data
 
   const fetchHotelData = async () => {
     try {
@@ -150,6 +152,38 @@ const HotelsList = () => {
     setRatingFilterOptions(["All", ...distinctRatings]);
   };
 
+  useEffect(() => {
+    fetchHotelData();
+  }, []);
+
+  useEffect(() => {
+    applyFilters();
+  }, [
+    hotels,
+    locationFilter,
+    nameFilter,
+    ratingFilter,
+    breakfastFilter,
+    wifiFilter,
+    parkingFilter,
+    minibarFilter,
+  ]);
+
+  const applyFilters = () => {
+    const filtered = hotels.filter((hotel) => {
+      return (
+        (!locationFilter || hotel.hotelLocation.includes(locationFilter)) &&
+        (!nameFilter || hotel.hotelName.includes(nameFilter)) &&
+        (!ratingFilter || hotel.rating.toString() === ratingFilter) &&
+        (!breakfastFilter || hotel.breakfast.toString() === breakfastFilter) &&
+        (!wifiFilter || hotel.wifiConnection.toString() === wifiFilter) &&
+        (!parkingFilter || hotel.privateParking.toString() === parkingFilter) &&
+        (!minibarFilter || hotel.minibar.toString() === minibarFilter)
+      );
+    });
+    setFilteredHotels(filtered);
+  };
+
   return (
     <div>
       <Typography variant="h5" sx={{ color: "#3f51b5", marginBottom: "10px" }}>
@@ -161,7 +195,7 @@ const HotelsList = () => {
             value={locationFilter}
             onChange={(e) => handleLocationChange(e.target.value)}
             select
-            sx={{ width: "150px", marginLeft: "10px" }}
+            sx={{ width: "150px" }}
           >
             <MenuItem value="">All</MenuItem>
             {getDistinctValues("hotelLocation").map((location) => (
@@ -175,7 +209,7 @@ const HotelsList = () => {
             value={nameFilter}
             onChange={(e) => handleNameChange(e.target.value)}
             select
-            sx={{ width: "150px", marginLeft: "10px" }}
+            sx={{ width: "150px", marginLeft: "12px" }}
           >
             {nameFilterOptions.map((name) => (
               <MenuItem key={name} value={name}>
@@ -188,7 +222,7 @@ const HotelsList = () => {
             value={ratingFilter}
             onChange={(e) => setRatingFilter(e.target.value)}
             select
-            sx={{ width: "150px", marginLeft: "10px" }}
+            sx={{ width: "150px", marginLeft: "12px" }}
           >
             {ratingFilterOptions.map((rating) => (
               <MenuItem key={rating} value={rating}>
@@ -201,7 +235,7 @@ const HotelsList = () => {
             value={breakfastFilter}
             onChange={(e) => setBreakfastFilter(e.target.value)}
             select
-            sx={{ width: "150px", marginLeft: "10px" }}
+            sx={{ width: "150px", marginLeft: "12px" }}
           >
             <MenuItem value="">All</MenuItem>
             <MenuItem value="true">Yes</MenuItem>
@@ -217,7 +251,7 @@ const HotelsList = () => {
             value={wifiFilter}
             onChange={(e) => setWifiFilter(e.target.value)}
             select
-            sx={{ width: "150px", marginLeft: "10px" }}
+            sx={{ width: "150px", marginLeft: "12px" }}
           >
             <MenuItem value="">All</MenuItem>
             <MenuItem value="true">Yes</MenuItem>
@@ -233,7 +267,7 @@ const HotelsList = () => {
             value={parkingFilter}
             onChange={(e) => setParkingFilter(e.target.value)}
             select
-            sx={{ width: "150px", marginLeft: "10px" }}
+            sx={{ width: "150px", marginLeft: "12px" }}
           >
             <MenuItem value="">All</MenuItem>
             <MenuItem value="true">Yes</MenuItem>
@@ -249,7 +283,7 @@ const HotelsList = () => {
             value={minibarFilter}
             onChange={(e) => setMinibarFilter(e.target.value)}
             select
-            sx={{ width: "150px", marginLeft: "10px" }}
+            sx={{ width: "150px", marginLeft: "12px" }}
           >
             <MenuItem value="">All</MenuItem>
             <MenuItem value="true">Yes</MenuItem>
@@ -260,6 +294,8 @@ const HotelsList = () => {
               </MenuItem>
             ))}
           </TextField>
+          <GeneratePDFButton getFilteredHotels={getFilteredHotels} />
+
           {/* Add similar select components for other filters */}
         </div>
       </Typography>
