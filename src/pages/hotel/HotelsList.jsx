@@ -9,7 +9,7 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import GeneratePDFButton from "./GeneratePDFButton"; // Import GeneratePDFButton component
+import GeneratePDFButton from "./HotelPDFButton"; // Import GeneratePDFButton component
 
 const HotelsList = () => {
   const [nameFilterOptions, setNameFilterOptions] = useState([""]);
@@ -238,13 +238,8 @@ const HotelsList = () => {
             sx={{ width: "150px", marginLeft: "12px" }}
           >
             <MenuItem value="">All</MenuItem>
-            <MenuItem value="true">Yes</MenuItem>
-            <MenuItem value="false">No</MenuItem>{" "}
-            {getDistinctValues("breakfast").map((breakfast) => (
-              <MenuItem key={breakfast} value={breakfast}>
-                {breakfast}
-              </MenuItem>
-            ))}
+            <MenuItem value="true">True</MenuItem>
+            <MenuItem value="false">False</MenuItem>
           </TextField>
           <TextField
             label="Wifi connection"
@@ -254,13 +249,8 @@ const HotelsList = () => {
             sx={{ width: "150px", marginLeft: "12px" }}
           >
             <MenuItem value="">All</MenuItem>
-            <MenuItem value="true">Yes</MenuItem>
-            <MenuItem value="false">No</MenuItem>{" "}
-            {getDistinctValues("wifiConnection").map((wifiConnection) => (
-              <MenuItem key={wifiConnection} value={wifiConnection}>
-                {wifiConnection}
-              </MenuItem>
-            ))}
+            <MenuItem value="true">True</MenuItem>
+            <MenuItem value="false">False</MenuItem>
           </TextField>
           <TextField
             label="Private parking"
@@ -270,13 +260,8 @@ const HotelsList = () => {
             sx={{ width: "150px", marginLeft: "12px" }}
           >
             <MenuItem value="">All</MenuItem>
-            <MenuItem value="true">Yes</MenuItem>
-            <MenuItem value="false">No</MenuItem>{" "}
-            {getDistinctValues("privateParking").map((privateParking) => (
-              <MenuItem key={privateParking} value={privateParking}>
-                {privateParking}
-              </MenuItem>
-            ))}
+            <MenuItem value="true">True</MenuItem>
+            <MenuItem value="false">False</MenuItem>
           </TextField>
           <TextField
             label="Minibar"
@@ -286,13 +271,8 @@ const HotelsList = () => {
             sx={{ width: "150px", marginLeft: "12px" }}
           >
             <MenuItem value="">All</MenuItem>
-            <MenuItem value="true">Yes</MenuItem>
-            <MenuItem value="false">No</MenuItem>
-            {getDistinctValues("minibar").map((minibar) => (
-              <MenuItem key={minibar} value={minibar}>
-                {minibar}
-              </MenuItem>
-            ))}
+            <MenuItem value="true">True</MenuItem>
+            <MenuItem value="false">False</MenuItem>
           </TextField>
           <GeneratePDFButton getFilteredHotels={getFilteredHotels} />
 
