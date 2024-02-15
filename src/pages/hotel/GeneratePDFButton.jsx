@@ -108,11 +108,11 @@ const GeneratePDFButton = ({ getFilteredHotels }) => {
 
   return (
     <div>
-      <Typography variant="body2">
+      <Typography variant="body2" sx={{ marginTop: 2, marginBottom: 2 }}>
         <Button
           variant="contained"
           onClick={handleGeneratePDF}
-          sx={{ width: "20%", display: "block" }}
+          sx={{ width: "100%", display: "block" }}
         >
           Generate PDF with Filtered Hotels
         </Button>
