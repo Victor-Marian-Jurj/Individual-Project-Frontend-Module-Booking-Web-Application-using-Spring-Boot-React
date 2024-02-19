@@ -93,7 +93,7 @@ const MyDocument = ({ data }) => (
   </Document>
 );
 
-const GeneratePDFButton = ({ getFilteredHotels }) => {
+const HotelPDFButton = ({ getFilteredHotels }) => {
   const handleGeneratePDF = () => {
     const pdfContent = <MyDocument data={getFilteredHotels()} />;
 
@@ -121,4 +121,4 @@ const GeneratePDFButton = ({ getFilteredHotels }) => {
   );
 };
 
-export default GeneratePDFButton;
+export default HotelPDFButton;

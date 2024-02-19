@@ -9,7 +9,7 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import GeneratePDFButton from "./HotelPDFButton"; // Import GeneratePDFButton component
+import HotelPDFButton from "./HotelPDFButton"; // Import GeneratePDFButton component
 
 const HotelsList = () => {
   const [nameFilterOptions, setNameFilterOptions] = useState([""]);
@@ -274,7 +274,7 @@ const HotelsList = () => {
             <MenuItem value="true">True</MenuItem>
             <MenuItem value="false">False</MenuItem>
           </TextField>
-          <GeneratePDFButton getFilteredHotels={getFilteredHotels} />
+          <HotelPDFButton getFilteredHotels={getFilteredHotels} />
 
           {/* Add similar select components for other filters */}
         </div>
