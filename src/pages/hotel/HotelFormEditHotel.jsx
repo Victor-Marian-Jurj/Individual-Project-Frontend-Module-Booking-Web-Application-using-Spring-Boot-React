@@ -1,11 +1,11 @@
-import { Box, TextField, Button } from "@mui/material";
+import { Box, Button, Select, MenuItem, InputLabel } from "@mui/material";
 import { useInput } from "../../hooks/useInput";
 
 const HotelFormEditHotel = ({
   hotel,
-  formTitle,
-  onSaveHotel,
   buttonLabel,
+  onSaveHotel,
+  onCancelClick,
   isReadonly,
 }) => {
   const [rating, handleRatingChange] = useInput(hotel.rating);
@@ -25,63 +25,98 @@ const HotelFormEditHotel = ({
         display: "flex",
         flexDirection: "column",
         gap: "16px",
-        alignItem: "center",
+        alignItems: "center",
         justifyContent: "center",
       }}
     >
-      <TextField
+      <InputLabel>Rating</InputLabel>
+      <Select
         variant="outlined"
         disabled={isReadonly}
-        label="Rating"
         value={rating}
         onChange={handleRatingChange}
-      />
-      <TextField
+      >
+        <MenuItem value="3">3</MenuItem>
+        <MenuItem value="4">4</MenuItem>
+        <MenuItem value="5">5</MenuItem>
+      </Select>
+
+      <InputLabel>Breakfast</InputLabel>
+      <Select
         variant="outlined"
         disabled={isReadonly}
-        label="Breakfast"
         value={breakfast}
         onChange={handleBreakfastChange}
-      />
-      <TextField
+      >
+        <MenuItem value={true}>True</MenuItem>
+        <MenuItem value={false}>False</MenuItem>
+      </Select>
+
+      <InputLabel>WiFi connection</InputLabel>
+      <Select
         variant="outlined"
         disabled={isReadonly}
-        label="WiFi connection"
         value={wifiConnection}
         onChange={handleWifiConnectionChange}
-      />
-      <TextField
+      >
+        <MenuItem value={true}>True</MenuItem>
+        <MenuItem value={false}>False</MenuItem>
+      </Select>
+
+      <InputLabel>Private parking</InputLabel>
+      <Select
         variant="outlined"
         disabled={isReadonly}
-        label="Private parking"
         value={privateParking}
         onChange={handlePrivateParkingChange}
-      />
-      <TextField
+      >
+        <MenuItem value={true}>True</MenuItem>
+        <MenuItem value={false}>False</MenuItem>
+      </Select>
+
+      <InputLabel>Minibar</InputLabel>
+      <Select
         variant="outlined"
         disabled={isReadonly}
-        label="Minibar"
         value={minibar}
         onChange={handleMinibarChange}
-      />
+      >
+        <MenuItem value={true}>True</MenuItem>
+        <MenuItem value={false}>False</MenuItem>
+      </Select>
+
       {!!buttonLabel && (
-        <Button
-          variant="contained"
-          onClick={() =>
-            onSaveHotel(
-              rating,
-              breakfast,
-              wifiConnection,
-              privateParking,
-              minibar
-            )
-          }
-          sx={{
-            maxWidth: "100px",
-          }}
-        >
-          {buttonLabel}
-        </Button>
+        <div>
+          <div style={{ marginBottom: "15px" }}>
+            <Button
+              variant="contained"
+              onClick={() =>
+                onSaveHotel(
+                  rating,
+                  breakfast,
+                  wifiConnection,
+                  privateParking,
+                  minibar
+                )
+              }
+              sx={{
+                maxWidth: "100px",
+                width: "140px",
+              }}
+            >
+              {buttonLabel}
+            </Button>
+          </div>
+          <div>
+            <Button
+              variant="outlined"
+              onClick={onCancelClick}
+              sx={{ display: "block", width: "100px" }}
+            >
+              Cancel
+            </Button>
+          </div>
+        </div>
       )}
     </Box>
   );
