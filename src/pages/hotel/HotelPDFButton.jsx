@@ -112,9 +112,19 @@ const HotelPDFButton = ({ getFilteredHotels }) => {
         <Button
           variant="contained"
           onClick={handleGeneratePDF}
-          sx={{ width: "100%", display: "block" }}
+          sx={{
+            marginLeft: "12px",
+            fontSize: "13px", // Set the font size to smaller
+            // lineHeight: "1", // Ensure text is on two lines
+            whiteSpace: "normal", // Allow text to wrap onto two lines
+            // fontWeight: "bold", // Make the text bold
+            padding: "4px 15px", // Increase padding to make the button bigger
+            height: "auto", // Adjust height to fit the content
+          }}
         >
-          Generate PDF with Filtered Hotels
+          Download PDF with
+          <br />
+          Filtered Hotels
         </Button>
       </Typography>
     </div>
