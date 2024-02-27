@@ -51,6 +51,30 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     backgroundColor: "#ffffff",
   },
+  fifthColumnHeader: {
+    // Styles for the header of the 5th column
+    width: "25%", // Adjust the width of the 5th column header
+  },
+  fifthColumnCell: {
+    // Styles for the cells of the 5th column
+    width: "25%", // Adjust the width of the 5th column cells
+  },
+  sixtColumnHeader: {
+    // Styles for the header of the 5th column
+    width: "25%", // Adjust the width of the 5th column header
+  },
+  sixtColumnCell: {
+    // Styles for the cells of the 5th column
+    width: "25%", // Adjust the width of the 5th column cells
+  },
+  seventhColumnHeader: {
+    // Styles for the header of the 5th column
+    width: "25%", // Adjust the width of the 5th column header
+  },
+  seventhColumnCell: {
+    // Styles for the cells of the 5th column
+    width: "25%", // Adjust the width of the 5th column cells
+  },
 });
 
 const MyDocument = ({ data }) => (
@@ -64,9 +88,15 @@ const MyDocument = ({ data }) => (
             <Text style={styles.tableHeader}>First name</Text>
             <Text style={styles.tableHeader}>Last name</Text>
             <Text style={styles.tableHeader}>Hotel name</Text>
-            <Text style={styles.tableHeader}>Hotel location</Text>
-            <Text style={styles.tableHeader}>Check-in date</Text>
-            <Text style={styles.tableHeader}>Check-out date</Text>
+            <Text style={[styles.tableHeader, styles.fifthColumnHeader]}>
+              Hotel location
+            </Text>
+            <Text style={[styles.tableHeader, styles.sixtColumnHeader]}>
+              Check-in date
+            </Text>
+            <Text style={[styles.tableHeader, styles.seventhColumnHeader]}>
+              Check-out date
+            </Text>
             <Text style={styles.tableHeader}>Room number</Text>
             <Text style={styles.tableHeader}>Room type</Text>
             <Text style={styles.tableHeader}>Room price</Text>
@@ -80,12 +110,14 @@ const MyDocument = ({ data }) => (
               <Text style={styles.tableCell}>{reservation.firstName}</Text>
               <Text style={styles.tableCell}>{reservation.lastName}</Text>
               <Text style={styles.tableCell}>{reservation.hotelName}</Text>
-              <Text style={styles.tableCell}>{reservation.hotelLocation}</Text>
-              <Text style={styles.tableCell}>
+              <Text style={[styles.tableCell, styles.fifthColumnCell]}>
+                {reservation.hotelLocation}
+              </Text>
+              <Text style={[styles.tableCell, styles.sixtColumnCell]}>
                 {new Date(reservation.checkInDate).toLocaleDateString()}
               </Text>{" "}
               {/* Format date consistently */}
-              <Text style={styles.tableCell}>
+              <Text style={[styles.tableCell, styles.seventhColumnCell]}>
                 {new Date(reservation.checkOutDate).toLocaleDateString()}
               </Text>{" "}
               {/* Format date consistently */}
@@ -122,7 +154,7 @@ const ReservationPDFButton = ({ getFilteredReservations }) => {
           variant="contained"
           onClick={handleGeneratePDF}
           sx={{
-            marginLeft: "10px",
+            marginLeft: "12px",
             fontSize: "13px", // Set the font size to smaller
             // lineHeight: "1", // Ensure text is on two lines
             whiteSpace: "normal", // Allow text to wrap onto two lines
