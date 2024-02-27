@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
 
 const MyDocument = ({ data }) => (
   <Document>
-    <Page size="A4" style={styles.page}>
+    <Page size="A4" orientation="landscape" style={styles.page}>
       <View style={styles.section}>
         <View style={styles.table}>
           {/* Table Header */}
