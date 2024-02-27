@@ -66,7 +66,7 @@ const CreateHotel = () => {
       <Button
         variant="outlined"
         onClick={handleCancelClick}
-        sx={{ mt: "16px" }}
+        sx={{ mt: "16px", width: "100px" }}
       >
         Cancel
       </Button>

@@ -1,4 +1,4 @@
-import { Button, CircularProgress } from "@mui/material";
+import { CircularProgress, Typography, Divider } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import HotelFormEditHotel from "./HotelFormEditHotel";
 import { useHotelById } from "../../hooks/useHotelById";
@@ -40,20 +40,17 @@ const EditHotel = () => {
 
   return hotel ? (
     <div>
-      Edit hotel with id: {params.hotelId}
+      <Typography variant="h5" gutterBottom>
+        Edit hotel with id: {params.hotelId}
+      </Typography>
+      <Divider sx={{ my: 2 }} />
       <HotelFormEditHotel
         formTitle="Edit hotel"
         hotel={hotel}
         buttonLabel="Edit"
         onSaveHotel={handleSaveHotel}
+        onCancelClick={handleCancelClick}
       />
-      <Button
-        variant="outlined"
-        onClick={handleCancelClick}
-        sx={{ mt: "16px" }}
-      >
-        Cancel
-      </Button>
     </div>
   ) : (
     <CircularProgress />

@@ -7,7 +7,7 @@ import CreateHotel from "./pages/hotel/CreateHotel";
 import CreateReservation from "./pages/reservation/CreateReservation";
 import ViewHotel from "./pages/hotel/ViewHotel";
 import EditHotel from "./pages/hotel/EditHotel";
-import AdminPage from "./pages/admin/AdminPage";
+import ReservationsTable from "./pages/reservation/ReservationsTable";
 import { Provider } from "react-redux";
 import store from "./stores/store";
 import EditReservation from "./pages/reservation/EditReservation";
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
         path: "/reservations/:reservationId/edit",
         element: <EditReservation />,
       },
-      { path: "/reservations", element: <AdminPage /> },
+      { path: "/reservations", element: <ReservationsTable /> },
       // { path: "/account", element: <div>Account</div> },
     ],
   },

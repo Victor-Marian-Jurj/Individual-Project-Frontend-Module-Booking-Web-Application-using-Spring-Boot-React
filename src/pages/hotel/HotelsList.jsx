@@ -9,7 +9,7 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import GeneratePDFButton from "./GeneratePDFButton"; // Import GeneratePDFButton component
+import HotelPDFButton from "./HotelPDFButton"; // Import GeneratePDFButton component
 
 const HotelsList = () => {
   const [nameFilterOptions, setNameFilterOptions] = useState([""]);
@@ -186,119 +186,99 @@ const HotelsList = () => {
 
   return (
     <div>
-      <Typography variant="h5" sx={{ color: "#3f51b5", marginBottom: "10px" }}>
+      <Typography variant="h5" sx={{ color: "#3f51b5" }}>
         Filter hotels
-        <div>
-          {/* Add filter components */}
-          <TextField
-            label="Hotel location"
-            value={locationFilter}
-            onChange={(e) => handleLocationChange(e.target.value)}
-            select
-            sx={{ width: "150px" }}
-          >
-            <MenuItem value="">All</MenuItem>
-            {getDistinctValues("hotelLocation").map((location) => (
-              <MenuItem key={location} value={location}>
-                {location}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            label="Hotel name"
-            value={nameFilter}
-            onChange={(e) => handleNameChange(e.target.value)}
-            select
-            sx={{ width: "150px", marginLeft: "12px" }}
-          >
-            {nameFilterOptions.map((name) => (
-              <MenuItem key={name} value={name}>
-                {name}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            label="Rating"
-            value={ratingFilter}
-            onChange={(e) => setRatingFilter(e.target.value)}
-            select
-            sx={{ width: "150px", marginLeft: "12px" }}
-          >
-            {ratingFilterOptions.map((rating) => (
-              <MenuItem key={rating} value={rating}>
-                {rating}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            label="Breakfast"
-            value={breakfastFilter}
-            onChange={(e) => setBreakfastFilter(e.target.value)}
-            select
-            sx={{ width: "150px", marginLeft: "12px" }}
-          >
-            <MenuItem value="">All</MenuItem>
-            <MenuItem value="true">Yes</MenuItem>
-            <MenuItem value="false">No</MenuItem>{" "}
-            {getDistinctValues("breakfast").map((breakfast) => (
-              <MenuItem key={breakfast} value={breakfast}>
-                {breakfast}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            label="Wifi connection"
-            value={wifiFilter}
-            onChange={(e) => setWifiFilter(e.target.value)}
-            select
-            sx={{ width: "150px", marginLeft: "12px" }}
-          >
-            <MenuItem value="">All</MenuItem>
-            <MenuItem value="true">Yes</MenuItem>
-            <MenuItem value="false">No</MenuItem>{" "}
-            {getDistinctValues("wifiConnection").map((wifiConnection) => (
-              <MenuItem key={wifiConnection} value={wifiConnection}>
-                {wifiConnection}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            label="Private parking"
-            value={parkingFilter}
-            onChange={(e) => setParkingFilter(e.target.value)}
-            select
-            sx={{ width: "150px", marginLeft: "12px" }}
-          >
-            <MenuItem value="">All</MenuItem>
-            <MenuItem value="true">Yes</MenuItem>
-            <MenuItem value="false">No</MenuItem>{" "}
-            {getDistinctValues("privateParking").map((privateParking) => (
-              <MenuItem key={privateParking} value={privateParking}>
-                {privateParking}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            label="Minibar"
-            value={minibarFilter}
-            onChange={(e) => setMinibarFilter(e.target.value)}
-            select
-            sx={{ width: "150px", marginLeft: "12px" }}
-          >
-            <MenuItem value="">All</MenuItem>
-            <MenuItem value="true">Yes</MenuItem>
-            <MenuItem value="false">No</MenuItem>
-            {getDistinctValues("minibar").map((minibar) => (
-              <MenuItem key={minibar} value={minibar}>
-                {minibar}
-              </MenuItem>
-            ))}
-          </TextField>
-          <GeneratePDFButton getFilteredHotels={getFilteredHotels} />
-
-          {/* Add similar select components for other filters */}
-        </div>
       </Typography>
+      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}>
+        {/* Add filter components */}
+        <TextField
+          label="Hotel location"
+          value={locationFilter}
+          onChange={(e) => handleLocationChange(e.target.value)}
+          select
+          sx={{ width: "145px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          {getDistinctValues("hotelLocation").map((location) => (
+            <MenuItem key={location} value={location}>
+              {location}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          label="Hotel name"
+          value={nameFilter}
+          onChange={(e) => handleNameChange(e.target.value)}
+          select
+          sx={{ width: "130px", marginLeft: "12px" }}
+        >
+          {nameFilterOptions.map((name) => (
+            <MenuItem key={name} value={name}>
+              {name}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          label="Private parking"
+          value={parkingFilter}
+          onChange={(e) => setParkingFilter(e.target.value)}
+          select
+          sx={{ width: "155px", marginLeft: "12px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          <MenuItem value="true">True</MenuItem>
+          <MenuItem value="false">False</MenuItem>
+        </TextField>
+        <TextField
+          label="Rating"
+          value={ratingFilter}
+          onChange={(e) => setRatingFilter(e.target.value)}
+          select
+          sx={{ width: "95px", marginLeft: "12px" }}
+        >
+          {ratingFilterOptions.map((rating) => (
+            <MenuItem key={rating} value={rating}>
+              {rating}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          label="Breakfast"
+          value={breakfastFilter}
+          onChange={(e) => setBreakfastFilter(e.target.value)}
+          select
+          sx={{ width: "120px", marginLeft: "12px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          <MenuItem value="true">True</MenuItem>
+          <MenuItem value="false">False</MenuItem>
+        </TextField>
+        <TextField
+          label="WiFi"
+          value={wifiFilter}
+          onChange={(e) => setWifiFilter(e.target.value)}
+          select
+          sx={{ width: "85px", marginLeft: "12px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          <MenuItem value="true">True</MenuItem>
+          <MenuItem value="false">False</MenuItem>
+        </TextField>
+        <TextField
+          label="Minibar"
+          value={minibarFilter}
+          onChange={(e) => setMinibarFilter(e.target.value)}
+          select
+          sx={{ width: "105px", marginLeft: "12px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          <MenuItem value="true">True</MenuItem>
+          <MenuItem value="false">False</MenuItem>
+        </TextField>
+        <HotelPDFButton getFilteredHotels={getFilteredHotels} />
+
+        {/* Add similar select components for other filters */}
+      </div>
       <Divider
         sx={{
           backgroundColor: "#3f51b5",
@@ -310,7 +290,7 @@ const HotelsList = () => {
         direction="row"
         sx={{
           flexWrap: "wrap",
-          gap: "3rem",
+          gap: "4rem",
         }}
       >
         {hotels.length === 0 ? (
