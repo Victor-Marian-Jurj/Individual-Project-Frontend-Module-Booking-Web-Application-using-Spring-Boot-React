@@ -172,7 +172,6 @@ const AdminReservationsTable = () => {
       (!filter.checkOutDate || reservation.checkOutDate <= filter.checkOutDate)
     );
   });
-
   return (
     <div>
       <Typography variant="h5" sx={{ color: "#3f51b5" }}>
@@ -185,7 +184,7 @@ const AdminReservationsTable = () => {
           label="Username"
           value={filter.username}
           onChange={(e) => handleFilterChange(e, "username")}
-          sx={{ width: "150px", marginLeft: "10px" }}
+          sx={{ width: "155px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueUsernames.map((username) => (
@@ -200,7 +199,7 @@ const AdminReservationsTable = () => {
           label="First name"
           value={filter.firstName}
           onChange={(e) => handleFilterChange(e, "firstName")}
-          sx={{ width: "150px", marginLeft: "10px" }}
+          sx={{ width: "155px", marginLeft: "12px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueFirstNames.map((firstName) => (
@@ -214,7 +213,7 @@ const AdminReservationsTable = () => {
           label="Last name"
           value={filter.lastName}
           onChange={(e) => handleFilterChange(e, "lastName")}
-          sx={{ width: "150px", marginLeft: "10px" }}
+          sx={{ width: "155px", marginLeft: "12px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueLastNames.map((lastName) => (
@@ -228,7 +227,7 @@ const AdminReservationsTable = () => {
           label="Hotel name"
           value={filter.hotelName}
           onChange={(e) => handleFilterChange(e, "hotelName")}
-          sx={{ width: "150px", marginLeft: "10px" }}
+          sx={{ width: "165px", marginLeft: "12px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueHotelName.map((hotelName) => (
@@ -242,7 +241,7 @@ const AdminReservationsTable = () => {
           label="Hotel location"
           value={filter.hotelLocation}
           onChange={(e) => handleFilterChange(e, "hotelLocation")}
-          sx={{ width: "150px", marginLeft: "10px" }}
+          sx={{ width: "155px", marginLeft: "12px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueHotelLocations.map((location) => (
@@ -256,7 +255,7 @@ const AdminReservationsTable = () => {
           label="Check-in date"
           value={filter.checkInDate}
           onChange={(e) => handleFilterChange(e, "checkInDate")}
-          sx={{ width: "150px", marginLeft: "10px" }}
+          sx={{ width: "155px", marginLeft: "12px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueCheckInDate.map((checkInDate) => (
@@ -270,7 +269,7 @@ const AdminReservationsTable = () => {
           label="Check-out date"
           value={filter.checkOutDate}
           onChange={(e) => handleFilterChange(e, "checkOutDate")}
-          sx={{ width: "150px", marginLeft: "10px" }}
+          sx={{ width: "155px", marginLeft: "12px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueCheckOutDate.map((checkOutDate) => (
@@ -284,7 +283,7 @@ const AdminReservationsTable = () => {
           label="Room number"
           value={filter.roomNumber}
           onChange={(e) => handleFilterChange(e, "roomNumber")}
-          sx={{ width: "150px", marginLeft: "10px" }}
+          sx={{ width: "155px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueRoomNumbers.map((roomNumber) => (
@@ -298,7 +297,7 @@ const AdminReservationsTable = () => {
           label="Room type"
           value={filter.roomType}
           onChange={(e) => handleFilterChange(e, "roomType")}
-          sx={{ width: "150px", marginLeft: "10px" }}
+          sx={{ width: "155px", marginLeft: "12px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueRoomType.map((roomType) => (
@@ -313,7 +312,7 @@ const AdminReservationsTable = () => {
           label="Room price"
           value={filter.roomPrice}
           onChange={(e) => handleFilterChange(e, "roomPrice")}
-          sx={{ width: "150px", marginLeft: "10px" }}
+          sx={{ width: "155px", marginLeft: "12px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueRoomPrices.map((roomPrice) => (
@@ -328,7 +327,7 @@ const AdminReservationsTable = () => {
           label="Payment method"
           value={filter.paymentMethod}
           onChange={(e) => handleFilterChange(e, "paymentMethod")}
-          sx={{ width: "150px", marginLeft: "10px" }}
+          sx={{ width: "165px", marginLeft: "12px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniquePaymentMethods.map((paymentMethod) => (
@@ -342,7 +341,7 @@ const AdminReservationsTable = () => {
           label="Total payment"
           value={filter.totalPayment}
           onChange={(e) => handleFilterChange(e, "totalPayment")}
-          sx={{ width: "150px", marginLeft: "10px" }}
+          sx={{ width: "155px", marginLeft: "12px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueTotalPayment.map((totalPayment) => (
@@ -370,40 +369,76 @@ const AdminReservationsTable = () => {
           <TableHead sx={{ backgroundColor: "black" }}>
             <TableRow>
               {/* <TableCell>Title</TableCell> */}
-              <TableCell align="right" sx={{ color: "white" }}>
+              <TableCell
+                align="left"
+                sx={{ color: "white", fontSize: 14, padding: "13px" }}
+              >
                 Username
               </TableCell>
-              <TableCell align="right" sx={{ color: "white" }}>
+              <TableCell
+                align="left"
+                sx={{ color: "white", fontSize: 14, padding: "13px" }}
+              >
                 First name
               </TableCell>
-              <TableCell align="right" sx={{ color: "white" }}>
+              <TableCell
+                align="left"
+                sx={{ color: "white", fontSize: 14, padding: "13px" }}
+              >
                 Last name
               </TableCell>
-              <TableCell align="right" sx={{ color: "white" }}>
+              <TableCell
+                align="left"
+                sx={{ color: "white", fontSize: 14, padding: "13px" }}
+              >
                 Hotel name
               </TableCell>
-              <TableCell align="right" sx={{ color: "white" }}>
+              <TableCell
+                align="left"
+                sx={{ color: "white", fontSize: 14, padding: "13px" }}
+              >
                 Hotel location
               </TableCell>
-              <TableCell align="right" sx={{ color: "white" }}>
+              <TableCell
+                align="left"
+                sx={{ color: "white", fontSize: 14, padding: "13px" }}
+              >
                 Check-in date
               </TableCell>
-              <TableCell align="right" sx={{ color: "white" }}>
+              <TableCell
+                align="left"
+                sx={{ color: "white", fontSize: 14, padding: "13px" }}
+              >
                 Check-out date
               </TableCell>
-              <TableCell align="right" sx={{ color: "white" }}>
+              <TableCell
+                align="left"
+                sx={{ color: "white", fontSize: 14, padding: "13px" }}
+              >
                 Room number
               </TableCell>
-              <TableCell align="right" sx={{ color: "white" }}>
+              <TableCell
+                align="left"
+                sx={{ color: "white", fontSize: 14, padding: "13px" }}
+              >
                 Room type
               </TableCell>
-              <TableCell align="right" sx={{ color: "white" }}>
+              <TableCell
+                align="left"
+                sx={{ color: "white", fontSize: 14, padding: "13px" }}
+              >
                 Room Price
               </TableCell>
-              <TableCell align="right" sx={{ color: "white" }}>
+              <TableCell
+                align="left"
+                sx={{ color: "white", fontSize: 14, padding: "13px" }}
+              >
                 Payment method
               </TableCell>
-              <TableCell align="right" sx={{ color: "white" }}>
+              <TableCell
+                align="left"
+                sx={{ color: "white", fontSize: 14, padding: "13px" }}
+              >
                 Total payment
               </TableCell>
             </TableRow>
@@ -412,40 +447,66 @@ const AdminReservationsTable = () => {
             {filteredReservations.map((reservation) => (
               <TableRow
                 key={reservation.reservationId}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                sx={{
+                  "&:last-child td, &:last-child th": { border: 0 },
+                  height: 40, // Adjust the height as needed
+                }}
               >
                 {/* <TableCell component="th" scope="row">
-                Registered reservation
-              </TableCell> */}
-                <TableCell align="right">{reservation.username}</TableCell>
-                <TableCell align="right">{reservation.firstName}</TableCell>
-                <TableCell align="right">{reservation.lastName}</TableCell>
-                <TableCell align="right">{reservation.hotelName}</TableCell>
-                <TableCell align="right">{reservation.hotelLocation}</TableCell>
-                <TableCell align="right">
+        Registered reservation
+      </TableCell> */}
+                <TableCell align="left" sx={{ fontSize: 14 }}>
+                  {reservation.username}
+                </TableCell>
+                <TableCell align="left" sx={{ fontSize: 14 }}>
+                  {reservation.firstName}
+                </TableCell>
+                <TableCell align="left" sx={{ fontSize: 14 }}>
+                  {reservation.lastName}
+                </TableCell>
+                <TableCell align="left" sx={{ fontSize: 14 }}>
+                  {reservation.hotelName}
+                </TableCell>
+                <TableCell align="left" sx={{ fontSize: 14 }}>
+                  {reservation.hotelLocation}
+                </TableCell>
+                <TableCell align="left" sx={{ fontSize: 14 }}>
                   {
                     new Date(reservation.checkInDate)
                       .toISOString()
                       .split("T")[0]
                   }
                 </TableCell>
-                <TableCell align="right">
+                <TableCell align="left" sx={{ fontSize: 14 }}>
                   {
                     new Date(reservation.checkOutDate)
                       .toISOString()
                       .split("T")[0]
                   }
                 </TableCell>
-                <TableCell align="right">{reservation.roomNumber}</TableCell>
-                <TableCell align="right">{reservation.roomType}</TableCell>
-                <TableCell align="right">{reservation.roomPrice}</TableCell>
-                <TableCell align="right">{reservation.paymentMethod}</TableCell>
-                <TableCell align="right">{reservation.totalPayment}</TableCell>
-                <TableCell align="right">
+                <TableCell align="left" sx={{ fontSize: 14 }}>
+                  {reservation.roomNumber}
+                </TableCell>
+                <TableCell align="left" sx={{ fontSize: 14 }}>
+                  {reservation.roomType}
+                </TableCell>
+                <TableCell align="left" sx={{ fontSize: 14 }}>
+                  {reservation.roomPrice}
+                </TableCell>
+                <TableCell align="left" sx={{ fontSize: 14 }}>
+                  {reservation.paymentMethod}
+                </TableCell>
+                <TableCell align="left" sx={{ fontSize: 14 }}>
+                  {reservation.totalPayment}
+                </TableCell>
+                <TableCell align="left">
                   <Link to={`/reservations/${reservation.reservationId}/edit`}>
-                    <Button>Edit</Button>
+                    <Button size="medium">Edit</Button>
                   </Link>
-                  <Button onClick={() => handleOpenDialog(reservation)}>
+                  <Button
+                    size="medium"
+                    onClick={() => handleOpenDialog(reservation)}
+                  >
                     Delete
                   </Button>
                   <ConfirmDeleteReservationDialog
