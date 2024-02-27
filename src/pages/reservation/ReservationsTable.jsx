@@ -17,6 +17,7 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import MenuItem from "@mui/material/MenuItem";
+import ReservationPDFButton from "./ReservationPDFButton";
 
 const AdminReservationsTable = () => {
   const [reservations, setReservations] = useState([]);
@@ -160,10 +161,11 @@ const AdminReservationsTable = () => {
           .includes(filter.paymentMethod.toLowerCase())) &&
       (filter.roomNumber === "" ||
         reservation.roomNumber === parseInt(filter.roomNumber, 10)) &&
+      reservation.roomType
+        .toLowerCase()
+        .includes(filter.roomType.toLowerCase()) &&
       (filter.roomPrice === "" ||
         reservation.roomPrice === parseInt(filter.roomPrice)) &&
-      (filter.roomType === "" ||
-        reservation.roomType === parseInt(filter.roomType)) &&
       (filter.totalPayment === "" ||
         reservation.totalPayment === parseInt(filter.totalPayment)) &&
       (!filter.checkInDate || reservation.checkInDate >= filter.checkInDate) &&
@@ -173,186 +175,194 @@ const AdminReservationsTable = () => {
 
   return (
     <div>
-      <Typography variant="h5" sx={{ color: "#3f51b5", marginBottom: "10px" }}>
+      <Typography variant="h5" sx={{ color: "#3f51b5" }}>
         Filter reservations
-        <div>
-          <TextField
-            select
-            label="Username"
-            value={filter.username}
-            onChange={(e) => handleFilterChange(e, "username")}
-            sx={{ width: "150px", marginLeft: "10px" }}
-          >
-            <MenuItem value="">All</MenuItem>
-            {uniqueUsernames.map((username) => (
-              <MenuItem key={username} value={username}>
-                {username}
-              </MenuItem>
-            ))}
-          </TextField>
-
-          <TextField
-            select
-            label="First name"
-            value={filter.firstName}
-            onChange={(e) => handleFilterChange(e, "firstName")}
-            sx={{ width: "150px", marginLeft: "10px" }}
-          >
-            <MenuItem value="">All</MenuItem>
-            {uniqueFirstNames.map((firstName) => (
-              <MenuItem key={firstName} value={firstName}>
-                {firstName}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            select
-            label="Last name"
-            value={filter.lastName}
-            onChange={(e) => handleFilterChange(e, "lastName")}
-            sx={{ width: "150px", marginLeft: "10px" }}
-          >
-            <MenuItem value="">All</MenuItem>
-            {uniqueLastNames.map((lastName) => (
-              <MenuItem key={lastName} value={lastName}>
-                {lastName}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            select
-            label="Hotel name"
-            value={filter.hotelName}
-            onChange={(e) => handleFilterChange(e, "hotelName")}
-            sx={{ width: "150px", marginLeft: "10px" }}
-          >
-            <MenuItem value="">All</MenuItem>
-            {uniqueHotelName.map((hotelName) => (
-              <MenuItem key={hotelName} value={hotelName}>
-                {hotelName}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            select
-            label="Hotel location"
-            value={filter.hotelLocation}
-            onChange={(e) => handleFilterChange(e, "hotelLocation")}
-            sx={{ width: "150px", marginLeft: "10px" }}
-          >
-            <MenuItem value="">All</MenuItem>
-            {uniqueHotelLocations.map((location) => (
-              <MenuItem key={location} value={location}>
-                {location}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            select
-            label="Check-in date"
-            value={filter.checkInDate}
-            onChange={(e) => handleFilterChange(e, "checkInDate")}
-            sx={{ width: "150px", marginLeft: "10px" }}
-          >
-            <MenuItem value="">All</MenuItem>
-            {uniqueCheckInDate.map((checkInDate) => (
-              <MenuItem key={checkInDate} value={checkInDate}>
-                {checkInDate}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            select
-            label="Check-out date"
-            value={filter.checkOutDate}
-            onChange={(e) => handleFilterChange(e, "checkOutDate")}
-            sx={{ width: "150px", marginLeft: "10px" }}
-          >
-            <MenuItem value="">All</MenuItem>
-            {uniqueCheckOutDate.map((checkOutDate) => (
-              <MenuItem key={checkOutDate} value={checkOutDate}>
-                {checkOutDate}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            select
-            label="Room number"
-            value={filter.roomNumber}
-            onChange={(e) => handleFilterChange(e, "roomNumber")}
-            sx={{ width: "150px", marginLeft: "10px", marginTop: "10px" }}
-          >
-            <MenuItem value="">All</MenuItem>
-            {uniqueRoomNumbers.map((roomNumber) => (
-              <MenuItem key={roomNumber} value={roomNumber}>
-                {roomNumber}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            select
-            label="Room type"
-            value={filter.roomType}
-            onChange={(e) => handleFilterChange(e, "roomType")}
-            sx={{ width: "150px", marginLeft: "10px", marginTop: "10px" }}
-          >
-            <MenuItem value="">All</MenuItem>
-            {uniqueRoomType.map((roomType) => (
-              <MenuItem key={roomType} value={roomType}>
-                {roomType}
-              </MenuItem>
-            ))}
-          </TextField>
-
-          <TextField
-            select
-            label="Room price"
-            value={filter.roomPrice}
-            onChange={(e) => handleFilterChange(e, "roomPrice")}
-            sx={{ width: "150px", marginLeft: "10px", marginTop: "10px" }}
-          >
-            <MenuItem value="">All</MenuItem>
-            {uniqueRoomPrices.map((roomPrice) => (
-              <MenuItem key={roomPrice} value={roomPrice}>
-                {roomPrice}
-              </MenuItem>
-            ))}
-          </TextField>
-
-          <TextField
-            select
-            label="Payment method"
-            value={filter.paymentMethod}
-            onChange={(e) => handleFilterChange(e, "paymentMethod")}
-            sx={{ width: "150px", marginLeft: "10px", marginTop: "10px" }}
-          >
-            <MenuItem value="">All</MenuItem>
-            {uniquePaymentMethods.map((paymentMethod) => (
-              <MenuItem key={paymentMethod} value={paymentMethod}>
-                {paymentMethod}
-              </MenuItem>
-            ))}
-          </TextField>
-          <TextField
-            select
-            label="Total payment"
-            value={filter.totalPayment}
-            onChange={(e) => handleFilterChange(e, "totalPayment")}
-            sx={{ width: "150px", marginLeft: "10px", marginTop: "10px" }}
-          >
-            <MenuItem value="">All</MenuItem>
-            {uniqueTotalPayment.map((totalPayment) => (
-              <MenuItem key={totalPayment} value={totalPayment}>
-                {totalPayment}
-              </MenuItem>
-            ))}
-          </TextField>
-
-          {/* Add more TextField components for other fields as needed */}
-        </div>
       </Typography>
+      <br />
+      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}>
+        <TextField
+          select
+          label="Username"
+          value={filter.username}
+          onChange={(e) => handleFilterChange(e, "username")}
+          sx={{ width: "150px", marginLeft: "10px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          {uniqueUsernames.map((username) => (
+            <MenuItem key={username} value={username}>
+              {username}
+            </MenuItem>
+          ))}
+        </TextField>
+
+        <TextField
+          select
+          label="First name"
+          value={filter.firstName}
+          onChange={(e) => handleFilterChange(e, "firstName")}
+          sx={{ width: "150px", marginLeft: "10px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          {uniqueFirstNames.map((firstName) => (
+            <MenuItem key={firstName} value={firstName}>
+              {firstName}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          select
+          label="Last name"
+          value={filter.lastName}
+          onChange={(e) => handleFilterChange(e, "lastName")}
+          sx={{ width: "150px", marginLeft: "10px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          {uniqueLastNames.map((lastName) => (
+            <MenuItem key={lastName} value={lastName}>
+              {lastName}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          select
+          label="Hotel name"
+          value={filter.hotelName}
+          onChange={(e) => handleFilterChange(e, "hotelName")}
+          sx={{ width: "150px", marginLeft: "10px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          {uniqueHotelName.map((hotelName) => (
+            <MenuItem key={hotelName} value={hotelName}>
+              {hotelName}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          select
+          label="Hotel location"
+          value={filter.hotelLocation}
+          onChange={(e) => handleFilterChange(e, "hotelLocation")}
+          sx={{ width: "150px", marginLeft: "10px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          {uniqueHotelLocations.map((location) => (
+            <MenuItem key={location} value={location}>
+              {location}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          select
+          label="Check-in date"
+          value={filter.checkInDate}
+          onChange={(e) => handleFilterChange(e, "checkInDate")}
+          sx={{ width: "150px", marginLeft: "10px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          {uniqueCheckInDate.map((checkInDate) => (
+            <MenuItem key={checkInDate} value={checkInDate}>
+              {checkInDate}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          select
+          label="Check-out date"
+          value={filter.checkOutDate}
+          onChange={(e) => handleFilterChange(e, "checkOutDate")}
+          sx={{ width: "150px", marginLeft: "10px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          {uniqueCheckOutDate.map((checkOutDate) => (
+            <MenuItem key={checkOutDate} value={checkOutDate}>
+              {checkOutDate}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          select
+          label="Room number"
+          value={filter.roomNumber}
+          onChange={(e) => handleFilterChange(e, "roomNumber")}
+          sx={{ width: "150px", marginLeft: "10px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          {uniqueRoomNumbers.map((roomNumber) => (
+            <MenuItem key={roomNumber} value={roomNumber}>
+              {roomNumber}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          select
+          label="Room type"
+          value={filter.roomType}
+          onChange={(e) => handleFilterChange(e, "roomType")}
+          sx={{ width: "150px", marginLeft: "10px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          {uniqueRoomType.map((roomType) => (
+            <MenuItem key={roomType} value={roomType}>
+              {roomType}
+            </MenuItem>
+          ))}
+        </TextField>
+
+        <TextField
+          select
+          label="Room price"
+          value={filter.roomPrice}
+          onChange={(e) => handleFilterChange(e, "roomPrice")}
+          sx={{ width: "150px", marginLeft: "10px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          {uniqueRoomPrices.map((roomPrice) => (
+            <MenuItem key={roomPrice} value={roomPrice}>
+              {roomPrice}
+            </MenuItem>
+          ))}
+        </TextField>
+
+        <TextField
+          select
+          label="Payment method"
+          value={filter.paymentMethod}
+          onChange={(e) => handleFilterChange(e, "paymentMethod")}
+          sx={{ width: "150px", marginLeft: "10px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          {uniquePaymentMethods.map((paymentMethod) => (
+            <MenuItem key={paymentMethod} value={paymentMethod}>
+              {paymentMethod}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          select
+          label="Total payment"
+          value={filter.totalPayment}
+          onChange={(e) => handleFilterChange(e, "totalPayment")}
+          sx={{ width: "150px", marginLeft: "10px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          {uniqueTotalPayment.map((totalPayment) => (
+            <MenuItem key={totalPayment} value={totalPayment}>
+              {totalPayment}
+            </MenuItem>
+          ))}
+        </TextField>
+        <ReservationPDFButton
+          getFilteredReservations={() => filteredReservations}
+        />
+      </div>
+
       <Divider
-        sx={{ backgroundColor: "#3f51b5", height: "2px", marginBottom: "20px" }}
+        sx={{
+          backgroundColor: "#3f51b5",
+          height: "2px",
+          marginTop: "10px",
+          marginBottom: "25px",
+        }}
       />
 
       <TableContainer component={Paper}>
