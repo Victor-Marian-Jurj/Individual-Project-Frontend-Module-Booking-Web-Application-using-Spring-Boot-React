@@ -18,10 +18,33 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import MenuItem from "@mui/material/MenuItem";
 import ReservationPDFButton from "./ReservationPDFButton";
+import { getEmail } from "../../service/EmailService"; // Import getEmail function
 
 const AdminReservationsTable = () => {
   const [reservations, setReservations] = useState([]);
   // const reservations = useSelector((state) => state.reservationReducer.reservations);
+
+  const [recipientEmail, setRecipientEmail] = useState(""); // State to store recipient email
+
+  // Function to handle recipient email change
+  const handleRecipientEmailChange = (event) => {
+    setRecipientEmail(event.target.value);
+  };
+
+  // Function to send email
+  const sendEmail = async () => {
+    try {
+      const response = await getEmail(recipientEmail); // Call getEmail function with recipient email
+      if (response.success) {
+        alert("Email sent successfully!");
+      } else {
+        alert("Failed to send email. Please try again later.");
+      }
+    } catch (error) {
+      console.error("Error sending email:", error);
+      alert("Failed to send email. Please try again later.");
+    }
+  };
 
   const [dialogStates, setDialogStates] = useState({});
   const [filter, setFilter] = useState({
@@ -354,6 +377,16 @@ const AdminReservationsTable = () => {
           getFilteredReservations={() => filteredReservations}
         />
       </div>
+      <TextField
+        label="Recipient Email"
+        value={recipientEmail}
+        onChange={handleRecipientEmailChange}
+        sx={{ width: "250px", marginRight: "10px" }}
+      />
+      {/* Button to Send Email */}
+      <Button variant="contained" onClick={sendEmail}>
+        Send Email
+      </Button>
 
       <Divider
         sx={{
