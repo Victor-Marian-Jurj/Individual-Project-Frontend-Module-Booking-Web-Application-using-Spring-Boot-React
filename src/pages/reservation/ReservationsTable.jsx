@@ -19,6 +19,7 @@ import Divider from "@mui/material/Divider";
 import MenuItem from "@mui/material/MenuItem";
 import ReservationPDFButton from "./ReservationPDFButton";
 import { getEmail } from "../../service/EmailService"; // Import getEmail function
+import EmailStatusDialog from "./EmailStatusDialog"; // Import EmailStatusDialog component
 
 const AdminReservationsTable = () => {
   const [reservations, setReservations] = useState([]);
@@ -26,23 +27,47 @@ const AdminReservationsTable = () => {
 
   const [recipientEmail, setRecipientEmail] = useState(""); // State to store recipient email
 
-  // Function to handle recipient email change
+  const [emailSent, setEmailSent] = useState(false); // State to manage email sent status
+  const [invalidEmail, setInvalidEmail] = useState(false); // State to manage invalid email status
+
+  // Regular expression pattern for email validation
+  const emailRegex = /^[a-zA-Z0-9._%+-]{5,20}@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
   const handleRecipientEmailChange = (event) => {
     setRecipientEmail(event.target.value);
   };
 
-  // Function to send email
+  const [validEmail, setValidEmail] = useState(false); // State to manage valid email status
+
   const sendEmail = async () => {
-    try {
-      const response = await getEmail(recipientEmail); // Call getEmail function with recipient email
-      if (response.success) {
-        alert("Email sent successfully!");
-      } else {
-        alert("Failed to send email. Please try again later.");
+    // Check if the recipient email is valid
+    const isValidEmail = emailRegex.test(recipientEmail);
+    setValidEmail(isValidEmail);
+
+    if (isValidEmail) {
+      try {
+        const response = await getEmail(recipientEmail);
+
+        // Check response status code
+        if (response.status === 200) {
+          setEmailSent(true); // Update email sent status to true
+          setInvalidEmail(false); // Reset invalid email status
+          setValidEmail(true); // Set valid email status to true
+        } else if (response.status === 404 || response.status === 500) {
+          setEmailSent(false); // Reset email sent status
+          setInvalidEmail(true); // Update invalid email status to true
+          setValidEmail(false); // Reset valid email status
+        }
+      } catch (error) {
+        console.error("Error sending email:", error);
+        setEmailSent(false); // Reset email sent status
+        setInvalidEmail(true); // Update invalid email status to true
+        setValidEmail(false); // Reset valid email status
       }
-    } catch (error) {
-      console.error("Error sending email:", error);
-      alert("Failed to send email. Please try again later.");
+    } else {
+      // If the email is not valid, set invalid email status to true
+      setInvalidEmail(true);
+      setValidEmail(false); // Reset valid email status
     }
   };
 
@@ -379,14 +404,30 @@ const AdminReservationsTable = () => {
       </div>
       <TextField
         label="Recipient Email"
+        type="email"
         value={recipientEmail}
         onChange={handleRecipientEmailChange}
+        error={invalidEmail}
+        helperText={invalidEmail ? "Invalid email address" : null}
         sx={{ width: "250px", marginRight: "10px" }}
       />
-      {/* Button to Send Email */}
+
       <Button variant="contained" onClick={sendEmail}>
         Send Email
       </Button>
+      {/* Render EmailStatusDialog component */}
+      <EmailStatusDialog
+        isOpen={emailSent || invalidEmail || validEmail} // Open the dialog when emailSent, invalidEmail, or validEmail is true
+        onClose={() => {
+          // Reset email status states when closing the dialog
+          setEmailSent(false);
+          setInvalidEmail(false);
+          setValidEmail(false);
+        }}
+        emailSent={emailSent}
+        invalidEmail={invalidEmail}
+        validEmail={validEmail} // Pass the validEmail prop here
+      />
 
       <Divider
         sx={{
