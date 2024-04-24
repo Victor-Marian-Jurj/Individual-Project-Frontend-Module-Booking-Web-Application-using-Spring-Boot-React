@@ -18,8 +18,9 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import MenuItem from "@mui/material/MenuItem";
 import ReservationPDFButton from "./ReservationPDFButton";
-import { getEmail } from "../../service/EmailService"; // Import getEmail function
+import { sendPDFToBackend } from "../../service/EmailService"; // Import sendPDFToBackend function
 import EmailStatusDialog from "./EmailStatusDialog"; // Import EmailStatusDialog component
+import generatePDF from "../reservation/ReservationsPDFBackend";
 
 const AdminReservationsTable = () => {
   const [reservations, setReservations] = useState([]);
@@ -39,35 +40,28 @@ const AdminReservationsTable = () => {
 
   const [validEmail, setValidEmail] = useState(false); // State to manage valid email status
 
-  const sendEmail = async () => {
-    // Check if the recipient email is valid
+  const generateAndSendEmail = async () => {
     const isValidEmail = emailRegex.test(recipientEmail);
     setValidEmail(isValidEmail);
 
     if (isValidEmail) {
       try {
-        const response = await getEmail(recipientEmail);
-
-        // Check response status code
-        if (response.status === 200) {
-          setEmailSent(true); // Update email sent status to true
-          setInvalidEmail(false); // Reset invalid email status
-          setValidEmail(true); // Set valid email status to true
-        } else if (response.status === 404 || response.status === 500) {
-          setEmailSent(false); // Reset email sent status
-          setInvalidEmail(true); // Update invalid email status to true
-          setValidEmail(false); // Reset valid email status
+        const pdfBlob = await generatePDF(reservations);
+        const response = await sendPDFToBackend(recipientEmail, pdfBlob);
+        if (response) {
+          setEmailSent(true);
+          setInvalidEmail(false);
+          setValidEmail(true);
         }
       } catch (error) {
-        console.error("Error sending email:", error);
-        setEmailSent(false); // Reset email sent status
-        setInvalidEmail(true); // Update invalid email status to true
-        setValidEmail(false); // Reset valid email status
+        console.error("Error sending email with PDF:", error);
+        setEmailSent(false);
+        setInvalidEmail(true);
+        setValidEmail(false);
       }
     } else {
-      // If the email is not valid, set invalid email status to true
       setInvalidEmail(true);
-      setValidEmail(false); // Reset valid email status
+      setValidEmail(false);
     }
   };
 
@@ -108,6 +102,21 @@ const AdminReservationsTable = () => {
       console.error(err);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await getReservations();
+        if (response && response.reservations) {
+          setReservations(response.reservations);
+        }
+      } catch (error) {
+        console.error("Error fetching reservations:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     handleGetReservations();
@@ -412,7 +421,7 @@ const AdminReservationsTable = () => {
         sx={{ width: "250px", marginRight: "10px" }}
       />
 
-      <Button variant="contained" onClick={sendEmail}>
+      <Button variant="contained" onClick={generateAndSendEmail}>
         Send Email
       </Button>
       {/* Render EmailStatusDialog component */}
