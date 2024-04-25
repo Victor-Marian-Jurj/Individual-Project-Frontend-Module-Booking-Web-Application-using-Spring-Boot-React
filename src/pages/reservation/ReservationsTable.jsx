@@ -28,9 +28,13 @@ const AdminReservationsTable = () => {
   // const reservations = useSelector((state) => state.reservationReducer.reservations);
 
   const [recipientEmail, setRecipientEmail] = useState(""); // State to store recipient email
+  const [recipientEmailAllReservations, setRecipientEmailAllReservations] =
+    useState(""); // State to store recipient email
 
   const [emailSent, setEmailSent] = useState(false); // State to manage email sent status
   const [invalidEmail, setInvalidEmail] = useState(false); // State to manage invalid email status
+  // const [invalidEmailAllReservations, setInvalidEmailAllReservations] = useState(false); // State to manage invalid email status
+  // const [emailSentAllReservations, setEmailSentAllReservations] = useState(false); // State to manage email sent status
 
   // Regular expression pattern for email validation
   const emailRegex = /^[a-zA-Z0-9._%+-]{5,20}@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -65,6 +69,43 @@ const AdminReservationsTable = () => {
       setValidEmail(false);
     }
   };
+
+  ////////////
+  const handleRecipientEmailChangeAllReservations = (event) => {
+    setRecipientEmailAllReservations(event.target.value);
+  };
+
+  const [validEmailAllReservations, setValidEmailAllReservations] =
+    useState(false); // State to manage valid email status
+
+  const generateAndSendEmailAllReservations = async () => {
+    const isValidEmail = emailRegex.test(recipientEmailAllReservations);
+    setValidEmail(isValidEmail);
+
+    if (isValidEmail) {
+      try {
+        const pdfBlob = await generateAllReservationsPDF(reservations);
+        const response = await sendPDFToBackend(
+          recipientEmailAllReservations,
+          pdfBlob
+        );
+        if (response) {
+          setEmailSent(true);
+          setInvalidEmail(false);
+          setValidEmail(true);
+        }
+      } catch (error) {
+        console.error("Error sending email with PDF:", error);
+        setEmailSent(false);
+        setInvalidEmail(true);
+        setValidEmail(false);
+      }
+    } else {
+      setInvalidEmail(true);
+      setValidEmail(false);
+    }
+  };
+  ////////
 
   const [dialogStates, setDialogStates] = useState({});
   const [filter, setFilter] = useState({
@@ -421,9 +462,23 @@ const AdminReservationsTable = () => {
         helperText={invalidEmail ? "Invalid email address" : null}
         sx={{ width: "250px", marginRight: "10px" }}
       />
-
-      <Button variant="contained" onClick={generateAndSendEmail}>
-        Send Email
+      <Button
+        variant="contained"
+        onClick={generateAndSendEmail}
+        sx={{
+          marginLeft: "10px",
+          marginRight: "20px",
+          fontSize: "13px", // Set the font size to smaller
+          // lineHeight: "1", // Ensure text is on two lines
+          whiteSpace: "normal", // Allow text to wrap onto two lines
+          // fontWeight: "bold", // Make the text bold
+          padding: "4px 13px", // Increase padding to make the button bigger
+          height: "auto", // Adjust height to fit the content
+        }}
+      >
+        Send Email with
+        <br />
+        Filtered Reservations
       </Button>
       {/* Render EmailStatusDialog component */}
       <EmailStatusDialog
@@ -438,7 +493,45 @@ const AdminReservationsTable = () => {
         invalidEmail={invalidEmail}
         validEmail={validEmail} // Pass the validEmail prop here
       />
-
+      <TextField
+        label="Email Address"
+        type="email"
+        value={recipientEmailAllReservations}
+        onChange={handleRecipientEmailChangeAllReservations}
+        error={invalidEmail}
+        helperText={invalidEmail ? "Invalid email address" : null}
+        sx={{ width: "250px", marginRight: "10px" }}
+      />
+      <Button
+        variant="contained"
+        onClick={generateAndSendEmailAllReservations}
+        sx={{
+          marginLeft: "10px",
+          fontSize: "13px", // Set the font size to smaller
+          // lineHeight: "1", // Ensure text is on two lines
+          whiteSpace: "normal", // Allow text to wrap onto two lines
+          // fontWeight: "bold", // Make the text bold
+          padding: "4px 15px", // Increase padding to make the button bigger
+          height: "auto", // Adjust height to fit the content
+        }}
+      >
+        Send Email with
+        <br />
+        All Reservations
+      </Button>
+      {/* Render EmailStatusDialog component */}
+      <EmailStatusDialog
+        isOpen={emailSent || invalidEmail || validEmail} // Open the dialog when emailSent, invalidEmail, or validEmail is true
+        onClose={() => {
+          // Reset email status states when closing the dialog
+          setEmailSent(false);
+          setInvalidEmail(false);
+          setValidEmail(false);
+        }}
+        emailSent={emailSent}
+        invalidEmail={invalidEmail}
+        validEmail={validEmail} // Pass the validEmail prop here
+      />
       <Divider
         sx={{
           backgroundColor: "#3f51b5",
