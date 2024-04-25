@@ -26,14 +26,14 @@ const EmailStatusDialog = ({
         ) : (
           invalidEmail && (
             <Typography sx={{ color: "red", fontWeight: "bold" }}>
-              Incorrect email address!
+              Invalid email address!
             </Typography>
           )
         )}
 
         {validEmail && (
           <Typography sx={{ color: "green", fontWeight: "bold" }}>
-            Email has been sent!
+            Valid email address!
           </Typography>
         )}
       </DialogContent>

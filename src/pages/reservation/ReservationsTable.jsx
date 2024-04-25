@@ -20,7 +20,8 @@ import MenuItem from "@mui/material/MenuItem";
 import ReservationPDFButton from "./ReservationPDFButton";
 import { sendPDFToBackend } from "../../service/EmailService"; // Import sendPDFToBackend function
 import EmailStatusDialog from "./EmailStatusDialog"; // Import EmailStatusDialog component
-import generatePDF from "../reservation/ReservationsPDFBackend";
+import generatePDF from "./FilterReservationsPDFBackend";
+import generateAllReservationsPDF from "./AllReservationsPDFBackend";
 
 const AdminReservationsTable = () => {
   const [reservations, setReservations] = useState([]);
@@ -446,7 +447,6 @@ const AdminReservationsTable = () => {
           marginBottom: "25px",
         }}
       />
-
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead sx={{ backgroundColor: "black" }}>
