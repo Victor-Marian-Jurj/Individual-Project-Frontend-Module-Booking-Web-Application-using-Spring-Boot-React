@@ -46,7 +46,7 @@ const AdminReservationsTable = () => {
 
     if (isValidEmail) {
       try {
-        const pdfBlob = await generatePDF(reservations);
+        const pdfBlob = await generatePDF(filteredReservations);
         const response = await sendPDFToBackend(recipientEmail, pdfBlob);
         if (response) {
           setEmailSent(true);
