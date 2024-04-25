@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
   },
 });
 
-const generatePDF = async (reservationsData) => {
+const generatePDF = async (filteredReservationsData) => {
   try {
     const MyDocument = () => (
       <Document>
@@ -64,7 +64,7 @@ const generatePDF = async (reservationsData) => {
                 <Text style={styles.tableHeader}>Payment method</Text>
                 <Text style={styles.tableHeader}>Total payment</Text>
               </View>
-              {reservationsData.map((reservation, index) => (
+              {filteredReservationsData.map((reservation, index) => (
                 <View style={styles.tableRow} key={index}>
                   <Text style={styles.tableCell}>{reservation.username}</Text>
                   <Text style={styles.tableCell}>{reservation.firstName}</Text>
