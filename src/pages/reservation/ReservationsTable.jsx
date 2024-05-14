@@ -20,22 +20,34 @@ import MenuItem from "@mui/material/MenuItem";
 import ReservationPDFButton from "./ReservationPDFButton";
 import { sendPDFToBackend } from "../../service/EmailService"; // Import sendPDFToBackend function
 import EmailStatusDialog from "./EmailStatusDialog"; // Import EmailStatusDialog component
-import generatePDF from "../reservation/ReservationsPDFBackend";
+import generatePDF from "./FilterReservationsPDFBackend";
+import generateAllReservationsPDF from "./AllReservationsPDFBackend";
 
 const AdminReservationsTable = () => {
   const [reservations, setReservations] = useState([]);
   // const reservations = useSelector((state) => state.reservationReducer.reservations);
 
   const [recipientEmail, setRecipientEmail] = useState(""); // State to store recipient email
+  const [recipientEmailAllReservations, setRecipientEmailAllReservations] =
+    useState(""); // State to store recipient email
 
   const [emailSent, setEmailSent] = useState(false); // State to manage email sent status
   const [invalidEmail, setInvalidEmail] = useState(false); // State to manage invalid email status
+  // const [invalidEmailAllReservations, setInvalidEmailAllReservations] = useState(false); // State to manage invalid email status
+  // const [emailSentAllReservations, setEmailSentAllReservations] = useState(false); // State to manage email sent status
+  const [scheduledEmail, setScheduledEmail] = useState(null);
+  const [selectedMinute, setSelectedMinute] = useState("");
+  const [minutes] = useState(Array.from({ length: 60 }, (_, i) => i));
 
   // Regular expression pattern for email validation
   const emailRegex = /^[a-zA-Z0-9._%+-]{5,20}@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
   const handleRecipientEmailChange = (event) => {
     setRecipientEmail(event.target.value);
+  };
+
+  const handleMinuteChange = (event) => {
+    setSelectedMinute(event.target.value);
   };
 
   const [validEmail, setValidEmail] = useState(false); // State to manage valid email status
@@ -64,6 +76,79 @@ const AdminReservationsTable = () => {
       setValidEmail(false);
     }
   };
+
+  ////////////
+  const handleRecipientEmailChangeAllReservations = (event) => {
+    setRecipientEmailAllReservations(event.target.value);
+  };
+
+  const [validEmailAllReservations, setValidEmailAllReservations] =
+    useState(false); // State to manage valid email status
+
+  const generateAndSendEmailAllReservations = async () => {
+    const isValidEmail = emailRegex.test(recipientEmailAllReservations);
+    setValidEmail(isValidEmail);
+
+    if (isValidEmail) {
+      try {
+        const pdfBlob = await generateAllReservationsPDF(reservations);
+        const response = await sendPDFToBackend(
+          recipientEmailAllReservations,
+          pdfBlob
+        );
+        if (response) {
+          setEmailSent(true);
+          setInvalidEmail(false);
+          setValidEmail(true);
+        }
+      } catch (error) {
+        console.error("Error sending email with PDF:", error);
+        setEmailSent(false);
+        setInvalidEmail(true);
+        setValidEmail(false);
+      }
+    } else {
+      setInvalidEmail(true);
+      setValidEmail(false);
+    }
+  };
+
+  const sendEmailAtSpecifiedMinute = (minute) => {
+    if (scheduledEmail) {
+      clearInterval(scheduledEmail);
+    }
+
+    const intervalId = setInterval(async () => {
+      try {
+        // Generate PDF with all reservations
+        const pdfBlob = await generateAllReservationsPDF(reservations);
+
+        // Send PDF to the specified recipient email address
+        const response = await sendPDFToBackend(
+          recipientEmailAllReservations,
+          pdfBlob
+        );
+
+        if (response) {
+          console.log("Email with all reservations sent successfully.");
+        }
+      } catch (error) {
+        console.error("Error sending email with all reservations:", error);
+      }
+    }, minute * 60000); // Convert minutes to milliseconds
+
+    setScheduledEmail(intervalId);
+  };
+
+  const handleSendRecurringEmails = () => {
+    if (selectedMinute && recipientEmailAllReservations) {
+      sendEmailAtSpecifiedMinute(selectedMinute);
+    } else {
+      console.error("Recipient email address or minute interval is empty.");
+    }
+  };
+
+  ////////
 
   const [dialogStates, setDialogStates] = useState({});
   const [filter, setFilter] = useState({
@@ -418,11 +503,25 @@ const AdminReservationsTable = () => {
         onChange={handleRecipientEmailChange}
         error={invalidEmail}
         helperText={invalidEmail ? "Invalid email address" : null}
-        sx={{ width: "250px", marginRight: "10px" }}
+        sx={{ width: "200px", marginRight: "13px" }}
       />
-
-      <Button variant="contained" onClick={generateAndSendEmail}>
-        Send Email
+      <Button
+        variant="contained"
+        onClick={generateAndSendEmail}
+        sx={{
+          marginLeft: "10px",
+          marginRight: "20px",
+          fontSize: "13px", // Set the font size to smaller
+          // lineHeight: "1", // Ensure text is on two lines
+          whiteSpace: "normal", // Allow text to wrap onto two lines
+          // fontWeight: "bold", // Make the text bold
+          padding: "4px 13px", // Increase padding to make the button bigger
+          height: "auto", // Adjust height to fit the content
+        }}
+      >
+        Send Email with
+        <br />
+        Filtered Reservations
       </Button>
       {/* Render EmailStatusDialog component */}
       <EmailStatusDialog
@@ -437,7 +536,64 @@ const AdminReservationsTable = () => {
         invalidEmail={invalidEmail}
         validEmail={validEmail} // Pass the validEmail prop here
       />
+      <TextField
+        label="Recipient Email"
+        type="email"
+        value={recipientEmailAllReservations}
+        onChange={handleRecipientEmailChangeAllReservations}
+        error={invalidEmail}
+        helperText={invalidEmail ? "Invalid email address" : null}
+        sx={{ width: "200px", marginRight: "13px" }}
+      />
 
+      {/* Dropdown menu to select the period in minutes */}
+      <TextField
+        select
+        label="Recurrency period"
+        value={selectedMinute}
+        onChange={handleMinuteChange}
+        sx={{ width: "150px", marginRight: "13px" }}
+      >
+        <MenuItem value="">Select Minute</MenuItem>
+        {minutes.map((minute) => (
+          <MenuItem key={minute} value={minute}>
+            {minute} minutes
+          </MenuItem>
+        ))}
+      </TextField>
+
+      {/* Button to send recurring emails */}
+      <Button
+        variant="contained"
+        onClick={handleSendRecurringEmails}
+        sx={{
+          marginLeft: "12px",
+          fontSize: "13px", // Set the font size to smaller
+          // lineHeight: "1", // Ensure text is on two lines
+          whiteSpace: "normal", // Allow text to wrap onto two lines
+          // fontWeight: "bold", // Make the text bold
+          padding: "4px 13px", // Increase padding to make the button bigger
+          height: "auto", // Adjust height to fit the content
+        }}
+      >
+        Send Recurring Emails
+        <br />
+        with All Reservations
+      </Button>
+
+      {/* Render EmailStatusDialog component */}
+      <EmailStatusDialog
+        isOpen={emailSent || invalidEmail || validEmail} // Open the dialog when emailSent, invalidEmail, or validEmail is true
+        onClose={() => {
+          // Reset email status states when closing the dialog
+          setEmailSent(false);
+          setInvalidEmail(false);
+          setValidEmail(false);
+        }}
+        emailSent={emailSent}
+        invalidEmail={invalidEmail}
+        validEmail={validEmail} // Pass the validEmail prop here
+      />
       <Divider
         sx={{
           backgroundColor: "#3f51b5",
@@ -446,7 +602,6 @@ const AdminReservationsTable = () => {
           marginBottom: "25px",
         }}
       />
-
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} aria-label="simple table">
           <TableHead sx={{ backgroundColor: "black" }}>
