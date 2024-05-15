@@ -18,8 +18,12 @@ import { Link } from "react-router-dom";
 
 const ResponsiveMenuDrawer = () => {
   const menuItems = [
-    { text: "Hotels", icon: HotelIcon, path: "/hotels" },
-    { text: "Reservations", icon: CheckCircleIcon, path: "/reservations" },
+    { text: "Hotels", icon: HotelIcon, path: "/hotel.manager/hotels" },
+    {
+      text: "Reservations",
+      icon: CheckCircleIcon,
+      path: "/hotel.manager/reservations",
+    },
   ];
 
   const accountMenuItems = [
@@ -75,7 +79,7 @@ const ResponsiveMenuDrawer = () => {
           mt: "16px",
         }}
       >
-        <Link to="/hotels/create">
+        <Link to="/hotel.manager/hotels/create">
           <Button variant="contained" startIcon={<AddIcon />}>
             New Hotel
           </Button>
