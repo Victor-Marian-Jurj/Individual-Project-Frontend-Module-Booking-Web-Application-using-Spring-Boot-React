@@ -24,7 +24,7 @@ const CreateReservation = () => {
   const dispatch = useDispatch();
 
   const handleCancelClick = () => {
-    navigate("/hotels");
+    navigate("/hotel.manager/hotels");
   };
 
   const handleAddReservation = async (
@@ -49,7 +49,7 @@ const CreateReservation = () => {
     try {
       await postReservation(reservation);
       dispatch(openSnackbar({ text: "Reservation added successfully" }));
-      navigate("/hotels");
+      navigate("hotel.manager/hotels");
     } catch (error) {
       console.error(error);
     } finally {

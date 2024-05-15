@@ -10,6 +10,10 @@ import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import HotelPDFButton from "./HotelPDFButton"; // Import GeneratePDFButton component
+import EmailStatusDialog from "../../components/EmailStatusDialog"; // Import EmailStatusDialog component
+import generatePDF from "./FilterHotelsPDFBackend";
+import { sendPDFToBackend } from "../../service/EmailServiceHotels"; // Import sendPDFToBackend function
+import Button from "@mui/material/Button";
 
 const HotelsList = () => {
   const [nameFilterOptions, setNameFilterOptions] = useState([""]);
@@ -23,6 +27,48 @@ const HotelsList = () => {
   const [parkingFilter, setParkingFilter] = useState("");
   const [minibarFilter, setMinibarFilter] = useState("");
   const [filteredHotels, setFilteredHotels] = useState([]); // State variable to hold filtered hotel data
+
+  //
+
+  const [recipientEmail, setRecipientEmail] = useState(""); // State to store recipient email
+
+  const [emailSent, setEmailSent] = useState(false); // State to manage email sent status
+  const [invalidEmail, setInvalidEmail] = useState(false); // State to manage invalid email status
+
+  // Regular expression pattern for email validation
+  const emailRegex = /^[a-zA-Z0-9._%+-]{5,20}@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+  const handleRecipientEmailChange = (event) => {
+    setRecipientEmail(event.target.value);
+  };
+
+  const [validEmail, setValidEmail] = useState(false); // State to manage valid email status
+
+  const generateAndSendEmail = async () => {
+    const isValidEmail = emailRegex.test(recipientEmail);
+    setValidEmail(isValidEmail);
+
+    if (isValidEmail) {
+      try {
+        const pdfBlob = await generatePDF(filteredHotels);
+        const response = await sendPDFToBackend(recipientEmail, pdfBlob);
+        if (response) {
+          setEmailSent(true);
+          setInvalidEmail(false);
+          setValidEmail(true);
+        }
+      } catch (error) {
+        console.error("Error sending email with PDF:", error);
+        setEmailSent(false);
+        setInvalidEmail(true);
+        setValidEmail(false);
+      }
+    } else {
+      setInvalidEmail(true);
+      setValidEmail(false);
+    }
+  };
+  //
 
   const fetchHotelData = async () => {
     try {
@@ -276,6 +322,47 @@ const HotelsList = () => {
           <MenuItem value="false">False</MenuItem>
         </TextField>
         <HotelPDFButton getFilteredHotels={getFilteredHotels} />
+
+        <TextField
+          label="Recipient Email"
+          type="email"
+          value={recipientEmail}
+          onChange={handleRecipientEmailChange}
+          error={invalidEmail}
+          helperText={invalidEmail ? "Invalid email address" : null}
+          sx={{ width: "200px", marginRight: "13px" }}
+        />
+        <Button
+          variant="contained"
+          onClick={generateAndSendEmail}
+          sx={{
+            marginLeft: "10px",
+            marginRight: "20px",
+            fontSize: "13px", // Set the font size to smaller
+            // lineHeight: "1", // Ensure text is on two lines
+            whiteSpace: "normal", // Allow text to wrap onto two lines
+            // fontWeight: "bold", // Make the text bold
+            padding: "4px 13px", // Increase padding to make the button bigger
+            height: "auto", // Adjust height to fit the content
+          }}
+        >
+          Send Email with
+          <br />
+          Filtered Hotels
+        </Button>
+        {/* Render EmailStatusDialog component */}
+        <EmailStatusDialog
+          isOpen={emailSent || invalidEmail || validEmail} // Open the dialog when emailSent, invalidEmail, or validEmail is true
+          onClose={() => {
+            // Reset email status states when closing the dialog
+            setEmailSent(false);
+            setInvalidEmail(false);
+            setValidEmail(false);
+          }}
+          emailSent={emailSent}
+          invalidEmail={invalidEmail}
+          validEmail={validEmail} // Pass the validEmail prop here
+        />
 
         {/* Add similar select components for other filters */}
       </div>

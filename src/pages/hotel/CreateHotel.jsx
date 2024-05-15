@@ -21,7 +21,7 @@ const CreateHotel = () => {
   const dispatch = useDispatch();
 
   const handleCancelClick = () => {
-    navigate("/hotels");
+    navigate("/hotel.manager/hotels");
   };
 
   const handleAddHotel = async (
@@ -48,7 +48,7 @@ const CreateHotel = () => {
     try {
       await postHotel(hotel);
       dispatch(openSnackbar({ text: "Hotel added successfully" }));
-      navigate("/hotels");
+      navigate("hotel.manager/hotels");
     } catch (error) {
       console.error(error);
     } finally {

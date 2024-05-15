@@ -10,7 +10,7 @@ const EditHotel = () => {
   const { hotel } = useHotelById(params.hotelId);
 
   const handleCancelClick = () => {
-    navigate("/hotels");
+    navigate("/hotel.manager/hotels");
   };
 
   const handleSaveHotel = async (
@@ -34,7 +34,7 @@ const EditHotel = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      navigate("/hotels");
+      navigate("hotel.manager/hotels");
     }
   };
 

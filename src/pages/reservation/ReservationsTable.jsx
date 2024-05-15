@@ -18,8 +18,8 @@ import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
 import MenuItem from "@mui/material/MenuItem";
 import ReservationPDFButton from "./ReservationPDFButton";
-import { sendPDFToBackend } from "../../service/EmailService"; // Import sendPDFToBackend function
-import EmailStatusDialog from "./EmailStatusDialog"; // Import EmailStatusDialog component
+import { sendPDFToBackend } from "../../service/EmailServiceReservations"; // Import sendPDFToBackend function
+import EmailStatusDialog from "../../components/EmailStatusDialog"; // Import EmailStatusDialog component
 import generatePDF from "./FilterReservationsPDFBackend";
 import generateAllReservationsPDF from "./AllReservationsPDFBackend";
 

@@ -50,7 +50,7 @@ export default function HotelItem({ hotel, onGetHotels }) {
   const navigate = useNavigate();
 
   const handleHotelReservation = () => {
-    navigate(`/hotels/${hotel.hotelId}/reservation`);
+    navigate(`/hotel.manager/hotels/${hotel.hotelId}/reservation`);
   };
 
   return (
@@ -74,10 +74,10 @@ export default function HotelItem({ hotel, onGetHotels }) {
           spacing={2}
           className="middle"
         >
-          <Link to={`/hotels/${hotel.hotelId}`}>
+          <Link to={`/hotel.manager/hotels/${hotel.hotelId}`}>
             <CircleBackgroundIcon icon={VisibilityIcon} color="white" />
           </Link>
-          <Link to={`/hotels/${hotel.hotelId}/edit`}>
+          <Link to={`/hotel.manager/hotels/${hotel.hotelId}/edit`}>
             <CircleBackgroundIcon icon={EditIcon} color="white" />
           </Link>
           <CircleBackgroundIcon
@@ -100,7 +100,7 @@ export default function HotelItem({ hotel, onGetHotels }) {
       </div>
 
       <Typography sx={{ fontWeight: "bold" }}>
-        <Link to={"/hotels/" + hotel.hotelId}>
+        <Link to={"/hotel.manager/hotels/" + hotel.hotelId}>
           {hotel.hotelName} - {hotel.hotelLocation}
         </Link>
       </Typography>

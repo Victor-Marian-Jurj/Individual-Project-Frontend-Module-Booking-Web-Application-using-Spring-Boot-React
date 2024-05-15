@@ -11,7 +11,7 @@ const EditReservation = () => {
   console.log(reservation);
 
   const handleCancelClick = () => {
-    navigate("/reservations");
+    navigate("/hotel.manager/reservations");
   };
 
   const handleSaveReservation = async (

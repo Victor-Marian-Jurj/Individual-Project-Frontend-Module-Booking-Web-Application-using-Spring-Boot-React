@@ -11,7 +11,7 @@ const ViewHotel = () => {
   const navigate = useNavigate();
 
   const handleCancelClick = () => {
-    navigate("/hotels");
+    navigate("/hotel.manager/hotels");
   };
 
   return (
