@@ -22,12 +22,13 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderStyle: "solid",
     borderBottomWidth: 1,
+    // Remove the fixed height
   },
   tableHeader: {
     fontSize: 14,
     fontWeight: "bold",
     padding: 10,
-    width: "20%",
+    width: "20.28%",
     borderStyle: "solid",
     borderRightWidth: 1,
     backgroundColor: "#3f51b5",
@@ -36,10 +37,34 @@ const styles = StyleSheet.create({
   tableCell: {
     fontSize: 12,
     padding: 10,
-    width: "20%",
+    width: "20.28%",
     borderStyle: "solid",
     borderRightWidth: 1,
     backgroundColor: "#ffffff",
+  },
+  fifthColumnHeader: {
+    // Styles for the header of the 5th column
+    width: "25%", // Adjust the width of the 5th column header
+  },
+  fifthColumnCell: {
+    // Styles for the cells of the 5th column
+    width: "25%", // Adjust the width of the 5th column cells
+  },
+  sixtColumnHeader: {
+    // Styles for the header of the 5th column
+    width: "25%", // Adjust the width of the 5th column header
+  },
+  sixtColumnCell: {
+    // Styles for the cells of the 5th column
+    width: "25%", // Adjust the width of the 5th column cells
+  },
+  seventhColumnHeader: {
+    // Styles for the header of the 5th column
+    width: "25%", // Adjust the width of the 5th column header
+  },
+  seventhColumnCell: {
+    // Styles for the cells of the 5th column
+    width: "25%", // Adjust the width of the 5th column cells
   },
 });
 
@@ -55,9 +80,15 @@ const generatePDF = async (filteredReservationsData) => {
                 <Text style={styles.tableHeader}>First name</Text>
                 <Text style={styles.tableHeader}>Last name</Text>
                 <Text style={styles.tableHeader}>Hotel name</Text>
-                <Text style={styles.tableHeader}>Hotel location</Text>
-                <Text style={styles.tableHeader}>Check-in date</Text>
-                <Text style={styles.tableHeader}>Check-out date</Text>
+                <Text style={[styles.tableHeader, styles.fifthColumnHeader]}>
+                  Hotel location
+                </Text>
+                <Text style={[styles.tableHeader, styles.sixtColumnHeader]}>
+                  Check-in date
+                </Text>
+                <Text style={[styles.tableHeader, styles.seventhColumnHeader]}>
+                  Check-out date
+                </Text>
                 <Text style={styles.tableHeader}>Room number</Text>
                 <Text style={styles.tableHeader}>Room type</Text>
                 <Text style={styles.tableHeader}>Room price</Text>
@@ -70,13 +101,13 @@ const generatePDF = async (filteredReservationsData) => {
                   <Text style={styles.tableCell}>{reservation.firstName}</Text>
                   <Text style={styles.tableCell}>{reservation.lastName}</Text>
                   <Text style={styles.tableCell}>{reservation.hotelName}</Text>
-                  <Text style={styles.tableCell}>
+                  <Text style={[styles.tableCell, styles.fifthColumnCell]}>
                     {reservation.hotelLocation}
                   </Text>
-                  <Text style={styles.tableCell}>
+                  <Text style={[styles.tableCell, styles.sixtColumnCell]}>
                     {new Date(reservation.checkInDate).toLocaleDateString()}
                   </Text>
-                  <Text style={styles.tableCell}>
+                  <Text style={[styles.tableCell, styles.seventhColumnCell]}>
                     {new Date(reservation.checkOutDate).toLocaleDateString()}
                   </Text>
                   <Text style={styles.tableCell}>{reservation.roomNumber}</Text>
