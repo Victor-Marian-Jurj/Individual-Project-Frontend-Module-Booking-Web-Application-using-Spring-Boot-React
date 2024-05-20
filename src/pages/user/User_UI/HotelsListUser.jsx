@@ -2,20 +2,20 @@ import React, { useEffect, useState } from "react";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import HotelItem from "./HotelItem";
-import "../../styles/HotelsList.css";
-import { getHotels } from "../../service/HotelService";
+import HotelItem from "./HotelItemUser";
+import "../../../styles/HotelsList.css";
+import { getHotels } from "../../..//service/HotelService";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import HotelPDFButton from "./HotelPDFButton"; // Import GeneratePDFButton component
-import EmailStatusDialog from "../../components/EmailStatusDialog"; // Import EmailStatusDialog component
-import generatePDF from "./FilterHotelsPDFBackend";
-import { sendPDFToBackend } from "../../service/EmailServiceHotels"; // Import sendPDFToBackend function
+import HotelPDFButton from "..//..//..//pages/hotel/HotelPDFButton"; // Import GeneratePDFButton component
+import EmailStatusDialog from "../../../components/EmailStatusDialog"; // Import EmailStatusDialog component
+import generatePDF from "..//..//..//pages/hotel/FilterHotelsPDFBackend";
+import { sendPDFToBackend } from "../../../service/EmailServiceHotels"; // Import sendPDFToBackend function
 import Button from "@mui/material/Button";
 
-const HotelsList = () => {
+const HotelsListUser = () => {
   const [nameFilterOptions, setNameFilterOptions] = useState([""]);
   const [hotels, setHotels] = useState([]);
   const [nameFilter, setNameFilter] = useState("");
@@ -399,4 +399,4 @@ const HotelsList = () => {
   );
 };
 
-export default HotelsList;
+export default HotelsListUser;

@@ -39,7 +39,7 @@ const EditReservation = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      navigate("/reservations");
+      navigate("/hotel.manager/reservations");
     }
   };
 

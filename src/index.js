@@ -11,6 +11,9 @@ import ReservationsTable from "./pages/reservation/ReservationsTable";
 import { Provider } from "react-redux";
 import store from "./stores/store";
 import EditReservation from "./pages/reservation/EditReservation";
+import ViewHotelUser from "./pages/user/User_UI/ViewHotelUser";
+import CreateReservationUser from "./pages/user/User_UI/CreateReservationUser";
+import HotelsListUser from "./pages/user/User_UI/HotelsListUser";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -28,11 +31,24 @@ const router = createBrowserRouter([
       { path: "/hotel.manager/hotels/:hotelId", element: <ViewHotel /> },
       { path: "/hotel.manager/hotels/:hotelId/edit", element: <EditHotel /> },
       {
-        path: "/reservations/:reservationId/edit",
+        path: "/hotel.manager/reservations/:reservationId/edit",
         element: <EditReservation />,
       },
       { path: "/hotel.manager/reservations", element: <ReservationsTable /> },
       // { path: "/account", element: <div>Account</div> },
+
+      /////////////user////
+
+      { path: "/tourist/hotels", element: <HotelsListUser /> },
+      { path: "/hotel.manager/hotels/create", element: <CreateHotel /> },
+      {
+        path: "/tourist/hotels/:hotelId/reservation",
+        element: <CreateReservationUser />,
+      },
+      { path: "/tourist/hotels/:hotelId", element: <ViewHotelUser /> },
+      // { path: "/hotel.manager/hotels/:hotelId/edit", element: <EditHotel /> },
+      // { path: "/reservations/:reservationId/edit",element: <EditReservation />,},
+      // { path: "/hotel.manager/reservations", element: <ReservationsTable /> },
     ],
   },
 ]);

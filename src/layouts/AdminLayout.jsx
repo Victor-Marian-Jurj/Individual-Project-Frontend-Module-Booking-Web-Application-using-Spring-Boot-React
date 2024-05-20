@@ -7,7 +7,7 @@ import AppSnackbar from "../components/AppSnackbar";
 
 const drawerWidth = 300;
 
-const Layout = () => {
+const AdminLayout = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   const handleDrawerToggle = () => {
@@ -29,4 +29,4 @@ const Layout = () => {
   );
 };
 
-export default Layout;
+export default AdminLayout;

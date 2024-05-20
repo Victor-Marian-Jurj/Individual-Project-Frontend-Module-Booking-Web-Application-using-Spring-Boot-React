@@ -1,7 +1,8 @@
-import Layout from "./layouts/Layout";
+import AdminLayout from "./layouts/AdminLayout";
+// import UserLayout from "./pages/user/layouts/UserLayout";
 
 function App() {
-  return <Layout />;
+  return <AdminLayout />;
 }
 
 export default App;
