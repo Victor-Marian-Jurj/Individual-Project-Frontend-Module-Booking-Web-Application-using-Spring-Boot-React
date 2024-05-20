@@ -370,7 +370,8 @@ const HotelsList = () => {
         sx={{
           backgroundColor: "#3f51b5",
           height: "2px",
-          marginBottom: "20px",
+          marginTop: "10px",
+          marginBottom: "25px",
         }}
       />
       <Stack

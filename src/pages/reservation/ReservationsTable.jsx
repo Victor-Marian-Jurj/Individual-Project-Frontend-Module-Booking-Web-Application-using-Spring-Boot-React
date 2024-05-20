@@ -738,7 +738,9 @@ const AdminReservationsTable = () => {
                   {reservation.totalPayment}
                 </TableCell>
                 <TableCell align="left">
-                  <Link to={`/reservations/${reservation.reservationId}/edit`}>
+                  <Link
+                    to={`/hotel.manager/reservations/${reservation.reservationId}/edit`}
+                  >
                     <Button size="medium">Edit</Button>
                   </Link>
                   <Button

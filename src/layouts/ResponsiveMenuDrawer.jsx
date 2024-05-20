@@ -37,7 +37,7 @@ const ResponsiveMenuDrawer = () => {
           <ListItemAvatar>
             <UserAvatar />
           </ListItemAvatar>
-          <ListItemText primary="MarianS" secondary="stoicamarian@yahoo.com" />
+          <ListItemText primary="Hotel Manager" />
         </ListItem>
       </List>
       <Divider />
