@@ -1,19 +1,23 @@
 import { useNavigate } from "react-router-dom";
 import { postReservation } from "../../service/ReservationService";
-import ReservationForm from "./ReservationForm";
+import ReservationFormNoId from "./RezervationFormNoId";
 import { openSnackbar } from "../../stores/snackbarSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { Button, CircularProgress } from "@mui/material";
+import { Button, CircularProgress, Box } from "@mui/material";
 
 const CreateReservation = () => {
   const initialReservation = {
-    UserId: "",
     HotelId: "",
-    RoomId: "",
+    FirstName: "",
+    LastName: "",
+    PhoneNumber: "",
+    EmailAddress: "",
     CheckinDate: "",
     CheckoutDate: "",
+    RoomType: "",
+    RoomPrice: "",
     PaymentMethod: "",
     TotalPayment: "",
   };
@@ -28,20 +32,28 @@ const CreateReservation = () => {
   };
 
   const handleAddReservation = async (
-    userId,
     hotelId,
-    roomId,
+    firstName,
+    lastName,
+    phoneNumber,
+    emailAddress,
     checkInDate,
     checkOutDate,
+    roomType,
+    roomPrice,
     paymentMethod,
     totalPayment
   ) => {
     const reservation = {
-      userId: userId,
       hotelId: hotelId,
-      roomId: roomId,
+      firstName: firstName,
+      lastName: lastName,
+      phoneNumber: phoneNumber,
+      emailAddress: emailAddress,
       checkInDate: checkInDate,
       checkOutDate: checkOutDate,
+      roomType: roomType,
+      roomPrice: roomPrice,
       paymentMethod: paymentMethod,
       totalPayment: totalPayment,
     };
@@ -49,30 +61,42 @@ const CreateReservation = () => {
     try {
       await postReservation(reservation);
       dispatch(openSnackbar({ text: "Reservation added successfully" }));
-      navigate("hotel.manager/hotels");
     } catch (error) {
       console.error(error);
     } finally {
+      navigate("/hotel.manager/hotels");
     }
   };
 
   return reservation ? (
-    <div>
-      Add reservation for hotel with id: {params.hotelId}
-      <ReservationForm
-        formTitle="Add Reservation"
-        reservation={reservation}
-        buttonLabel="Add"
-        onSaveReservation={handleAddReservation}
-      />
-      <Button
-        variant="outlined"
-        onClick={handleCancelClick}
-        sx={{ mt: "16px", width: "100px" }}
-      >
-        Cancel
-      </Button>
-    </div>
+    <Box
+      component="form"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "16px",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <div>
+        Add reservation for hotel with id: {params.hotelId}
+        <ReservationFormNoId
+          formTitle="Add Reservation"
+          reservation={reservation}
+          buttonLabel="Add"
+          onSaveReservation={handleAddReservation}
+          hotelId={params.hotelId} // Pass hotelId as a prop
+        />
+        <Button
+          variant="outlined"
+          onClick={handleCancelClick}
+          sx={{ width: "100px", marginTop: "15px" }}
+        >
+          Cancel
+        </Button>
+      </div>
+    </Box>
   ) : (
     <CircularProgress />
   );

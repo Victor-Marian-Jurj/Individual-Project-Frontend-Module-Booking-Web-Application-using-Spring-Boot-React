@@ -15,20 +15,30 @@ const EditReservation = () => {
   };
 
   const handleSaveReservation = async (
-    userId,
+    reservationId,
     hotelId,
-    roomId,
+    firstName,
+    lastName,
+    emailAddress,
+    phoneNumber,
     checkInDate,
     checkOutDate,
+    roomType,
+    roomPrice,
     paymentMethod,
     totalPayment
   ) => {
     const reservation = {
-      userId,
+      reservationId,
       hotelId,
-      roomId,
+      firstName,
+      lastName,
+      emailAddress,
+      phoneNumber,
       checkInDate,
       checkOutDate,
+      roomType,
+      roomPrice,
       paymentMethod,
       totalPayment,
     };
