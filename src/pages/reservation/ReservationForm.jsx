@@ -9,9 +9,19 @@ const ReservationForm = ({
   buttonLabel,
   isReadonly,
 }) => {
-  const [userId, handleUserIdChange] = useInput(reservation.userId);
+  const [reservationId, handleReservationIdChange] = useInput(
+    reservation.reservationId
+  );
   const [hotelId, handleHotelIdChange] = useInput(reservation.hotelId);
-  const [roomId, handleRoomIdChange] = useInput(reservation.roomId);
+  // const [roomId, handleRoomIdChange] = useInput(reservation.roomId);
+
+  const [firstName, handleFirstName] = useInput(reservation.firstName);
+  const [lastName, handleLastName] = useInput(reservation.lastName);
+  const [phoneNumber, handlePhoneNumber] = useInput(reservation.phoneNumber);
+  const [emailAddress, handleEmailAddress] = useInput(reservation.emailAddress);
+  const [roomPrice, handleRoomPrice] = useInput(reservation.roomPrice);
+  const [roomType, handleRoomType] = useInput(reservation.roomType);
+
   const [checkInDate, handleCheckInDateChange] = useInput(
     reservation.checkInDate
   );
@@ -42,12 +52,27 @@ const ReservationForm = ({
       }}
     >
       <h1>{formTitle}</h1>
-      <TextField
+      {/* <TextField
         variant="outlined"
         disabled={isReadonly}
         label="UserId"
         value={userId}
         onChange={handleUserIdChange}
+      />
+     
+      <TextField
+        variant="outlined"
+        disabled={isReadonly}
+        label="RoomId"
+        value={roomId}
+        onChange={handleRoomIdChange}
+      /> */}
+      <TextField
+        variant="outlined"
+        disabled={isReadonly}
+        label="ReservationId"
+        value={reservationId}
+        onChange={handleReservationIdChange}
       />
       <TextField
         variant="outlined"
@@ -59,35 +84,71 @@ const ReservationForm = ({
       <TextField
         variant="outlined"
         disabled={isReadonly}
-        label="RoomId"
-        value={roomId}
-        onChange={handleRoomIdChange}
+        label="First Name"
+        value={firstName}
+        onChange={handleFirstName}
       />
       <TextField
         variant="outlined"
         disabled={isReadonly}
-        label="CheckinDate"
+        label="Last Name"
+        value={lastName}
+        onChange={handleLastName}
+      />
+      <TextField
+        variant="outlined"
+        disabled={isReadonly}
+        label="Phone Number"
+        value={phoneNumber}
+        onChange={handlePhoneNumber}
+      />
+      <TextField
+        variant="outlined"
+        disabled={isReadonly}
+        label="Email Address"
+        value={emailAddress}
+        onChange={handleEmailAddress}
+      />
+
+      <TextField
+        variant="outlined"
+        disabled={isReadonly}
+        label="Check-in Date"
         value={checkInDate}
         onChange={handleCheckInDateChange}
       />
       <TextField
         variant="outlined"
         disabled={isReadonly}
-        label="CheckoutDate"
+        label="Check-out Date"
         value={checkOutDate}
         onChange={handleCheckOutDateChange}
       />
       <TextField
         variant="outlined"
         disabled={isReadonly}
-        label="PaymentMethod"
+        label="Room Type"
+        value={roomType}
+        onChange={handleRoomType}
+      />
+      <TextField
+        variant="outlined"
+        disabled={isReadonly}
+        label="Room Price"
+        value={roomPrice}
+        onChange={handleRoomPrice}
+      />
+      <TextField
+        variant="outlined"
+        disabled={isReadonly}
+        label="Payment Method"
         value={paymentMethod}
         onChange={handlePaymentMethodChange}
       />
       <TextField
         variant="outlined"
         disabled={isReadonly}
-        label="TotalPayment"
+        label="Total Payment"
         value={totalPayment}
         onChange={handleTotalPaymentChange}
       />
@@ -96,11 +157,17 @@ const ReservationForm = ({
           variant="contained"
           onClick={() =>
             onSaveReservation(
-              userId,
+              reservationId,
               hotelId,
-              roomId,
+              // roomId,
+              firstName,
+              lastName,
+              phoneNumber,
+              emailAddress,
               checkInDate,
               checkOutDate,
+              roomType,
+              roomPrice,
               paymentMethod,
               totalPayment
             )

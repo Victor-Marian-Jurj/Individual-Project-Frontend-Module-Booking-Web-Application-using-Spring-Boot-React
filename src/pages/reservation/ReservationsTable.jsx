@@ -152,14 +152,14 @@ const AdminReservationsTable = () => {
 
   const [dialogStates, setDialogStates] = useState({});
   const [filter, setFilter] = useState({
-    username: "",
-    firstName: "",
-    lastName: "",
     hotelName: "",
     hotelLocation: "",
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    emailAddress: "",
     checkInDate: "",
     checkOutDate: "",
-    roomNumber: "",
     roomType: "",
     roomPrice: "",
     paymentMethod: "",
@@ -169,14 +169,15 @@ const AdminReservationsTable = () => {
   const handleGetReservations = async () => {
     try {
       const response = await getReservations();
-      console.log(response);
+      console.log("Fetched Reservations: ", response);
       const reservationsData = response.reservations;
 
       if (Array.isArray(reservationsData)) {
         reservationsData.sort((a, b) =>
-          a.username.toLowerCase().localeCompare(b.username.toLowerCase())
+          a.firstName.toLowerCase().localeCompare(b.firstName.toLowerCase())
         );
         setReservations([...reservationsData]);
+        console.log("Updated Reservations State: ", reservationsData);
       } else {
         console.error(
           "Data from getReservations is not an array:",
@@ -184,7 +185,7 @@ const AdminReservationsTable = () => {
         );
       }
     } catch (err) {
-      console.error(err);
+      console.error("Error fetching reservations:", err);
     }
   };
 
@@ -270,21 +271,21 @@ const AdminReservationsTable = () => {
   const uniqueFirstNames = [
     ...new Set(reservations.map((reservation) => reservation.firstName)),
   ];
-  const uniqueUsernames = [
-    ...new Set(reservations.map((reservation) => reservation.username)),
-  ];
-  const uniqueRoomNumbers = [
-    ...new Set(reservations.map((reservation) => reservation.roomNumber)),
-  ];
+  // const uniqueUsernames = [
+  //   ...new Set(reservations.map((reservation) => reservation.username)),
+  // ];
   const uniqueRoomPrices = [
     ...new Set(reservations.map((reservation) => reservation.roomPrice)),
+  ];
+  const uniqueEmailAddress = [
+    ...new Set(reservations.map((reservation) => reservation.emailAddress)),
+  ];
+  const uniquePhoneNumber = [
+    ...new Set(reservations.map((reservation) => reservation.phoneNumber)),
   ];
 
   const filteredReservations = reservations.filter((reservation) => {
     return (
-      reservation.username
-        .toLowerCase()
-        .includes(filter.username.toLowerCase()) &&
       reservation.firstName
         .toLowerCase()
         .includes(filter.firstName.toLowerCase()) &&
@@ -294,6 +295,12 @@ const AdminReservationsTable = () => {
       reservation.hotelName
         .toLowerCase()
         .includes(filter.hotelName.toLowerCase()) &&
+      reservation.phoneNumber
+        .toLowerCase()
+        .includes(filter.phoneNumber.toLowerCase()) &&
+      reservation.emailAddress
+        .toLowerCase()
+        .includes(filter.emailAddress.toLowerCase()) &&
       reservation.hotelLocation
         .toLowerCase()
         .includes(filter.hotelLocation.toLowerCase()) &&
@@ -301,8 +308,6 @@ const AdminReservationsTable = () => {
         reservation.paymentMethod
           .toLowerCase()
           .includes(filter.paymentMethod.toLowerCase())) &&
-      (filter.roomNumber === "" ||
-        reservation.roomNumber === parseInt(filter.roomNumber, 10)) &&
       reservation.roomType
         .toLowerCase()
         .includes(filter.roomType.toLowerCase()) &&
@@ -321,7 +326,7 @@ const AdminReservationsTable = () => {
       </Typography>
       <br />
       <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}>
-        <TextField
+        {/* <TextField
           select
           label="Username"
           value={filter.username}
@@ -334,7 +339,7 @@ const AdminReservationsTable = () => {
               {username}
             </MenuItem>
           ))}
-        </TextField>
+        </TextField> */}
 
         <TextField
           select
@@ -361,6 +366,34 @@ const AdminReservationsTable = () => {
           {uniqueLastNames.map((lastName) => (
             <MenuItem key={lastName} value={lastName}>
               {lastName}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          select
+          label="Phone number"
+          value={filter.phoneNumber}
+          onChange={(e) => handleFilterChange(e, "phoneNumber")}
+          sx={{ width: "165px", marginLeft: "12px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          {uniquePhoneNumber.map((phoneNumber) => (
+            <MenuItem key={phoneNumber} value={phoneNumber}>
+              {phoneNumber}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          select
+          label="Email address"
+          value={filter.emailAddress}
+          onChange={(e) => handleFilterChange(e, "emailAddress")}
+          sx={{ width: "165px", marginLeft: "12px" }}
+        >
+          <MenuItem value="">All</MenuItem>
+          {uniqueEmailAddress.map((emailAddress) => (
+            <MenuItem key={emailAddress} value={emailAddress}>
+              {emailAddress}
             </MenuItem>
           ))}
         </TextField>
@@ -417,20 +450,6 @@ const AdminReservationsTable = () => {
           {uniqueCheckOutDate.map((checkOutDate) => (
             <MenuItem key={checkOutDate} value={checkOutDate}>
               {checkOutDate}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
-          select
-          label="Room number"
-          value={filter.roomNumber}
-          onChange={(e) => handleFilterChange(e, "roomNumber")}
-          sx={{ width: "155px" }}
-        >
-          <MenuItem value="">All</MenuItem>
-          {uniqueRoomNumbers.map((roomNumber) => (
-            <MenuItem key={roomNumber} value={roomNumber}>
-              {roomNumber}
             </MenuItem>
           ))}
         </TextField>
@@ -607,12 +626,12 @@ const AdminReservationsTable = () => {
           <TableHead sx={{ backgroundColor: "black" }}>
             <TableRow>
               {/* <TableCell>Title</TableCell> */}
-              <TableCell
+              {/* <TableCell
                 align="left"
                 sx={{ color: "white", fontSize: 14, padding: "13px" }}
               >
                 Username
-              </TableCell>
+              </TableCell> */}
               <TableCell
                 align="left"
                 sx={{ color: "white", fontSize: 14, padding: "13px" }}
@@ -624,6 +643,18 @@ const AdminReservationsTable = () => {
                 sx={{ color: "white", fontSize: 14, padding: "13px" }}
               >
                 Last name
+              </TableCell>
+              <TableCell
+                align="left"
+                sx={{ color: "white", fontSize: 14, padding: "13px" }}
+              >
+                Phone number
+              </TableCell>
+              <TableCell
+                align="left"
+                sx={{ color: "white", fontSize: 14, padding: "13px" }}
+              >
+                Email address
               </TableCell>
               <TableCell
                 align="left"
@@ -648,12 +679,6 @@ const AdminReservationsTable = () => {
                 sx={{ color: "white", fontSize: 14, padding: "13px" }}
               >
                 Check-out date
-              </TableCell>
-              <TableCell
-                align="left"
-                sx={{ color: "white", fontSize: 14, padding: "13px" }}
-              >
-                Room number
               </TableCell>
               <TableCell
                 align="left"
@@ -687,20 +712,20 @@ const AdminReservationsTable = () => {
                 key={reservation.reservationId}
                 sx={{
                   "&:last-child td, &:last-child th": { border: 0 },
-                  height: 40, // Adjust the height as needed
+                  height: 40,
                 }}
               >
-                {/* <TableCell component="th" scope="row">
-        Registered reservation
-      </TableCell> */}
-                <TableCell align="left" sx={{ fontSize: 14 }}>
-                  {reservation.username}
-                </TableCell>
                 <TableCell align="left" sx={{ fontSize: 14 }}>
                   {reservation.firstName}
                 </TableCell>
                 <TableCell align="left" sx={{ fontSize: 14 }}>
                   {reservation.lastName}
+                </TableCell>
+                <TableCell align="left" sx={{ fontSize: 14 }}>
+                  {reservation.phoneNumber}
+                </TableCell>
+                <TableCell align="left" sx={{ fontSize: 14 }}>
+                  {reservation.emailAddress}
                 </TableCell>
                 <TableCell align="left" sx={{ fontSize: 14 }}>
                   {reservation.hotelName}
@@ -721,9 +746,6 @@ const AdminReservationsTable = () => {
                       .toISOString()
                       .split("T")[0]
                   }
-                </TableCell>
-                <TableCell align="left" sx={{ fontSize: 14 }}>
-                  {reservation.roomNumber}
                 </TableCell>
                 <TableCell align="left" sx={{ fontSize: 14 }}>
                   {reservation.roomType}
