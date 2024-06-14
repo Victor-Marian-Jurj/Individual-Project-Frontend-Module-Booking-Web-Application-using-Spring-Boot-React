@@ -522,7 +522,7 @@ const AdminReservationsTable = () => {
         onChange={handleRecipientEmailChange}
         error={invalidEmail}
         helperText={invalidEmail ? "Invalid email address" : null}
-        sx={{ width: "200px", marginRight: "13px" }}
+        sx={{ width: "200px", marginRight: "5px", marginLeft: "13px" }}
       />
       <Button
         variant="contained"
@@ -586,7 +586,7 @@ const AdminReservationsTable = () => {
         variant="contained"
         onClick={handleSendRecurringEmails}
         sx={{
-          marginLeft: "12px",
+          // marginLeft: "12px",
           fontSize: "13px", // Set the font size to smaller
           // lineHeight: "1", // Ensure text is on two lines
           whiteSpace: "normal", // Allow text to wrap onto two lines
