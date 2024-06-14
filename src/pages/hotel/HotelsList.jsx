@@ -14,6 +14,7 @@ import EmailStatusDialog from "../../components/EmailStatusDialog"; // Import Em
 import generatePDF from "./FilterHotelsPDFBackend";
 import { sendPDFToBackend } from "../../service/EmailServiceHotels"; // Import sendPDFToBackend function
 import Button from "@mui/material/Button";
+import { format, addDays } from "date-fns"; // Import date-fns format and addDays functions
 
 const HotelsList = () => {
   const [nameFilterOptions, setNameFilterOptions] = useState([""]);
@@ -414,28 +415,28 @@ const HotelsList = () => {
           label="Check-in"
           value={checkInIntervalFilter}
           onChange={(e) => setCheckInIntervalFilter(e.target.value)}
-          select
-          sx={{ width: "110px", marginLeft: "12px" }}
-        >
-          {checkInIntervalFilterOptions.map((checkInInterval) => (
-            <MenuItem key={checkInInterval} value={checkInInterval}>
-              {checkInInterval}
-            </MenuItem>
-          ))}
-        </TextField>
+          type="date"
+          sx={{ width: "110px", marginRight: "12px" }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          inputProps={{
+            min: format(new Date(), "yyyy-MM-dd"),
+          }}
+        />
         <TextField
           label="Check-out"
           value={checkOutIntervalFilter}
           onChange={(e) => setCheckOutIntervalFilter(e.target.value)}
-          select
-          sx={{ width: "115px", marginLeft: "12px" }}
-        >
-          {checkOutIntervalFilterOptions.map((checkOutInterval) => (
-            <MenuItem key={checkOutInterval} value={checkOutInterval}>
-              {checkOutInterval}
-            </MenuItem>
-          ))}
-        </TextField>
+          type="date"
+          sx={{ width: "115px", marginRight: "12px" }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          inputProps={{
+            min: addDays(new Date(checkInIntervalFilter || new Date()), 1),
+          }}
+        />
 
         <HotelPDFButton getFilteredHotels={getFilteredHotels} />
 
