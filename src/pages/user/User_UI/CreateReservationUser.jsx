@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { postReservation } from "../../../service/ReservationService";
 import ReservationForm from "./ReservationFormUser";
-import { openSnackbar } from "..//..//..//stores/snackbarSlice";
+import { openSnackbar } from "../../../stores/snackbarSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
 import { useParams } from "react-router-dom";
