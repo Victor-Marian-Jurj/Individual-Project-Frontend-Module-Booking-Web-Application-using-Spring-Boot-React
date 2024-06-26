@@ -14,6 +14,10 @@ const EditHotel = () => {
   };
 
   const handleSaveHotel = async (
+    room,
+    price,
+    checkInInterval,
+    checkOutInterval,
     rating,
     breakfast,
     wifiConnection,
@@ -21,6 +25,10 @@ const EditHotel = () => {
     minibar
   ) => {
     const hotel = {
+      room,
+      price,
+      checkInInterval,
+      checkOutInterval,
       rating,
       breakfast,
       wifiConnection,
@@ -34,7 +42,7 @@ const EditHotel = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      navigate("hotel.manager/hotels");
+      navigate("/hotel.manager/hotels");
     }
   };
 
