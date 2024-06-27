@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from "react";
 import {
   Box,
   TextField,
@@ -11,14 +12,8 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useInput } from "../../hooks/useInput";
-import { useState } from "react";
 import { format } from "date-fns";
-
-// Function to parse and validate dates in DD-MM-YYYY format
-const parseDate = (dateString) => {
-  const parsedDate = new Date(dateString);
-  return isNaN(parsedDate) ? new Date() : parsedDate;
-};
+import { useHotelById } from "../../hooks/useHotelById"; // Replace with your custom hook
 
 const ReservationFormNoId = ({
   reservation,
@@ -34,89 +29,120 @@ const ReservationFormNoId = ({
   const [phoneNumberError, setPhoneNumberError] = useState(false);
   const [emailAddress, setEmailAddress] = useState(reservation.emailAddress);
   const [emailError, setEmailError] = useState(false);
-  const [checkInDate, setCheckInDate] = useState(
-    parseDate(reservation.checkInDate)
-  );
-  const [checkOutDate, setCheckOutDate] = useState(
-    parseDate(reservation.checkOutDate)
-  );
+  const [checkInDate, setCheckInDate] = useState(null);
+  const [checkOutDate, setCheckOutDate] = useState(null);
   const [dateError, setDateError] = useState(false);
-  const [roomPrice, handleRoomPrice] = useInput(reservation.roomPrice);
+  const [roomPrice, setRoomPrice] = useState(0);
   const [roomType, setRoomType] = useState(reservation.roomType);
   const [paymentMethod, setPaymentMethod] = useState(reservation.paymentMethod);
-  const [totalPayment, handleTotalPaymentChange] = useInput(
-    reservation.totalPayment
-  );
+  const [totalPayment, setTotalPayment] = useState(reservation.totalPayment);
 
-  const paymentOptions = [
-    { value: "Cash", label: "Cash" },
-    { value: "Card", label: "Card" },
-  ];
+  // Custom hook to fetch hotel details including price based on hotelId
+  const { hotel, loading, error } = useHotelById(hotelId);
 
-  const roomTypeOptions = [
-    { value: "Single", label: "Single" },
-    { value: "Double", label: "Double" },
-  ];
+  useEffect(() => {
+    if (hotel && hotel.price) {
+      setRoomPrice(hotel.price);
+    }
+  }, [hotel]);
 
-  const handlePhoneNumber = (event) => {
+  useEffect(() => {
+    calculateTotalPayment();
+  }, [checkInDate, checkOutDate, roomPrice]);
+
+  const handlePhoneNumberChange = (event) => {
     const { value } = event.target;
     setPhoneNumber(value);
-    if (isPhoneNumberValid(value)) {
-      setPhoneNumberError(false);
-    }
+    validatePhoneNumber(value);
   };
 
-  const handlePhoneNumberBlur = () => {
-    if (!isPhoneNumberValid(phoneNumber)) {
-      setPhoneNumberError(true);
-    } else {
-      setPhoneNumberError(false);
-    }
-  };
-
-  const handleEmailAddress = (event) => {
+  const handleEmailAddressChange = (event) => {
     const { value } = event.target;
     setEmailAddress(value);
-    if (isEmailValid(value)) {
-      setEmailError(false);
-    }
+    validateEmailAddress(value);
   };
 
-  const handleEmailAddressBlur = () => {
-    if (!isEmailValid(emailAddress)) {
-      setEmailError(true);
-    } else {
-      setEmailError(false);
-    }
+  const validatePhoneNumber = (value) => {
+    const isValid = /^\d{10}$/.test(value);
+    setPhoneNumberError(!isValid);
+  };
+
+  const validateEmailAddress = (value) => {
+    const isValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+      value
+    );
+    setEmailError(!isValid);
   };
 
   const handleCheckInDateChange = (date) => {
+    setCheckInDate(date);
     if (date > checkOutDate || date < new Date()) {
       setDateError(true);
     } else {
       setDateError(false);
-      setCheckInDate(date);
     }
   };
 
   const handleCheckOutDateChange = (date) => {
+    setCheckOutDate(date);
     if (date < checkInDate || date < new Date()) {
       setDateError(true);
     } else {
       setDateError(false);
-      setCheckOutDate(date);
     }
   };
 
-  const isEmailValid = (email) => {
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return emailPattern.test(email);
+  const calculateNumberOfNights = () => {
+    if (!checkInDate || !checkOutDate) return 0;
+    const oneDay = 24 * 60 * 60 * 1000;
+    const firstDate = new Date(checkInDate);
+    const secondDate = new Date(checkOutDate);
+
+    return Math.round(Math.abs((firstDate - secondDate) / oneDay));
   };
 
-  const isPhoneNumberValid = (phone) => {
-    const phonePattern = /^\d{10}$/;
-    return phonePattern.test(phone);
+  const calculateTotalPayment = () => {
+    const numberOfNights = calculateNumberOfNights();
+    if (numberOfNights >= 0 && !isNaN(roomPrice)) {
+      const calculatedTotalPayment = roomPrice * numberOfNights;
+      setTotalPayment(calculatedTotalPayment);
+    } else {
+      setTotalPayment(0);
+    }
   };
+
+  const handleRoomPriceChange = (event) => {
+    const { value } = event.target;
+    setRoomPrice(value);
+  };
+
+  const handleSaveReservation = () => {
+    onSaveReservation(
+      hotelId,
+      firstName,
+      lastName,
+      phoneNumber,
+      emailAddress,
+      roomType,
+      roomPrice,
+      checkInDate ? format(checkInDate, "yyyy-MM-dd") : "",
+      checkOutDate ? format(checkOutDate, "yyyy-MM-dd") : "",
+      paymentMethod,
+      totalPayment
+    );
+  };
+
+  // Check if all required fields are valid
+  const isFormValid =
+    firstName &&
+    lastName &&
+    phoneNumber &&
+    !phoneNumberError &&
+    emailAddress &&
+    !emailError &&
+    checkInDate &&
+    checkOutDate &&
+    !dateError;
 
   return (
     <Box
@@ -149,8 +175,7 @@ const ReservationFormNoId = ({
         disabled={isReadonly}
         label="Phone Number"
         value={phoneNumber}
-        onChange={handlePhoneNumber}
-        onBlur={handlePhoneNumberBlur}
+        onChange={handlePhoneNumberChange}
         error={phoneNumberError}
         helperText={phoneNumberError && "Please enter a valid phone number"}
       />
@@ -159,31 +184,52 @@ const ReservationFormNoId = ({
         disabled={isReadonly}
         label="Email Address"
         value={emailAddress}
-        onChange={handleEmailAddress}
-        onBlur={handleEmailAddressBlur}
+        onChange={handleEmailAddressChange}
         error={emailError}
         helperText={emailError && "Please enter a valid email address"}
       />
+      <FormControl variant="outlined" sx={{ width: "100%" }}>
+        <InputLabel id="room-type-label">Room Type</InputLabel>
+        <Select
+          labelId="room-type-label"
+          value={roomType}
+          onChange={(e) => setRoomType(e.target.value)}
+          label="Room Type"
+          input={<OutlinedInput label="Room Type" />}
+          disabled={isReadonly}
+        >
+          <MenuItem value="Single">Single</MenuItem>
+          <MenuItem value="Double">Double</MenuItem>
+        </Select>
+      </FormControl>
       <>
+        <TextField
+          variant="outlined"
+          disabled
+          label="Room Price"
+          value={roomPrice}
+        />
         <DatePicker
           selected={checkInDate}
           onChange={handleCheckInDateChange}
+          placeholderText="-- -- --"
           minDate={new Date()}
           disabled={isReadonly}
           popperPlacement="right-start"
           customInput={<TextField label="Check-in Date" variant="outlined" />}
           dateFormat="dd-MM-yyyy"
-          className="datePickerContainer" // Add this line
+          className="datePickerContainer"
         />
         <DatePicker
           selected={checkOutDate}
           onChange={handleCheckOutDateChange}
+          placeholderText="-- -- --"
           minDate={checkInDate}
           disabled={isReadonly}
           popperPlacement="right-start"
           customInput={<TextField label="Check-out Date" variant="outlined" />}
           dateFormat="dd-MM-yyyy"
-          className="datePickerContainer" // Add this line
+          className="datePickerContainer"
         />
 
         <p
@@ -197,23 +243,7 @@ const ReservationFormNoId = ({
           {dateError && "Please select valid check-in and check-out dates."}
         </p>
       </>
-      <FormControl variant="outlined" sx={{ width: "100%" }}>
-        <InputLabel id="room-type-label">Room Type</InputLabel>
-        <Select
-          labelId="room-type-label"
-          value={roomType}
-          onChange={(e) => setRoomType(e.target.value)}
-          label="Room Type"
-          input={<OutlinedInput label="Room Type" />}
-          disabled={isReadonly}
-        >
-          {roomTypeOptions.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+
       <FormControl variant="outlined" sx={{ width: "100%" }}>
         <InputLabel id="payment-method-label">Payment Method</InputLabel>
         <Select
@@ -224,45 +254,22 @@ const ReservationFormNoId = ({
           input={<OutlinedInput label="Payment Method" />}
           disabled={isReadonly}
         >
-          {paymentOptions.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
+          <MenuItem value="Cash">Cash</MenuItem>
+          <MenuItem value="Card">Card</MenuItem>
         </Select>
       </FormControl>
+
       <TextField
         variant="outlined"
-        disabled={isReadonly}
-        label="Room Price"
-        value={roomPrice}
-        onChange={handleRoomPrice}
-      />
-      <TextField
-        variant="outlined"
-        disabled={isReadonly}
+        disabled
         label="Total Payment"
         value={totalPayment}
-        onChange={handleTotalPaymentChange}
       />
       {!!buttonLabel && (
         <Button
           variant="contained"
-          onClick={() =>
-            onSaveReservation(
-              hotelId,
-              firstName,
-              lastName,
-              phoneNumber,
-              emailAddress,
-              checkInDate,
-              checkOutDate,
-              roomType,
-              roomPrice,
-              paymentMethod,
-              totalPayment
-            )
-          }
+          onClick={handleSaveReservation}
+          disabled={!isFormValid || isReadonly} // Disable button if form is invalid or in readonly mode
           sx={{
             maxWidth: "100px",
           }}

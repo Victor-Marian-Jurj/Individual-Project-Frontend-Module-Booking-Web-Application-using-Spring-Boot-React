@@ -14,10 +14,10 @@ const CreateReservation = () => {
     LastName: "",
     PhoneNumber: "",
     EmailAddress: "",
-    CheckinDate: "",
-    CheckoutDate: "",
     RoomType: "",
     RoomPrice: "",
+    CheckinDate: "",
+    CheckoutDate: "",
     PaymentMethod: "",
     TotalPayment: "",
   };
@@ -37,10 +37,10 @@ const CreateReservation = () => {
     lastName,
     phoneNumber,
     emailAddress,
-    checkInDate,
-    checkOutDate,
     roomType,
     roomPrice,
+    checkInDate,
+    checkOutDate,
     paymentMethod,
     totalPayment
   ) => {
@@ -50,10 +50,10 @@ const CreateReservation = () => {
       lastName: lastName,
       phoneNumber: phoneNumber,
       emailAddress: emailAddress,
-      checkInDate: checkInDate,
-      checkOutDate: checkOutDate,
       roomType: roomType,
       roomPrice: roomPrice,
+      checkInDate: checkInDate,
+      checkOutDate: checkOutDate,
       paymentMethod: paymentMethod,
       totalPayment: totalPayment,
     };
