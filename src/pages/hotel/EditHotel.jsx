@@ -3,11 +3,14 @@ import { useNavigate, useParams } from "react-router-dom";
 import HotelFormEditHotel from "./HotelFormEditHotel";
 import { useHotelById } from "../../hooks/useHotelById";
 import { patchHotel } from "../../service/HotelService";
+import { openSnackbar } from "../../stores/snackbarSlice";
+import { useDispatch } from "react-redux";
 
 const EditHotel = () => {
   const params = useParams();
   const navigate = useNavigate();
   const { hotel } = useHotelById(params.hotelId);
+  const dispatch = useDispatch();
 
   const handleCancelClick = () => {
     navigate("/hotel.manager/hotels");
@@ -39,6 +42,7 @@ const EditHotel = () => {
     //TODO: implement PATCH in backend
     try {
       await patchHotel(params.hotelId, hotel);
+      dispatch(openSnackbar({ text: "Hotel modified successfully" }));
     } catch (error) {
       console.error(error);
     } finally {
