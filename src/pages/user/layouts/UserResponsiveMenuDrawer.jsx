@@ -6,6 +6,7 @@ import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import UserAvatar from "..//..//user/layouts/UserAvatar";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 
 // import AccountBoxIcon from "@mui/icons-material/AccountBox";
 import HotelIcon from "@mui/icons-material/Hotel";
@@ -15,6 +16,11 @@ import { Link } from "react-router-dom";
 const ResponsiveMenuDrawer = () => {
   const menuItems = [
     { text: "Hotels", icon: HotelIcon, path: "/tourist/hotels" },
+    {
+      text: "Reservations",
+      icon: CheckCircleIcon,
+      path: "/tourist/reservations",
+    },
   ];
 
   const accountMenuItems = [

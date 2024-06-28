@@ -14,6 +14,7 @@ import EditReservation from "./pages/reservation/EditReservation";
 import ViewHotelUser from "./pages/user/User_UI/ViewHotelUser";
 import CreateReservationUser from "./pages/user/User_UI/CreateReservationUser";
 import HotelsListUser from "./pages/user/User_UI/HotelsListUser";
+import ReservationsTableUser from "./pages/user/User_UI/ReservationsTableUser";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -40,6 +41,7 @@ const router = createBrowserRouter([
       /////////////user////
 
       { path: "/tourist/hotels", element: <HotelsListUser /> },
+      { path: "/tourist/reservations", element: <ReservationsTableUser /> },
       { path: "/hotel.manager/hotels/create", element: <CreateHotel /> },
       {
         path: "/tourist/hotels/:hotelId/reservation",

@@ -113,7 +113,7 @@ const HotelPDFButton = ({ getFilteredHotels }) => {
           variant="contained"
           onClick={handleGeneratePDF}
           sx={{
-            marginLeft: "12px",
+            // marginLeft: "12px",
             fontSize: "13px", // Set the font size to smaller
             // lineHeight: "1", // Ensure text is on two lines
             whiteSpace: "normal", // Allow text to wrap onto two lines
