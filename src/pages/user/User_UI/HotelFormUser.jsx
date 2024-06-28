@@ -26,6 +26,14 @@ const HotelForm = ({
     hotel.privateParking
   );
   const [minibar, handleMinibarChange] = useInput(hotel.minibar);
+  const [price, handlePriceChange] = useInput(hotel.price);
+  const [room, handleRoomChange] = useInput(hotel.room);
+  const [checkInInterval, handleCheckInIntervalChange] = useInput(
+    hotel.checkInInterval
+  );
+  const [checkOutInterval, handleCheckOutIntervalChange] = useInput(
+    hotel.checkOutInterval
+  );
 
   const hotels = useSelector((state) => state.hotelReducer.hotels);
   console.log(hotels);
@@ -66,6 +74,34 @@ const HotelForm = ({
       <TextField
         variant="outlined"
         disabled={isReadonly}
+        label="Room type"
+        value={room}
+        onChange={handleRoomChange}
+      />
+      <TextField
+        variant="outlined"
+        disabled={isReadonly}
+        label="Room price"
+        value={price}
+        onChange={handlePriceChange}
+      />
+      <TextField
+        variant="outlined"
+        disabled={isReadonly}
+        label="Available check-in"
+        value={checkInInterval}
+        onChange={handleCheckInIntervalChange}
+      />
+      <TextField
+        variant="outlined"
+        disabled={isReadonly}
+        label="Available check-out"
+        value={checkOutInterval}
+        onChange={handleCheckOutIntervalChange}
+      />
+      <TextField
+        variant="outlined"
+        disabled={isReadonly}
         label="Breakfast"
         value={breakfast}
         onChange={handleBreakfastChange}
@@ -98,6 +134,10 @@ const HotelForm = ({
             onSaveHotel(
               hotelName,
               hotelLocation,
+              price,
+              room,
+              checkInInterval,
+              checkOutInterval,
               latitude,
               longitude,
               rating,
