@@ -9,9 +9,9 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import HotelPDFButton from "..//..//..//pages/hotel/HotelPDFButton"; // Import GeneratePDFButton component
+import HotelPDFButtonUser from "../User_UI/HotelPDFButtonUser"; // Import GeneratePDFButton component
 import EmailStatusDialog from "../../../components/EmailStatusDialog"; // Import EmailStatusDialog component
-import generatePDF from "..//..//..//pages/hotel/FilterHotelsPDFBackend";
+import generatePDF from "../User_UI/FilterHotelsPDFBackendUser";
 import { sendPDFToBackend } from "../../../service/EmailServiceHotels"; // Import sendPDFToBackend function
 import Button from "@mui/material/Button";
 import { format, addDays } from "date-fns"; // Import date-fns format and addDays functions
@@ -438,7 +438,7 @@ const HotelsListUser = () => {
           }}
         />
 
-        <HotelPDFButton getFilteredHotels={getFilteredHotels} />
+        <HotelPDFButtonUser getFilteredHotels={getFilteredHotels} />
 
         <TextField
           label="Recipient Email"
