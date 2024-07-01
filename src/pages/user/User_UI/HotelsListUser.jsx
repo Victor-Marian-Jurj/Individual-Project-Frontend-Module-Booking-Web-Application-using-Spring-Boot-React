@@ -189,33 +189,42 @@ const HotelsListUser = () => {
   };
 
   const getFilteredHotels = () => {
+    // Convert check-in and check-out filter values to Date objects
+    const checkInDate = checkInIntervalFilter
+      ? new Date(checkInIntervalFilter)
+      : null;
+    const checkOutDate = checkOutIntervalFilter
+      ? new Date(checkOutIntervalFilter)
+      : null;
+
     // Apply filters
-    const filteredHotels = hotels.filter((hotel) => {
+    const filtered = hotels.filter((hotel) => {
+      // Convert hotel's check-in and check-out dates to Date objects
+      const hotelCheckInDate = new Date(hotel.checkInInterval);
+      const hotelCheckOutDate = new Date(hotel.checkOutInterval);
+
+      // Check if both check-in and check-out dates are within the hotel's available period
+      const isWithinRange =
+        (!checkInDate || hotelCheckInDate <= checkInDate) &&
+        (!checkOutDate || hotelCheckOutDate >= checkOutDate) &&
+        // Ensure the checkout date is within the hotel's period
+        (!checkOutDate || hotelCheckInDate <= checkOutDate);
+
       return (
         (!locationFilter || hotel.hotelLocation.includes(locationFilter)) &&
         (!nameFilter || hotel.hotelName.includes(nameFilter)) &&
-        (!ratingFilter ||
-          (ratingFilter === "All"
-            ? true
-            : hotel.rating === parseInt(ratingFilter, 10))) &&
+        (!ratingFilter || hotel.rating.toString() === ratingFilter) &&
         (!breakfastFilter || hotel.breakfast.toString() === breakfastFilter) &&
         (!wifiFilter || hotel.wifiConnection.toString() === wifiFilter) &&
         (!parkingFilter || hotel.privateParking.toString() === parkingFilter) &&
         (!minibarFilter || hotel.minibar.toString() === minibarFilter) &&
-        (!roomFilter || hotel.room === roomFilter) &&
-        (!checkInIntervalFilter ||
-          (checkInIntervalFilter.toString() === "All"
-            ? true
-            : hotel.checkInInterval === checkInIntervalFilter)) &&
-        (!checkOutIntervalFilter ||
-          (checkOutIntervalFilter.toString() === "All"
-            ? true
-            : hotel.checkOutInterval === checkOutIntervalFilter))
+        (!roomFilter || hotel.room.includes(roomFilter)) &&
+        isWithinRange
       );
     });
 
     // Sort filtered hotels alphabetically by the first letter of the second name
-    return filteredHotels.sort((a, b) => {
+    return filtered.sort((a, b) => {
       // Extract second names
       const secondNameA = (a.hotelName.split(" ")[1] || "").toUpperCase();
       const secondNameB = (b.hotelName.split(" ")[1] || "").toUpperCase();

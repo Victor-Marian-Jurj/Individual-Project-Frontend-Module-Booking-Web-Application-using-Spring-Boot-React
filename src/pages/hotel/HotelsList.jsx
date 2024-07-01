@@ -199,13 +199,16 @@ const HotelsList = () => {
 
     // Apply filters
     const filtered = hotels.filter((hotel) => {
-      // Check if the hotel's check-in and check-out dates encompass the selected date range
+      // Convert hotel's check-in and check-out dates to Date objects
       const hotelCheckInDate = new Date(hotel.checkInInterval);
       const hotelCheckOutDate = new Date(hotel.checkOutInterval);
 
+      // Check if both check-in and check-out dates are within the hotel's available period
       const isWithinRange =
         (!checkInDate || hotelCheckInDate <= checkInDate) &&
-        (!checkOutDate || hotelCheckOutDate >= checkOutDate);
+        (!checkOutDate || hotelCheckOutDate >= checkOutDate) &&
+        // Ensure the checkout date is within the hotel's period
+        (!checkOutDate || hotelCheckInDate <= checkOutDate);
 
       return (
         (!locationFilter || hotel.hotelLocation.includes(locationFilter)) &&
