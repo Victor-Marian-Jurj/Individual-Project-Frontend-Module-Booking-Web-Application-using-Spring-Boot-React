@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 // Function to parse and validate dates in DD-MM-YYYY format
 const parseDate = (dateString) => {
   const parsedDate = new Date(dateString);
-  return isNaN(parsedDate) ? new Date() : parsedDate;
+  return isNaN(parsedDate) ? null : parsedDate;
 };
 
 const HotelForm = ({
@@ -44,10 +44,10 @@ const HotelForm = ({
   const [price, handlePriceChange] = useInput(hotel.price || "");
   const [room, handleRoom] = useInput(hotel.room || "");
   const [checkInInterval, setCheckInInterval] = useState(
-    parseDate(hotel.checkInInterval || "")
+    hotel.checkInInterval ? parseDate(hotel.checkInInterval) : null
   );
   const [checkOutInterval, setCheckOutInterval] = useState(
-    parseDate(hotel.checkOutInterval || "")
+    hotel.checkOutInterval ? parseDate(hotel.checkOutInterval) : null
   );
   const navigate = useNavigate();
 
@@ -56,7 +56,11 @@ const HotelForm = ({
   const [formError, setFormError] = useState(false);
 
   const handleCheckInDateChange = (date) => {
-    if (date >= checkOutInterval || date < new Date().setHours(0, 0, 0, 0)) {
+    if (
+      date &&
+      ((checkOutInterval && date >= checkOutInterval) ||
+        date < new Date().setHours(0, 0, 0, 0))
+    ) {
       setDateError(true);
     } else {
       setDateError(false);
@@ -65,7 +69,11 @@ const HotelForm = ({
   };
 
   const handleCheckOutDateChange = (date) => {
-    if (date <= checkInInterval || date < new Date().setHours(0, 0, 0, 0)) {
+    if (
+      date &&
+      ((checkInInterval && date <= checkInInterval) ||
+        date < new Date().setHours(0, 0, 0, 0))
+    ) {
       setDateError(true);
     } else {
       setDateError(false);
@@ -73,7 +81,8 @@ const HotelForm = ({
     }
   };
 
-  const handlePriceValidation = (value) => {
+  const handlePriceValidation = (event) => {
+    const value = event.target.value;
     const numericValue = value.replace(/\D/g, "");
 
     if (numericValue.length > 4) {
@@ -86,11 +95,37 @@ const HotelForm = ({
       setPriceError("");
     }
 
-    return numericValue;
+    handlePriceChange({ target: { value: numericValue } }); // Ensure handlePriceChange is properly defined and called
+  };
+
+  const handleNameValidation = (event) => {
+    const value = event.target.value;
+    const alphabeticValue = value.replace(/[^a-zA-Z\s]/g, "").substring(0, 20);
+    handleHotelNameChange({ target: { value: alphabeticValue } });
+  };
+
+  const handleLocationValidation = (event) => {
+    const value = event.target.value;
+    const alphabeticValue = value.replace(/[^a-zA-Z\s]/g, "").substring(0, 20);
+    handleHotelLocationChange({ target: { value: alphabeticValue } });
+  };
+
+  const handleLatitudeValidation = (event) => {
+    const value = event.target.value;
+    const numericValue = value.replace(/\D/g, "");
+    handleLatitudeChange({ target: { value: numericValue } });
+  };
+
+  const handleLongitudeValidation = (event) => {
+    const value = event.target.value;
+    const numericValue = value.replace(/\D/g, "");
+    handleLongitudeChange({ target: { value: numericValue } });
   };
 
   const handleSaveClick = () => {
-    const validatedPrice = handlePriceValidation(price);
+    // const validatedPrice = handlePriceValidation(price);
+
+    const validatedPrice = price;
 
     if (
       !room ||
@@ -155,7 +190,8 @@ const HotelForm = ({
         disabled={isReadonly}
         label="Name"
         value={hotelName}
-        onChange={handleHotelNameChange}
+        onChange={handleNameValidation}
+        inputProps={{ maxLength: 20 }}
       />
 
       <TextField
@@ -163,7 +199,8 @@ const HotelForm = ({
         disabled={isReadonly}
         label="Location"
         value={hotelLocation}
-        onChange={handleHotelLocationChange}
+        onChange={handleLocationValidation}
+        inputProps={{ maxLength: 20 }}
       />
 
       <TextField
@@ -171,7 +208,8 @@ const HotelForm = ({
         disabled={isReadonly}
         label="Latitude"
         value={latitude}
-        onChange={handleLatitudeChange}
+        onChange={handleLatitudeValidation}
+        inputProps={{ maxLength: 15 }} // Adjust the max length as needed
       />
 
       <TextField
@@ -179,7 +217,8 @@ const HotelForm = ({
         disabled={isReadonly}
         label="Longitude"
         value={longitude}
-        onChange={handleLongitudeChange}
+        onChange={handleLongitudeValidation}
+        inputProps={{ maxLength: 15 }} // Adjust the max length as needed
       />
 
       <InputLabel>Rating</InputLabel>
@@ -210,10 +249,10 @@ const HotelForm = ({
         disabled={isReadonly}
         label="Room price"
         value={price}
-        onChange={handlePriceChange}
+        onChange={handlePriceValidation}
         error={!!priceError}
         helperText={priceError}
-        inputProps={{ maxLength: 5 }}
+        inputProps={{ maxLength: 4 }} // Limit to 4 digits
       />
 
       <DatePicker
@@ -231,7 +270,7 @@ const HotelForm = ({
         selected={checkOutInterval}
         onChange={handleCheckOutDateChange}
         placeholderText="-- -- --"
-        minDate={checkInInterval}
+        minDate={checkInInterval || new Date()}
         disabled={isReadonly}
         popperPlacement="right-start"
         customInput={<TextField label="Check-out Date" variant="outlined" />}
@@ -295,25 +334,27 @@ const HotelForm = ({
       </Select>
 
       {!!buttonLabel && (
-        <Button
-          variant="contained"
-          onClick={handleSaveClick}
-          disabled={!isFormValid() || isReadonly} // Disable button if form is invalid or in readonly mode
-          sx={{
-            maxWidth: "100px",
-          }}
-        >
-          {buttonLabel}
-        </Button>
-      )}
+        <>
+          <Button
+            variant="contained"
+            onClick={handleSaveClick}
+            disabled={!isFormValid() || isReadonly} // Disable button if form is invalid or in readonly mode
+            sx={{
+              maxWidth: "100px",
+            }}
+          >
+            {buttonLabel}
+          </Button>
 
-      <Button
-        variant="outlined"
-        onClick={handleCancelClick}
-        sx={{ width: "100px", marginTop: "15px" }}
-      >
-        Cancel
-      </Button>
+          <Button
+            variant="outlined"
+            onClick={handleCancelClick}
+            sx={{ width: "100px", marginTop: "15px" }}
+          >
+            Cancel
+          </Button>
+        </>
+      )}
     </Box>
   );
 };
