@@ -53,7 +53,7 @@ const EditHotel = () => {
   return hotel ? (
     <div>
       <Typography variant="h5" gutterBottom>
-        Edit hotel with id: {params.hotelId}
+        Edit hotel
       </Typography>
       <Divider sx={{ my: 2 }} />
       <HotelFormEditHotel
