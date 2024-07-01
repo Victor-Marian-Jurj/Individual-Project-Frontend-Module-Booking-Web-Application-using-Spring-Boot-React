@@ -6,6 +6,12 @@ const styles = StyleSheet.create({
   page: {
     flexDirection: "column",
     backgroundColor: "#E4E4E4",
+    padding: "10",
+  },
+  title: {
+    fontSize: 20,
+    textAlign: "center",
+    margin: 10,
   },
   section: {
     margin: 10,
@@ -22,95 +28,83 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     borderStyle: "solid",
     borderBottomWidth: 1,
-    // Remove the fixed height
   },
   tableHeader: {
     fontSize: 14,
     fontWeight: "bold",
-    padding: 10,
-    width: "20.28%",
+    padding: 5,
+    width: "20%", // Each cell should take up around 1/7th of the table width
     borderStyle: "solid",
     borderRightWidth: 1,
-    backgroundColor: "#3f51b5",
-    color: "white",
+    backgroundColor: "#3f51b5", // Background color for table header
+    color: "white", // Text color for table header
   },
   tableCell: {
     fontSize: 12,
-    padding: 10,
-    width: "20.28%",
+    padding: 5,
+    width: "20%", // Each cell should take up around 1/7th of the table width
     borderStyle: "solid",
     borderRightWidth: 1,
-    backgroundColor: "#ffffff",
+    backgroundColor: "#ffffff", // Background color for table cell
   },
-  fifthColumnHeader: {
-    // Styles for the header of the 5th column
-    width: "25%", // Adjust the width of the 5th column header
-  },
-  fifthColumnCell: {
-    // Styles for the cells of the 5th column
-    width: "25%", // Adjust the width of the 5th column cells
-  },
-  sixtColumnHeader: {
-    // Styles for the header of the 5th column
-    width: "25%", // Adjust the width of the 5th column header
-  },
-  sixtColumnCell: {
-    // Styles for the cells of the 5th column
-    width: "25%", // Adjust the width of the 5th column cells
-  },
-  seventhColumnHeader: {
-    // Styles for the header of the 5th column
-    width: "25%", // Adjust the width of the 5th column header
-  },
-  seventhColumnCell: {
-    // Styles for the cells of the 5th column
-    width: "25%", // Adjust the width of the 5th column cells
+  footer: {
+    marginTop: 10,
+    fontSize: 12,
+    textAlign: "center",
   },
 });
 
+const formatDateTime = (date) => {
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  const hours = String(date.getHours()).padStart(2, "0");
+  const minutes = String(date.getMinutes()).padStart(2, "0");
+  return `${day}-${month}-${year} ${hours}:${minutes}`;
+};
+
 const generatePDF = async (filteredReservationsData) => {
   try {
-    const MyDocument = () => (
+    const MyDocument = ({ data, generatedOn }) => (
       <Document>
         <Page size="A4" orientation="landscape" style={styles.page}>
+          <Text style={styles.title}>Filtered Reservations from HotelsHub</Text>
           <View style={styles.section}>
             <View style={styles.table}>
               <View style={styles.tableRow}>
-                <Text style={styles.tableHeader}>User name</Text>
                 <Text style={styles.tableHeader}>First name</Text>
                 <Text style={styles.tableHeader}>Last name</Text>
                 <Text style={styles.tableHeader}>Hotel name</Text>
-                <Text style={[styles.tableHeader, styles.fifthColumnHeader]}>
-                  Hotel location
-                </Text>
-                <Text style={[styles.tableHeader, styles.sixtColumnHeader]}>
-                  Check-in date
-                </Text>
-                <Text style={[styles.tableHeader, styles.seventhColumnHeader]}>
-                  Check-out date
-                </Text>
-                <Text style={styles.tableHeader}>Room number</Text>
+                <Text style={styles.tableHeader}>Hotel location</Text>
+                <Text style={styles.tableHeader}>Phone number</Text>
+                <Text style={styles.tableHeader}>Email address</Text>
+                <Text style={styles.tableHeader}>Check-in date</Text>
+                <Text style={styles.tableHeader}>Check-out date</Text>
                 <Text style={styles.tableHeader}>Room type</Text>
                 <Text style={styles.tableHeader}>Room price</Text>
                 <Text style={styles.tableHeader}>Payment method</Text>
                 <Text style={styles.tableHeader}>Total payment</Text>
               </View>
-              {filteredReservationsData.map((reservation, index) => (
+              {data.map((reservation, index) => (
                 <View style={styles.tableRow} key={index}>
-                  <Text style={styles.tableCell}>{reservation.username}</Text>
                   <Text style={styles.tableCell}>{reservation.firstName}</Text>
                   <Text style={styles.tableCell}>{reservation.lastName}</Text>
                   <Text style={styles.tableCell}>{reservation.hotelName}</Text>
-                  <Text style={[styles.tableCell, styles.fifthColumnCell]}>
+                  <Text style={styles.tableCell}>
                     {reservation.hotelLocation}
                   </Text>
-                  <Text style={[styles.tableCell, styles.sixtColumnCell]}>
+                  <Text style={styles.tableCell}>
+                    {reservation.phoneNumber}
+                  </Text>
+                  <Text style={styles.tableCell}>
+                    {reservation.emailAddress}
+                  </Text>
+                  <Text style={styles.tableCell}>
                     {new Date(reservation.checkInDate).toLocaleDateString()}
                   </Text>
-                  <Text style={[styles.tableCell, styles.seventhColumnCell]}>
+                  <Text style={styles.tableCell}>
                     {new Date(reservation.checkOutDate).toLocaleDateString()}
                   </Text>
-                  <Text style={styles.tableCell}>{reservation.roomNumber}</Text>
                   <Text style={styles.tableCell}>{reservation.roomType}</Text>
                   <Text style={styles.tableCell}>{reservation.roomPrice}</Text>
                   <Text style={styles.tableCell}>
@@ -123,14 +117,16 @@ const generatePDF = async (filteredReservationsData) => {
               ))}
             </View>
           </View>
+          <Text style={styles.footer}>Generated on: {generatedOn}</Text>
         </Page>
       </Document>
     );
 
-    // Generate the PDF content
-    const pdfContent = <MyDocument />;
+    const generatedOn = formatDateTime(new Date());
+    const pdfContent = (
+      <MyDocument data={filteredReservationsData} generatedOn={generatedOn} />
+    );
 
-    // Convert the PDF content to blob
     const blob = await pdf(pdfContent).toBlob();
 
     return blob;

@@ -9,11 +9,12 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Divider from "@mui/material/Divider";
-import HotelPDFButton from "..//..//..//pages/hotel/HotelPDFButton"; // Import GeneratePDFButton component
+import HotelPDFButtonUser from "../User_UI/HotelPDFButtonUser"; // Import GeneratePDFButton component
 import EmailStatusDialog from "../../../components/EmailStatusDialog"; // Import EmailStatusDialog component
-import generatePDF from "..//..//..//pages/hotel/FilterHotelsPDFBackend";
+import generatePDF from "../User_UI/FilterHotelsPDFBackendUser";
 import { sendPDFToBackend } from "../../../service/EmailServiceHotels"; // Import sendPDFToBackend function
 import Button from "@mui/material/Button";
+import { format, addDays } from "date-fns"; // Import date-fns format and addDays functions
 
 const HotelsListUser = () => {
   const [nameFilterOptions, setNameFilterOptions] = useState([""]);
@@ -27,6 +28,16 @@ const HotelsListUser = () => {
   const [parkingFilter, setParkingFilter] = useState("");
   const [minibarFilter, setMinibarFilter] = useState("");
   const [filteredHotels, setFilteredHotels] = useState([]); // State variable to hold filtered hotel data
+
+  //
+  const [roomFilter, setRoomFilter] = useState("");
+  const [roomFilterOptions, setRoomFilterOptions] = useState([""]);
+  const [checkInIntervalFilter, setCheckInIntervalFilter] = useState("");
+  const [checkInIntervalFilterOptions, setCheckInIntervalFilterOptions] =
+    useState([""]);
+  const [checkOutIntervalFilter, setCheckOutIntervalFilter] = useState("");
+  const [checkOutIntervalFilterOptions, setCheckOutIntervalFilterOptions] =
+    useState([""]);
 
   //
 
@@ -79,6 +90,9 @@ const HotelsListUser = () => {
       // Update rating and name filter options after fetching hotel data
       updateRatingFilterOptions();
       updateNameFilterOptions();
+      updateRoomFilterOptions();
+      updateCheckInIntervalFilterOptions();
+      updateCheckOutIntervalFilterOptions();
     } catch (err) {
       console.error(err);
     }
@@ -88,16 +102,25 @@ const HotelsListUser = () => {
     // Update rating and name filter options whenever hotels data changes
     updateRatingFilterOptions();
     updateNameFilterOptions();
+    updateRoomFilterOptions();
+    updateCheckInIntervalFilterOptions();
+    updateCheckOutIntervalFilterOptions();
   }, [hotels]); // Run when hotels data changes
 
   useEffect(() => {
     if (locationFilter !== "") {
       updateRatingFilterOptions({ location: locationFilter });
-      updateNameFilterOptions({ location: locationFilter }); // Update name filter options for the selected location
+      updateNameFilterOptions({ location: locationFilter });
+      updateRoomFilterOptions({ location: locationFilter });
+      updateCheckInIntervalFilterOptions({ location: locationFilter });
+      updateCheckOutIntervalFilterOptions({ location: locationFilter }); // Update name filter options for the selected location
     } else {
       // If location is not selected, use all available ratings and names
       updateRatingFilterOptions();
       updateNameFilterOptions();
+      updateRoomFilterOptions();
+      updateCheckInIntervalFilterOptions();
+      updateCheckOutIntervalFilterOptions();
     }
   }, [locationFilter]); // Run when location filter changes
 
@@ -114,10 +137,16 @@ const HotelsListUser = () => {
     if (locationFilter !== "") {
       updateRatingFilterOptions({ location: locationFilter });
       updateNameFilterOptions({ location: locationFilter });
+      updateRoomFilterOptions({ location: locationFilter });
+      updateCheckInIntervalFilterOptions({ location: locationFilter });
+      updateCheckOutIntervalFilterOptions({ location: locationFilter });
     } else {
       // If location is not selected, use all available ratings and names
       updateRatingFilterOptions();
       updateNameFilterOptions();
+      updateRoomFilterOptions();
+      updateCheckInIntervalFilterOptions();
+      updateCheckOutIntervalFilterOptions();
     }
   }, [locationFilter]); // Run when location filter changes
 
@@ -128,7 +157,11 @@ const HotelsListUser = () => {
 
   useEffect(() => {
     fetchHotelData();
-    updateRatingFilterOptions(); // Update rating filter options for all hotels
+    updateRatingFilterOptions();
+    updateRoomFilterOptions();
+    updateCheckInIntervalFilterOptions();
+    updateCheckOutIntervalFilterOptions();
+    // Update rating filter options for all hotels
   }, []); // Run once on component mount
 
   const getDistinctValues = (key, options = {}) => {
@@ -168,7 +201,16 @@ const HotelsListUser = () => {
         (!breakfastFilter || hotel.breakfast.toString() === breakfastFilter) &&
         (!wifiFilter || hotel.wifiConnection.toString() === wifiFilter) &&
         (!parkingFilter || hotel.privateParking.toString() === parkingFilter) &&
-        (!minibarFilter || hotel.minibar.toString() === minibarFilter)
+        (!minibarFilter || hotel.minibar.toString() === minibarFilter) &&
+        (!roomFilter || hotel.room === roomFilter) &&
+        (!checkInIntervalFilter ||
+          (checkInIntervalFilter.toString() === "All"
+            ? true
+            : hotel.checkInInterval === checkInIntervalFilter)) &&
+        (!checkOutIntervalFilter ||
+          (checkOutIntervalFilter.toString() === "All"
+            ? true
+            : hotel.checkOutInterval === checkOutIntervalFilter))
       );
     });
 
@@ -198,6 +240,28 @@ const HotelsListUser = () => {
     setRatingFilterOptions(["All", ...distinctRatings]);
   };
 
+  const updateRoomFilterOptions = (options = {}) => {
+    // Get distinct values based on the current filter settings and location
+    const distinctRooms = getDistinctValues("room", options);
+    setRoomFilterOptions(["All", ...distinctRooms]);
+  };
+  const updateCheckInIntervalFilterOptions = (options = {}) => {
+    // Get distinct values based on the current filter settings and location
+    const distinctCheckInIntervals = getDistinctValues(
+      "checkInInterval",
+      options
+    );
+    setCheckInIntervalFilterOptions(["All", ...distinctCheckInIntervals]);
+  };
+  const updateCheckOutIntervalFilterOptions = (options = {}) => {
+    // Get distinct values based on the current filter settings and location
+    const distinctCheckOutIntervals = getDistinctValues(
+      "checkOutInterval",
+      options
+    );
+    setCheckOutIntervalFilterOptions(["All", ...distinctCheckOutIntervals]);
+  };
+
   useEffect(() => {
     fetchHotelData();
   }, []);
@@ -213,6 +277,9 @@ const HotelsListUser = () => {
     wifiFilter,
     parkingFilter,
     minibarFilter,
+    roomFilter,
+    checkInIntervalFilter,
+    checkOutIntervalFilter,
   ]);
 
   const applyFilters = () => {
@@ -224,7 +291,16 @@ const HotelsListUser = () => {
         (!breakfastFilter || hotel.breakfast.toString() === breakfastFilter) &&
         (!wifiFilter || hotel.wifiConnection.toString() === wifiFilter) &&
         (!parkingFilter || hotel.privateParking.toString() === parkingFilter) &&
-        (!minibarFilter || hotel.minibar.toString() === minibarFilter)
+        (!minibarFilter || hotel.minibar.toString() === minibarFilter) &&
+        (!roomFilter || hotel.room.includes(roomFilter)) &&
+        (!checkInIntervalFilter ||
+          (checkInIntervalFilter.toString() === "All"
+            ? true
+            : hotel.checkInInterval === checkInIntervalFilter)) &&
+        (!checkOutIntervalFilter ||
+          (checkOutIntervalFilter.toString() === "All"
+            ? true
+            : hotel.checkOutInterval === checkOutIntervalFilter))
       );
     });
     setFilteredHotels(filtered);
@@ -321,7 +397,48 @@ const HotelsListUser = () => {
           <MenuItem value="true">True</MenuItem>
           <MenuItem value="false">False</MenuItem>
         </TextField>
-        <HotelPDFButton getFilteredHotels={getFilteredHotels} />
+
+        <TextField
+          label="Room type"
+          value={roomFilter}
+          onChange={(e) => setRoomFilter(e.target.value)}
+          select
+          sx={{ width: "120px", marginLeft: "12px" }}
+        >
+          {roomFilterOptions.map((room) => (
+            <MenuItem key={room} value={room}>
+              {room}
+            </MenuItem>
+          ))}
+        </TextField>
+        <TextField
+          label="Check-in"
+          value={checkInIntervalFilter}
+          onChange={(e) => setCheckInIntervalFilter(e.target.value)}
+          type="date"
+          sx={{ width: "110px", marginRight: "12px" }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          inputProps={{
+            min: format(new Date(), "yyyy-MM-dd"),
+          }}
+        />
+        <TextField
+          label="Check-out"
+          value={checkOutIntervalFilter}
+          onChange={(e) => setCheckOutIntervalFilter(e.target.value)}
+          type="date"
+          sx={{ width: "115px", marginRight: "12px" }}
+          InputLabelProps={{
+            shrink: true,
+          }}
+          inputProps={{
+            min: addDays(new Date(checkInIntervalFilter || new Date()), 1),
+          }}
+        />
+
+        <HotelPDFButtonUser getFilteredHotels={getFilteredHotels} />
 
         <TextField
           label="Recipient Email"
@@ -330,13 +447,12 @@ const HotelsListUser = () => {
           onChange={handleRecipientEmailChange}
           error={invalidEmail}
           helperText={invalidEmail ? "Invalid email address" : null}
-          sx={{ width: "200px", marginRight: "13px" }}
+          sx={{ width: "200px", marginRight: "13px", marginLeft: "13px" }}
         />
         <Button
           variant="contained"
           onClick={generateAndSendEmail}
           sx={{
-            marginLeft: "10px",
             marginRight: "20px",
             fontSize: "13px", // Set the font size to smaller
             // lineHeight: "1", // Ensure text is on two lines

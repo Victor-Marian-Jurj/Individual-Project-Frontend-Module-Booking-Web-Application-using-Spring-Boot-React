@@ -38,7 +38,8 @@ const AdminReservationsTable = () => {
   const [scheduledEmail, setScheduledEmail] = useState(null);
   const [selectedMinute, setSelectedMinute] = useState("");
   const [minutes] = useState(Array.from({ length: 60 }, (_, i) => i));
-
+  const [emailMessage, setEmailMessage] = useState(""); // State for email message
+  const [recurringMessage, setRecurringMessage] = useState(""); // State for recurring message
   // Regular expression pattern for email validation
   const emailRegex = /^[a-zA-Z0-9._%+-]{5,20}@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -139,10 +140,28 @@ const AdminReservationsTable = () => {
 
     setScheduledEmail(intervalId);
   };
+  // const handleSendRecurringEmails = () => {
+  //   if (selectedMinute && recipientEmailAllReservations) {
+  //     sendEmailAtSpecifiedMinute(selectedMinute);
+  //   } else {
+  //     console.error("Recipient email address or minute interval is empty.");
+  //   }
+  // };
 
-  const handleSendRecurringEmails = () => {
+  const handleSendRecurringEmails = async () => {
+    const isValidEmail = emailRegex.test(recipientEmailAllReservations);
+    setValidEmail(isValidEmail);
+
+    if (!isValidEmail) {
+      setEmailMessage("Invalid Email Address!");
+      return; // Exit the function if the email is invalid
+    } else {
+      setEmailMessage("Recurring activated!");
+    }
+
     if (selectedMinute && recipientEmailAllReservations) {
       sendEmailAtSpecifiedMinute(selectedMinute);
+      setRecurringMessage("Recurring email activated");
     } else {
       console.error("Recipient email address or minute interval is empty.");
     }
@@ -283,6 +302,11 @@ const AdminReservationsTable = () => {
   const uniquePhoneNumber = [
     ...new Set(reservations.map((reservation) => reservation.phoneNumber)),
   ];
+
+  const formatDate = (date) => {
+    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+    return new Date(date).toLocaleDateString("en-GB", options);
+  };
 
   const filteredReservations = reservations.filter((reservation) => {
     return (
@@ -514,92 +538,113 @@ const AdminReservationsTable = () => {
         <ReservationPDFButton
           getFilteredReservations={() => filteredReservations}
         />
+
+        <TextField
+          label="Recipient Email"
+          type="email"
+          value={recipientEmail}
+          onChange={handleRecipientEmailChange}
+          error={invalidEmail}
+          helperText={invalidEmail ? "Invalid email address" : null}
+          sx={{ width: "200px", marginRight: "5px", marginLeft: "13px" }}
+        />
+        <Button
+          variant="contained"
+          onClick={generateAndSendEmail}
+          sx={{
+            marginLeft: "10px",
+            marginRight: "20px",
+            fontSize: "13px", // Set the font size to smaller
+            // lineHeight: "1", // Ensure text is on two lines
+            whiteSpace: "normal", // Allow text to wrap onto two lines
+            // fontWeight: "bold", // Make the text bold
+            padding: "4px 13px", // Increase padding to make the button bigger
+            height: "auto", // Adjust height to fit the content
+          }}
+        >
+          Send Email with
+          <br />
+          Filtered Reservations
+        </Button>
+        {/* Render EmailStatusDialog component */}
+        <EmailStatusDialog
+          isOpen={emailSent || invalidEmail || validEmail} // Open the dialog when emailSent, invalidEmail, or validEmail is true
+          onClose={() => {
+            // Reset email status states when closing the dialog
+            setEmailSent(false);
+            setInvalidEmail(false);
+            setValidEmail(false);
+          }}
+          emailSent={emailSent}
+          invalidEmail={invalidEmail}
+          validEmail={validEmail} // Pass the validEmail prop here
+        />
+        <TextField
+          label="Recipient Email"
+          type="email"
+          value={recipientEmailAllReservations}
+          onChange={handleRecipientEmailChangeAllReservations}
+          error={invalidEmail}
+          helperText={invalidEmail ? "Invalid email address" : null}
+          sx={{ width: "200px", marginRight: "13px" }}
+        />
+
+        {/* Dropdown menu to select the period in minutes */}
+        <TextField
+          select
+          label="Recurrency period"
+          value={selectedMinute}
+          onChange={handleMinuteChange}
+          sx={{ width: "150px", marginRight: "13px" }}
+        >
+          <MenuItem value="">Select Minute</MenuItem>
+          {minutes.map((minute) => (
+            <MenuItem key={minute} value={minute}>
+              {minute} minutes
+            </MenuItem>
+          ))}
+        </TextField>
+
+        {/* Button to send recurring emails */}
+
+        <Button
+          variant="contained"
+          onClick={handleSendRecurringEmails}
+          sx={{
+            fontSize: "13px",
+            whiteSpace: "normal",
+            padding: "4px 13px",
+            height: "auto",
+            marginBottom: "12px", // Adjust margin bottom for spacing between button and message
+          }}
+        >
+          Activate Recurring Emails
+          <br />
+          with All Reservations
+        </Button>
+        {emailMessage && !validEmail && (
+          <Typography
+            sx={{
+              color: "red", // Red color for invalid email message
+              fontSize: "12px",
+              marginLeft: "12px", // Adjust margin for spacing
+            }}
+          >
+            {emailMessage}
+          </Typography>
+        )}
+        {emailMessage && validEmail && (
+          <Typography
+            sx={{
+              color: "green", // Green color for valid email message
+              fontSize: "12px",
+              marginLeft: "12px", // Adjust margin for spacing
+            }}
+          >
+            {emailMessage}
+          </Typography>
+        )}
       </div>
-      <TextField
-        label="Recipient Email"
-        type="email"
-        value={recipientEmail}
-        onChange={handleRecipientEmailChange}
-        error={invalidEmail}
-        helperText={invalidEmail ? "Invalid email address" : null}
-        sx={{ width: "200px", marginRight: "5px", marginLeft: "13px" }}
-      />
-      <Button
-        variant="contained"
-        onClick={generateAndSendEmail}
-        sx={{
-          marginLeft: "10px",
-          marginRight: "20px",
-          fontSize: "13px", // Set the font size to smaller
-          // lineHeight: "1", // Ensure text is on two lines
-          whiteSpace: "normal", // Allow text to wrap onto two lines
-          // fontWeight: "bold", // Make the text bold
-          padding: "4px 13px", // Increase padding to make the button bigger
-          height: "auto", // Adjust height to fit the content
-        }}
-      >
-        Send Email with
-        <br />
-        Filtered Reservations
-      </Button>
-      {/* Render EmailStatusDialog component */}
-      <EmailStatusDialog
-        isOpen={emailSent || invalidEmail || validEmail} // Open the dialog when emailSent, invalidEmail, or validEmail is true
-        onClose={() => {
-          // Reset email status states when closing the dialog
-          setEmailSent(false);
-          setInvalidEmail(false);
-          setValidEmail(false);
-        }}
-        emailSent={emailSent}
-        invalidEmail={invalidEmail}
-        validEmail={validEmail} // Pass the validEmail prop here
-      />
-      <TextField
-        label="Recipient Email"
-        type="email"
-        value={recipientEmailAllReservations}
-        onChange={handleRecipientEmailChangeAllReservations}
-        error={invalidEmail}
-        helperText={invalidEmail ? "Invalid email address" : null}
-        sx={{ width: "200px", marginRight: "13px" }}
-      />
-
-      {/* Dropdown menu to select the period in minutes */}
-      <TextField
-        select
-        label="Recurrency period"
-        value={selectedMinute}
-        onChange={handleMinuteChange}
-        sx={{ width: "150px", marginRight: "13px" }}
-      >
-        <MenuItem value="">Select Minute</MenuItem>
-        {minutes.map((minute) => (
-          <MenuItem key={minute} value={minute}>
-            {minute} minutes
-          </MenuItem>
-        ))}
-      </TextField>
-
-      {/* Button to send recurring emails */}
-      <Button
-        variant="contained"
-        onClick={handleSendRecurringEmails}
-        sx={{
-          // marginLeft: "12px",
-          fontSize: "13px", // Set the font size to smaller
-          // lineHeight: "1", // Ensure text is on two lines
-          whiteSpace: "normal", // Allow text to wrap onto two lines
-          // fontWeight: "bold", // Make the text bold
-          padding: "4px 13px", // Increase padding to make the button bigger
-          height: "auto", // Adjust height to fit the content
-        }}
-      >
-        Send Recurring Emails
-        <br />
-        with All Reservations
-      </Button>
-
       {/* Render EmailStatusDialog component */}
       <EmailStatusDialog
         isOpen={emailSent || invalidEmail || validEmail} // Open the dialog when emailSent, invalidEmail, or validEmail is true
@@ -733,20 +778,9 @@ const AdminReservationsTable = () => {
                 <TableCell align="left" sx={{ fontSize: 14 }}>
                   {reservation.hotelLocation}
                 </TableCell>
-                <TableCell align="left" sx={{ fontSize: 14 }}>
-                  {
-                    new Date(reservation.checkInDate)
-                      .toISOString()
-                      .split("T")[0]
-                  }
-                </TableCell>
-                <TableCell align="left" sx={{ fontSize: 14 }}>
-                  {
-                    new Date(reservation.checkOutDate)
-                      .toISOString()
-                      .split("T")[0]
-                  }
-                </TableCell>
+                <TableCell>{formatDate(reservation.checkInDate)}</TableCell>
+                <TableCell>{formatDate(reservation.checkOutDate)}</TableCell>
+
                 <TableCell align="left" sx={{ fontSize: 14 }}>
                   {reservation.roomType}
                 </TableCell>
