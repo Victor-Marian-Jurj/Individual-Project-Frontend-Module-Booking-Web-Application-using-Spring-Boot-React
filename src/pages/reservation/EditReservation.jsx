@@ -23,7 +23,6 @@ const EditReservation = () => {
     lastName,
     phoneNumber,
     emailAddress,
-
     checkInDate,
     checkOutDate,
     roomType,

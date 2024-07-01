@@ -262,7 +262,9 @@ const HotelForm = ({
         minDate={new Date()}
         disabled={isReadonly}
         popperPlacement="right-start"
-        customInput={<TextField label="Check-in Date" variant="outlined" />}
+        customInput={
+          <TextField label="Check-in available" variant="outlined" />
+        }
         dateFormat="dd-MM-yyyy"
         className="datePickerContainer"
       />
@@ -273,7 +275,9 @@ const HotelForm = ({
         minDate={checkInInterval || new Date()}
         disabled={isReadonly}
         popperPlacement="right-start"
-        customInput={<TextField label="Check-out Date" variant="outlined" />}
+        customInput={
+          <TextField label="Check-in available" variant="outlined" />
+        }
         dateFormat="dd-MM-yyyy"
         className="datePickerContainer"
       />
