@@ -1,4 +1,4 @@
-import { Button, CircularProgress } from "@mui/material";
+import { CircularProgress, Typography, Divider, Button } from "@mui/material";
 import { useNavigate, useParams } from "react-router-dom";
 import ReservationForm from "./ReservationForm";
 import { useReservationById } from "../../hooks/useReservationById";
@@ -10,7 +10,6 @@ const EditReservation = () => {
   const params = useParams();
   const navigate = useNavigate();
   const { reservation } = useReservationById(params.reservationId);
-  console.log(reservation);
   const dispatch = useDispatch();
 
   const handleCancelClick = () => {
@@ -22,8 +21,9 @@ const EditReservation = () => {
     hotelId,
     firstName,
     lastName,
-    emailAddress,
     phoneNumber,
+    emailAddress,
+
     checkInDate,
     checkOutDate,
     roomType,
@@ -36,8 +36,8 @@ const EditReservation = () => {
       hotelId,
       firstName,
       lastName,
-      emailAddress,
       phoneNumber,
+      emailAddress,
       checkInDate,
       checkOutDate,
       roomType,
@@ -46,7 +46,6 @@ const EditReservation = () => {
       totalPayment,
     };
 
-    //TODO: implement PATCH in backend
     try {
       await patchReservation(params.reservationId, reservation);
       dispatch(openSnackbar({ text: "Reservation modified successfully" }));
@@ -59,12 +58,13 @@ const EditReservation = () => {
 
   return reservation ? (
     <div>
-      Edit reservation with id: {params.reservationId}
+      <Divider sx={{ my: 2 }} />
       <ReservationForm
         formTitle="Edit reservation"
         reservation={reservation}
         buttonLabel="Edit"
         onSaveReservation={handleSaveReservation}
+        onCancelClick={handleCancelClick}
       />
       <Button
         variant="outlined"
