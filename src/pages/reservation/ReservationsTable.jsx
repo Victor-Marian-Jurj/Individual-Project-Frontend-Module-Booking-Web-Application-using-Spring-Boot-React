@@ -303,6 +303,11 @@ const AdminReservationsTable = () => {
     ...new Set(reservations.map((reservation) => reservation.phoneNumber)),
   ];
 
+  const formatDate = (date) => {
+    const options = { day: "2-digit", month: "2-digit", year: "numeric" };
+    return new Date(date).toLocaleDateString("en-GB", options);
+  };
+
   const filteredReservations = reservations.filter((reservation) => {
     return (
       reservation.firstName
@@ -773,20 +778,9 @@ const AdminReservationsTable = () => {
                 <TableCell align="left" sx={{ fontSize: 14 }}>
                   {reservation.hotelLocation}
                 </TableCell>
-                <TableCell align="left" sx={{ fontSize: 14 }}>
-                  {
-                    new Date(reservation.checkInDate)
-                      .toISOString()
-                      .split("T")[0]
-                  }
-                </TableCell>
-                <TableCell align="left" sx={{ fontSize: 14 }}>
-                  {
-                    new Date(reservation.checkOutDate)
-                      .toISOString()
-                      .split("T")[0]
-                  }
-                </TableCell>
+                <TableCell>{formatDate(reservation.checkInDate)}</TableCell>
+                <TableCell>{formatDate(reservation.checkOutDate)}</TableCell>
+
                 <TableCell align="left" sx={{ fontSize: 14 }}>
                   {reservation.roomType}
                 </TableCell>
