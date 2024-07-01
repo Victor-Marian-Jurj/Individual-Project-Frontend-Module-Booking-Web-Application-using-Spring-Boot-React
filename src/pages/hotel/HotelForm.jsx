@@ -1,6 +1,22 @@
-import { Box, TextField, Button } from "@mui/material";
+import React, { useState } from "react";
+import {
+  Box,
+  TextField,
+  Button,
+  Select,
+  MenuItem,
+  InputLabel,
+} from "@mui/material";
 import { useInput } from "../../hooks/useInput";
-import { useSelector } from "react-redux";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import { useNavigate } from "react-router-dom";
+
+// Function to parse and validate dates in DD-MM-YYYY format
+const parseDate = (dateString) => {
+  const parsedDate = new Date(dateString);
+  return isNaN(parsedDate) ? new Date() : parsedDate;
+};
 
 const HotelForm = ({
   hotel,
@@ -8,35 +24,118 @@ const HotelForm = ({
   onSaveHotel,
   buttonLabel,
   isReadonly,
+  onCancelClick,
 }) => {
-  const [hotelName, handleHotelNameChange] = useInput(hotel.hotelName);
+  const [hotelName, handleHotelNameChange] = useInput(hotel.hotelName || "");
   const [hotelLocation, handleHotelLocationChange] = useInput(
-    hotel.hotelLocation
+    hotel.hotelLocation || ""
   );
-  const [latitude] = useInput(hotel.latitude);
-
-  const [longitude] = useInput(hotel.longitude);
-
-  const [rating, handleRatingChange] = useInput(hotel.rating);
+  const [latitude, handleLatitudeChange] = useInput(hotel.latitude || "");
+  const [longitude, handleLongitudeChange] = useInput(hotel.longitude || "");
+  const [rating, handleRatingChange] = useInput(hotel.rating || "");
   const [wifiConnection, handleWifiConnectionChange] = useInput(
-    hotel.wifiConnection
+    hotel.wifiConnection || ""
   );
-  const [breakfast, handleBreakfastChange] = useInput(hotel.breakfast);
+  const [breakfast, handleBreakfastChange] = useInput(hotel.breakfast || "");
   const [privateParking, handlePrivateParkingChange] = useInput(
-    hotel.privateParking
+    hotel.privateParking || ""
   );
-  const [minibar, handleMinibarChange] = useInput(hotel.minibar);
-  const [price, handlePriceChange] = useInput(hotel.price);
-  const [room, handleRoomChange] = useInput(hotel.room);
-  const [checkInInterval, handleCheckInIntervalChange] = useInput(
-    hotel.checkInInterval
+  const [minibar, handleMinibarChange] = useInput(hotel.minibar || "");
+  const [price, handlePriceChange] = useInput(hotel.price || "");
+  const [room, handleRoom] = useInput(hotel.room || "");
+  const [checkInInterval, setCheckInInterval] = useState(
+    parseDate(hotel.checkInInterval || "")
   );
-  const [checkOutInterval, handleCheckOutIntervalChange] = useInput(
-    hotel.checkOutInterval
+  const [checkOutInterval, setCheckOutInterval] = useState(
+    parseDate(hotel.checkOutInterval || "")
   );
+  const navigate = useNavigate();
 
-  const hotels = useSelector((state) => state.hotelReducer.hotels);
-  console.log(hotels);
+  const [dateError, setDateError] = useState(false);
+  const [priceError, setPriceError] = useState("");
+  const [formError, setFormError] = useState(false);
+
+  const handleCheckInDateChange = (date) => {
+    if (date >= checkOutInterval || date < new Date().setHours(0, 0, 0, 0)) {
+      setDateError(true);
+    } else {
+      setDateError(false);
+      setCheckInInterval(date);
+    }
+  };
+
+  const handleCheckOutDateChange = (date) => {
+    if (date <= checkInInterval || date < new Date().setHours(0, 0, 0, 0)) {
+      setDateError(true);
+    } else {
+      setDateError(false);
+      setCheckOutInterval(date);
+    }
+  };
+
+  const handlePriceValidation = (value) => {
+    const numericValue = value.replace(/\D/g, "");
+
+    if (numericValue.length > 4) {
+      setPriceError("Room price cannot exceed 4 digits.");
+    } else if (numericValue.length < 3 && numericValue.length > 0) {
+      setPriceError("Room price must be at least 3 digits.");
+    } else if (numericValue.length === 0) {
+      setPriceError("Room price is required.");
+    } else {
+      setPriceError("");
+    }
+
+    return numericValue;
+  };
+
+  const handleSaveClick = () => {
+    const validatedPrice = handlePriceValidation(price);
+
+    if (
+      !room ||
+      !validatedPrice ||
+      !rating ||
+      !breakfast ||
+      !wifiConnection ||
+      !privateParking ||
+      !minibar ||
+      dateError
+    ) {
+      setFormError(true);
+    } else {
+      setFormError(false);
+      onSaveHotel(
+        hotelName,
+        hotelLocation,
+        latitude,
+        longitude,
+        rating,
+        breakfast,
+        privateParking,
+        minibar,
+        room,
+        validatedPrice,
+        checkInInterval,
+        checkOutInterval
+      );
+    }
+  };
+
+  const isFormValid = () =>
+    room &&
+    price &&
+    !priceError &&
+    rating &&
+    breakfast !== "" &&
+    wifiConnection !== "" &&
+    privateParking !== "" &&
+    minibar !== "" &&
+    !dateError;
+
+  const handleCancelClick = () => {
+    navigate("/hotel.manager/hotels");
+  };
 
   return (
     <Box
@@ -45,11 +144,12 @@ const HotelForm = ({
         display: "flex",
         flexDirection: "column",
         gap: "16px",
-        alignItem: "center",
+        alignItems: "center",
         justifyContent: "center",
       }}
     >
       <h1>{formTitle}</h1>
+
       <TextField
         variant="outlined"
         disabled={isReadonly}
@@ -57,6 +157,7 @@ const HotelForm = ({
         value={hotelName}
         onChange={handleHotelNameChange}
       />
+
       <TextField
         variant="outlined"
         disabled={isReadonly}
@@ -64,89 +165,140 @@ const HotelForm = ({
         value={hotelLocation}
         onChange={handleHotelLocationChange}
       />
+
       <TextField
         variant="outlined"
         disabled={isReadonly}
-        label="Rating"
+        label="Latitude"
+        value={latitude}
+        onChange={handleLatitudeChange}
+      />
+
+      <TextField
+        variant="outlined"
+        disabled={isReadonly}
+        label="Longitude"
+        value={longitude}
+        onChange={handleLongitudeChange}
+      />
+
+      <InputLabel>Rating</InputLabel>
+      <Select
+        variant="outlined"
+        disabled={isReadonly}
         value={rating}
         onChange={handleRatingChange}
-      />
-      <TextField
+      >
+        <MenuItem value="3">3</MenuItem>
+        <MenuItem value="4">4</MenuItem>
+        <MenuItem value="5">5</MenuItem>
+      </Select>
+
+      <InputLabel>Room type</InputLabel>
+      <Select
         variant="outlined"
         disabled={isReadonly}
-        label="Room type"
         value={room}
-        onChange={handleRoomChange}
-      />
+        onChange={handleRoom}
+      >
+        <MenuItem value="Single">Single</MenuItem>
+        <MenuItem value="Double">Double</MenuItem>
+      </Select>
+
       <TextField
         variant="outlined"
         disabled={isReadonly}
         label="Room price"
         value={price}
         onChange={handlePriceChange}
+        error={!!priceError}
+        helperText={priceError}
+        inputProps={{ maxLength: 5 }}
       />
-      <TextField
+
+      <DatePicker
+        selected={checkInInterval}
+        onChange={handleCheckInDateChange}
+        placeholderText="-- -- --"
+        minDate={new Date()}
+        disabled={isReadonly}
+        popperPlacement="right-start"
+        customInput={<TextField label="Check-in Date" variant="outlined" />}
+        dateFormat="dd-MM-yyyy"
+        className="datePickerContainer"
+      />
+      <DatePicker
+        selected={checkOutInterval}
+        onChange={handleCheckOutDateChange}
+        placeholderText="-- -- --"
+        minDate={checkInInterval}
+        disabled={isReadonly}
+        popperPlacement="right-start"
+        customInput={<TextField label="Check-out Date" variant="outlined" />}
+        dateFormat="dd-MM-yyyy"
+        className="datePickerContainer"
+      />
+
+      <p
+        style={{
+          color: "#D32F2F",
+          margin: "0px 0px 0",
+          fontSize: "0.68rem",
+          fontFamily: "sans-serif",
+        }}
+      >
+        {dateError && "Please select valid check-in and check-out dates."}
+      </p>
+
+      <InputLabel>Breakfast</InputLabel>
+      <Select
         variant="outlined"
         disabled={isReadonly}
-        label="Available check-in"
-        value={checkInInterval}
-        onChange={handleCheckInIntervalChange}
-      />
-      <TextField
-        variant="outlined"
-        disabled={isReadonly}
-        label="Available check-out"
-        value={checkOutInterval}
-        onChange={handleCheckOutIntervalChange}
-      />
-      <TextField
-        variant="outlined"
-        disabled={isReadonly}
-        label="Breakfast"
         value={breakfast}
         onChange={handleBreakfastChange}
-      />
-      <TextField
+      >
+        <MenuItem value={true}>True</MenuItem>
+        <MenuItem value={false}>False</MenuItem>
+      </Select>
+
+      <InputLabel>WiFi connection</InputLabel>
+      <Select
         variant="outlined"
         disabled={isReadonly}
-        label="Wifi connection"
         value={wifiConnection}
         onChange={handleWifiConnectionChange}
-      />
-      <TextField
+      >
+        <MenuItem value={true}>True</MenuItem>
+        <MenuItem value={false}>False</MenuItem>
+      </Select>
+
+      <InputLabel>Private parking</InputLabel>
+      <Select
         variant="outlined"
         disabled={isReadonly}
-        label="Private parking"
         value={privateParking}
         onChange={handlePrivateParkingChange}
-      />
-      <TextField
+      >
+        <MenuItem value={true}>True</MenuItem>
+        <MenuItem value={false}>False</MenuItem>
+      </Select>
+
+      <InputLabel>Minibar</InputLabel>
+      <Select
         variant="outlined"
         disabled={isReadonly}
-        label="Minibar"
         value={minibar}
         onChange={handleMinibarChange}
-      />
+      >
+        <MenuItem value={true}>True</MenuItem>
+        <MenuItem value={false}>False</MenuItem>
+      </Select>
+
       {!!buttonLabel && (
         <Button
           variant="contained"
-          onClick={() =>
-            onSaveHotel(
-              hotelName,
-              hotelLocation,
-              price,
-              room,
-              checkInInterval,
-              checkOutInterval,
-              latitude,
-              longitude,
-              rating,
-              breakfast,
-              wifiConnection,
-              privateParking,
-              minibar
-            )
-          }
+          onClick={handleSaveClick}
+          disabled={!isFormValid() || isReadonly} // Disable button if form is invalid or in readonly mode
           sx={{
             maxWidth: "100px",
           }}
@@ -154,6 +306,14 @@ const HotelForm = ({
           {buttonLabel}
         </Button>
       )}
+
+      <Button
+        variant="outlined"
+        onClick={handleCancelClick}
+        sx={{ width: "100px", marginTop: "15px" }}
+      >
+        Cancel
+      </Button>
     </Box>
   );
 };

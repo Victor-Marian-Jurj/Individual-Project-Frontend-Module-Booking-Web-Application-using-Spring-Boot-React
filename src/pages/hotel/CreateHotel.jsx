@@ -3,7 +3,8 @@ import { postHotel } from "../../service/HotelService";
 import HotelForm from "./HotelForm";
 import { openSnackbar } from "../../stores/snackbarSlice";
 import { useDispatch } from "react-redux";
-import { Button } from "@mui/material";
+import { Button, Box } from "@mui/material";
+import { useState } from "react";
 
 const CreateHotel = () => {
   const initialHotel = {
@@ -15,7 +16,12 @@ const CreateHotel = () => {
     Breakfast: "",
     PrivateParking: "",
     Minibar: "",
+    Room: "",
+    Price: "",
+    CheckInInterval: "",
+    CheckOutInterval: "",
   };
+  const [hotel, setHotel] = useState(initialHotel);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -24,6 +30,9 @@ const CreateHotel = () => {
     navigate("/hotel.manager/hotels");
   };
 
+  const handleSaveClick = () => {
+    navigate("/hotel.manager/hotels");
+  };
   const handleAddHotel = async (
     hotelName,
     hotelLocation,
@@ -32,45 +41,65 @@ const CreateHotel = () => {
     rating,
     breakfast,
     privateParking,
-    minibar
+    minibar,
+    room,
+    price,
+    checkInInterval,
+    checkOutInterval
   ) => {
     const hotel = {
       hotelName: hotelName,
       hotelLocation: hotelLocation,
-      latitude: Number(latitude),
-      longitude: Number(longitude),
-      rating: Number(rating),
+      latitude: latitude,
+      longitude: longitude,
+      rating: rating,
       breakfast: breakfast,
       privateParking: privateParking,
       minibar: minibar,
+      room: room,
+      price: price,
+      checkInInterval: checkInInterval,
+      checkOutInterval: checkOutInterval,
     };
 
     try {
       await postHotel(hotel);
       dispatch(openSnackbar({ text: "Hotel added successfully" }));
-      navigate("hotel.manager/hotels");
     } catch (error) {
       console.error(error);
     } finally {
+      navigate("/hotel.manager/hotels");
     }
   };
 
   return (
-    <div>
-      <HotelForm
-        formTitle="Add hotel"
-        hotel={initialHotel}
-        buttonLabel="Add"
-        onSaveHotel={handleAddHotel}
-      />
-      <Button
-        variant="outlined"
-        onClick={handleCancelClick}
-        sx={{ mt: "16px", width: "100px" }}
-      >
-        Cancel
-      </Button>
-    </div>
+    <Box
+      component="form"
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: "16px",
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      <div>
+        <HotelForm
+          formTitle="Add hotel"
+          hotel={hotel}
+          buttonLabel="Add"
+          onSaveHotel={handleAddHotel}
+          // onClick={handleSaveHotel}
+        />
+        {/* <Button
+          variant="outlined"
+          onClick={handleCancelClick}
+          sx={{ width: "100px", marginTop: "15px" }}
+        >
+          Cancel
+        </Button> */}
+      </div>
+    </Box>
   );
 };
 
