@@ -42,7 +42,16 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     padding: 5,
-    width: "20%", // Each cell should take up around 1/7th of the table width
+    borderStyle: "solid",
+    borderRightWidth: 1,
+    backgroundColor: "#3f51b5", // Background color for table header
+    color: "white", // Text color for table header
+  },
+  tableHeaderEmail: {
+    fontSize: 14,
+    fontWeight: "bold",
+    padding: 5,
+    width: "16.66%", // Increase the width for the email header
     borderStyle: "solid",
     borderRightWidth: 1,
     backgroundColor: "#3f51b5", // Background color for table header
@@ -51,7 +60,14 @@ const styles = StyleSheet.create({
   tableCell: {
     fontSize: 12,
     padding: 5,
-    width: "20%", // Each cell should take up around 1/7th of the table width
+    borderStyle: "solid",
+    borderRightWidth: 1,
+    backgroundColor: "#ffffff", // Background color for table cell
+  },
+  tableCellEmail: {
+    fontSize: 12,
+    padding: 5,
+    width: "16.66%", // Increase the width for the email cell
     borderStyle: "solid",
     borderRightWidth: 1,
     backgroundColor: "#ffffff", // Background color for table cell
@@ -85,46 +101,80 @@ const MyDocument = ({ data, generatedOn }) => (
         <View style={styles.table}>
           {/* Table Header */}
           <View style={styles.tableRow}>
-            <Text style={styles.tableHeader}>First name</Text>
-            <Text style={styles.tableHeader}>Last name</Text>
-            <Text style={styles.tableHeader}>Hotel name</Text>
-            <Text style={[styles.tableHeader, styles.fifthColumnHeader]}>
+            <Text style={[styles.tableHeader, { width: "8.33%" }]}>
+              First name
+            </Text>
+            <Text style={[styles.tableHeader, { width: "8.33%" }]}>
+              Last name
+            </Text>
+            <Text style={[styles.tableHeader, { width: "10%" }]}>
+              Hotel name
+            </Text>
+            <Text style={[styles.tableHeader, { width: "10%" }]}>
               Hotel location
             </Text>
-            <Text style={styles.tableHeader}>Phone number</Text>
-            <Text style={styles.tableHeader}>Email address</Text>
-            <Text style={[styles.tableHeader, styles.sixtColumnHeader]}>
+            <Text style={[styles.tableHeader, { width: "12%" }]}>
+              Phone number
+            </Text>
+            <Text style={styles.tableHeaderEmail}>Email address</Text>
+            <Text style={[styles.tableHeader, { width: "12%" }]}>
               Check-in date
             </Text>
-            <Text style={[styles.tableHeader, styles.seventhColumnHeader]}>
+            <Text style={[styles.tableHeader, { width: "12%" }]}>
               Check-out date
             </Text>
-            <Text style={styles.tableHeader}>Room type</Text>
-            <Text style={styles.tableHeader}>Room price</Text>
-            <Text style={styles.tableHeader}>Payment method</Text>
-            <Text style={styles.tableHeader}>Total payment</Text>
+            <Text style={[styles.tableHeader, { width: "8.33%" }]}>
+              Room type
+            </Text>
+            <Text style={[styles.tableHeader, { width: "7%" }]}>
+              Room price
+            </Text>
+            <Text style={[styles.tableHeader, { width: "10%" }]}>
+              Payment method
+            </Text>
+            <Text style={[styles.tableHeader, { width: "7%" }]}>
+              Total payment
+            </Text>
           </View>
           {/* Table Body */}
           {data.map((reservation, index) => (
             <View style={styles.tableRow} key={index}>
-              <Text style={styles.tableCell}>{reservation.firstName}</Text>
-              <Text style={styles.tableCell}>{reservation.lastName}</Text>
-              <Text style={styles.tableCell}>{reservation.hotelName}</Text>
-              <Text style={styles.tableCell}>{reservation.hotelLocation}</Text>
-              <Text style={styles.tableCell}>{reservation.phoneNumber}</Text>
-              <Text style={styles.tableCell}>{reservation.emailAddress}</Text>
-              <Text style={styles.tableCell}>
+              <Text style={[styles.tableCell, { width: "8.33%" }]}>
+                {reservation.firstName}
+              </Text>
+              <Text style={[styles.tableCell, { width: "8.33%" }]}>
+                {reservation.lastName}
+              </Text>
+              <Text style={[styles.tableCell, { width: "10%" }]}>
+                {reservation.hotelName}
+              </Text>
+              <Text style={[styles.tableCell, { width: "10%" }]}>
+                {reservation.hotelLocation}
+              </Text>
+              <Text style={[styles.tableCell, { width: "12%" }]}>
+                {reservation.phoneNumber}
+              </Text>
+              <Text style={styles.tableCellEmail}>
+                {reservation.emailAddress}
+              </Text>
+              <Text style={[styles.tableCell, { width: "12%" }]}>
                 {formatDate(reservation.checkInDate)}
-              </Text>{" "}
-              {/* Format date consistently */}
-              <Text style={[styles.tableCell, styles.seventhColumnCell]}>
+              </Text>
+              <Text style={[styles.tableCell, { width: "12%" }]}>
                 {formatDate(reservation.checkOutDate)}
-              </Text>{" "}
-              {/* Format date consistently */}
-              <Text style={styles.tableCell}>{reservation.roomType}</Text>
-              <Text style={styles.tableCell}>{reservation.roomPrice}</Text>
-              <Text style={styles.tableCell}>{reservation.paymentMethod}</Text>
-              <Text style={styles.tableCell}>{reservation.totalPayment}</Text>
+              </Text>
+              <Text style={[styles.tableCell, { width: "8.33%" }]}>
+                {reservation.roomType}
+              </Text>
+              <Text style={[styles.tableCell, { width: "7%" }]}>
+                {reservation.roomPrice}
+              </Text>
+              <Text style={[styles.tableCell, { width: "10%" }]}>
+                {reservation.paymentMethod}
+              </Text>
+              <Text style={[styles.tableCell, { width: "7%" }]}>
+                {reservation.totalPayment}
+              </Text>
             </View>
           ))}
         </View>
