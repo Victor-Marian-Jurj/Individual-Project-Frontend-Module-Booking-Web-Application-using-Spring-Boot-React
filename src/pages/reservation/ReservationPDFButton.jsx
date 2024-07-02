@@ -110,17 +110,15 @@ const MyDocument = ({ data, generatedOn }) => (
               <Text style={styles.tableCell}>{reservation.firstName}</Text>
               <Text style={styles.tableCell}>{reservation.lastName}</Text>
               <Text style={styles.tableCell}>{reservation.hotelName}</Text>
-              <Text style={[styles.tableCell, styles.fifthColumnCell]}>
-                {reservation.hotelLocation}
-              </Text>
+              <Text style={styles.tableCell}>{reservation.hotelLocation}</Text>
               <Text style={styles.tableCell}>{reservation.phoneNumber}</Text>
               <Text style={styles.tableCell}>{reservation.emailAddress}</Text>
-              <Text style={[styles.tableCell, styles.sixtColumnCell]}>
-                {new Date(reservation.checkInDate).toLocaleDateString()}
+              <Text style={styles.tableCell}>
+                {formatDate(reservation.checkInDate)}
               </Text>{" "}
               {/* Format date consistently */}
               <Text style={[styles.tableCell, styles.seventhColumnCell]}>
-                {new Date(reservation.checkOutDate).toLocaleDateString()}
+                {formatDate(reservation.checkOutDate)}
               </Text>{" "}
               {/* Format date consistently */}
               <Text style={styles.tableCell}>{reservation.roomType}</Text>
