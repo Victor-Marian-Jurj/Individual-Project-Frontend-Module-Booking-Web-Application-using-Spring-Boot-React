@@ -159,10 +159,8 @@ const ReservationPDFButton = ({ getFilteredReservations }) => {
           variant="contained"
           onClick={handleGeneratePDF}
           sx={{
-            marginLeft: "12px",
             fontSize: "13px", // Set the font size to smaller
             whiteSpace: "normal", // Allow text to wrap onto two lines
-            padding: "4px 15px", // Increase padding to make the button bigger
             height: "auto", // Adjust height to fit the content
           }}
         >
