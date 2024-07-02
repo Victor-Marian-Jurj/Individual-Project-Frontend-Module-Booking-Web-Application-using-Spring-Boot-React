@@ -25,7 +25,7 @@ const ViewHotel = () => {
             <Button
               variant="outlined"
               onClick={handleCancelClick}
-              sx={{ mt: "16px" }}
+              sx={{ mt: "30px", ml: "60px" }}
             >
               Cancel
             </Button>

@@ -11,7 +11,6 @@ import {
 } from "@mui/material";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useInput } from "../../hooks/useInput";
 import { format } from "date-fns";
 
 const ReservationForm = ({
@@ -29,30 +28,51 @@ const ReservationForm = ({
     reservation.emailAddress || ""
   );
   const [emailError, setEmailError] = useState(false);
-  const [checkInDate, setCheckInDate] = useState(null);
-  const [checkOutDate, setCheckOutDate] = useState(null);
+  const [checkInDate, setCheckInDate] = useState(
+    reservation.checkInDate ? new Date(reservation.checkInDate) : null
+  );
+  const [checkOutDate, setCheckOutDate] = useState(
+    reservation.checkOutDate ? new Date(reservation.checkOutDate) : null
+  );
   const [dateError, setDateError] = useState(false);
-  const [roomPrice, setRoomPrice] = useState(reservation.roomPrice || 0);
+  const [roomPrice, setRoomPrice] = useState(
+    parseFloat(reservation.roomPrice) || 0
+  );
+  const [roomPriceError, setRoomPriceError] = useState(false);
   const [roomType, setRoomType] = useState(reservation.roomType || "");
   const [paymentMethod, setPaymentMethod] = useState(
     reservation.paymentMethod || ""
   );
   const [totalPayment, setTotalPayment] = useState(
-    reservation.totalPayment || 0
+    parseFloat(reservation.totalPayment) || 0
   );
 
-  useEffect(() => {
-    if (reservation.checkInDate) {
-      setCheckInDate(new Date(reservation.checkInDate));
-    }
-    if (reservation.checkOutDate) {
-      setCheckOutDate(new Date(reservation.checkOutDate));
-    }
-  }, [reservation]);
+  const [firstNameError, setFirstNameError] = useState(false);
+  const [lastNameError, setLastNameError] = useState(false);
 
   useEffect(() => {
     calculateTotalPayment();
   }, [checkInDate, checkOutDate, roomPrice]);
+
+  const handleFirstNameChange = (event) => {
+    const { value } = event.target;
+    setFirstName(value);
+    if (!isValidName(value)) {
+      setFirstNameError(true);
+    } else {
+      setFirstNameError(false);
+    }
+  };
+
+  const handleLastNameChange = (event) => {
+    const { value } = event.target;
+    setLastName(value);
+    if (!isValidName(value)) {
+      setLastNameError(true);
+    } else {
+      setLastNameError(false);
+    }
+  };
 
   const handlePhoneNumberChange = (event) => {
     const { value } = event.target;
@@ -116,7 +136,12 @@ const ReservationForm = ({
 
   const handleRoomPriceChange = (event) => {
     const { value } = event.target;
-    setRoomPrice(parseFloat(value) || 0); // Ensure the value is a number
+    if (/^\d{1,4}$/.test(value)) {
+      setRoomPrice(parseFloat(value)); // Ensure the value is a number
+      setRoomPriceError(false);
+    } else {
+      setRoomPriceError(true);
+    }
   };
 
   const handleSaveReservation = () => {
@@ -140,13 +165,21 @@ const ReservationForm = ({
   const isFormValid =
     firstName &&
     lastName &&
+    !firstNameError &&
+    !lastNameError &&
     phoneNumber &&
     !phoneNumberError &&
     emailAddress &&
     !emailError &&
     checkInDate &&
     checkOutDate &&
-    !dateError;
+    !dateError &&
+    !roomPriceError;
+
+  const isValidName = (name) => {
+    const regex = /^[a-zA-Z]{0,20}$/; // Regex to allow only letters and limit to 20 characters
+    return regex.test(name);
+  };
 
   return (
     <Box
@@ -165,14 +198,24 @@ const ReservationForm = ({
         disabled={isReadonly}
         label="First Name"
         value={firstName}
-        onChange={(e) => setFirstName(e.target.value)}
+        onChange={handleFirstNameChange}
+        error={firstNameError}
+        helperText={
+          firstNameError &&
+          "Please enter up to 20 letters only. No numbers inside"
+        }
       />
       <TextField
         variant="outlined"
         disabled={isReadonly}
         label="Last Name"
         value={lastName}
-        onChange={(e) => setLastName(e.target.value)}
+        onChange={handleLastNameChange}
+        error={lastNameError}
+        helperText={
+          lastNameError &&
+          "Please enter up to 20 letters only. No numbers inside"
+        }
       />
       <TextField
         variant="outlined"
@@ -192,63 +235,49 @@ const ReservationForm = ({
         error={emailError}
         helperText={emailError && "Please enter a valid email address"}
       />
-      <FormControl variant="outlined" sx={{ width: "100%" }}>
-        <InputLabel id="room-type-label">Room Type</InputLabel>
-        <Select
-          labelId="room-type-label"
-          value={roomType}
-          onChange={(e) => setRoomType(e.target.value)}
-          label="Room Type"
-          input={<OutlinedInput label="Room Type" />}
-          disabled={isReadonly}
-        >
-          <MenuItem value="Single">Single</MenuItem>
-          <MenuItem value="Double">Double</MenuItem>
-        </Select>
-      </FormControl>
-      <>
-        <TextField
-          variant="outlined"
-          label="Room Price"
-          value={roomPrice}
-          onChange={handleRoomPriceChange}
-          disabled={isReadonly}
-        />
-        <DatePicker
-          selected={checkInDate}
-          onChange={handleCheckInDateChange}
-          placeholderText="-- -- --"
-          minDate={new Date()}
-          disabled={isReadonly}
-          popperPlacement="right-start"
-          customInput={<TextField label="Check-in Date" variant="outlined" />}
-          dateFormat="dd-MM-yyyy"
-          className="datePickerContainer"
-        />
-        <DatePicker
-          selected={checkOutDate}
-          onChange={handleCheckOutDateChange}
-          placeholderText="-- -- --"
-          minDate={checkInDate}
-          disabled={isReadonly}
-          popperPlacement="right-start"
-          customInput={<TextField label="Check-out Date" variant="outlined" />}
-          dateFormat="dd-MM-yyyy"
-          className="datePickerContainer"
-        />
-
-        <p
-          style={{
-            color: "#D32F2F",
-            margin: "0px 0px 0",
-            fontSize: "0.68rem",
-            fontFamily: "sans-serif",
-          }}
-        >
-          {dateError && "Please select valid check-in and check-out dates."}
-        </p>
-      </>
-
+      <TextField
+        variant="outlined"
+        label="Room Price"
+        value={roomPrice}
+        onChange={handleRoomPriceChange}
+        error={roomPriceError}
+        helperText={
+          roomPriceError && "Please enter a valid room price (up to 4 digits)"
+        }
+        disabled={isReadonly}
+      />
+      <DatePicker
+        selected={checkInDate}
+        onChange={handleCheckInDateChange}
+        placeholderText="-- -- --"
+        minDate={new Date()}
+        disabled={isReadonly}
+        popperPlacement="right-start"
+        customInput={<TextField label="Check-in Date" variant="outlined" />}
+        dateFormat="dd-MM-yyyy"
+        className="datePickerContainer"
+      />
+      <DatePicker
+        selected={checkOutDate}
+        onChange={handleCheckOutDateChange}
+        placeholderText="-- -- --"
+        minDate={checkInDate}
+        disabled={isReadonly}
+        popperPlacement="right-start"
+        customInput={<TextField label="Check-out Date" variant="outlined" />}
+        dateFormat="dd-MM-yyyy"
+        className="datePickerContainer"
+      />
+      <p
+        style={{
+          color: "#D32F2F",
+          margin: "0px 0px 0",
+          fontSize: "0.68rem",
+          fontFamily: "sans-serif",
+        }}
+      >
+        {dateError && "Please select valid check-in and check-out dates."}
+      </p>
       <FormControl variant="outlined" sx={{ width: "100%" }}>
         <InputLabel id="payment-method-label">Payment Method</InputLabel>
         <Select
@@ -263,7 +292,6 @@ const ReservationForm = ({
           <MenuItem value="Card">Card</MenuItem>
         </Select>
       </FormControl>
-
       <TextField
         variant="outlined"
         disabled

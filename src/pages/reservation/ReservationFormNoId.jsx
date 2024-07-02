@@ -11,9 +11,7 @@ import {
 } from "@mui/material";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { useInput } from "../../hooks/useInput";
 import { format } from "date-fns";
-import { useHotelById } from "../../hooks/useHotelById"; // Replace with your custom hook
 
 const ReservationFormNoId = ({
   reservation,
@@ -23,32 +21,63 @@ const ReservationFormNoId = ({
   isReadonly,
   hotelId,
 }) => {
-  const [firstName, handleFirstName] = useInput(reservation.firstName);
-  const [lastName, handleLastName] = useInput(reservation.lastName);
-  const [phoneNumber, setPhoneNumber] = useState(reservation.phoneNumber);
+  const [firstName, setFirstName] = useState(reservation.firstName || "");
+  const [lastName, setLastName] = useState(reservation.lastName || "");
+  const [phoneNumber, setPhoneNumber] = useState(reservation.phoneNumber || "");
   const [phoneNumberError, setPhoneNumberError] = useState(false);
-  const [emailAddress, setEmailAddress] = useState(reservation.emailAddress);
+  const [emailAddress, setEmailAddress] = useState(
+    reservation.emailAddress || ""
+  );
   const [emailError, setEmailError] = useState(false);
-  const [checkInDate, setCheckInDate] = useState(null);
-  const [checkOutDate, setCheckOutDate] = useState(null);
+  const [checkInDate, setCheckInDate] = useState(
+    reservation.checkInDate ? new Date(reservation.checkInDate) : null
+  );
+  const [checkOutDate, setCheckOutDate] = useState(
+    reservation.checkOutDate ? new Date(reservation.checkOutDate) : null
+  );
   const [dateError, setDateError] = useState(false);
   const [roomPrice, setRoomPrice] = useState(0);
-  const [roomType, setRoomType] = useState(reservation.roomType);
-  const [paymentMethod, setPaymentMethod] = useState(reservation.paymentMethod);
-  const [totalPayment, setTotalPayment] = useState(reservation.totalPayment);
+  const [roomType, setRoomType] = useState(reservation.roomType || "");
+  const [paymentMethod, setPaymentMethod] = useState(
+    reservation.paymentMethod || ""
+  );
+  const [totalPayment, setTotalPayment] = useState(
+    reservation.totalPayment || ""
+  );
 
-  // Custom hook to fetch hotel details including price based on hotelId
-  const { hotel, loading, error } = useHotelById(hotelId);
+  const [firstNameError, setFirstNameError] = useState(false);
+  const [lastNameError, setLastNameError] = useState(false);
 
   useEffect(() => {
-    if (hotel && hotel.price) {
-      setRoomPrice(hotel.price);
+    // Set initial values from reservation object
+    if (reservation.roomPrice) {
+      setRoomPrice(reservation.roomPrice);
     }
-  }, [hotel]);
+  }, [reservation.roomPrice]);
 
   useEffect(() => {
     calculateTotalPayment();
   }, [checkInDate, checkOutDate, roomPrice]);
+
+  const handleFirstNameChange = (event) => {
+    const { value } = event.target;
+    setFirstName(value);
+    if (!isValidName(value)) {
+      setFirstNameError(true);
+    } else {
+      setFirstNameError(false);
+    }
+  };
+
+  const handleLastNameChange = (event) => {
+    const { value } = event.target;
+    setLastName(value);
+    if (!isValidName(value)) {
+      setLastNameError(true);
+    } else {
+      setLastNameError(false);
+    }
+  };
 
   const handlePhoneNumberChange = (event) => {
     const { value } = event.target;
@@ -60,18 +89,6 @@ const ReservationFormNoId = ({
     const { value } = event.target;
     setEmailAddress(value);
     validateEmailAddress(value);
-  };
-
-  const validatePhoneNumber = (value) => {
-    const isValid = /^\d{10}$/.test(value);
-    setPhoneNumberError(!isValid);
-  };
-
-  const validateEmailAddress = (value) => {
-    const isValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
-      value
-    );
-    setEmailError(!isValid);
   };
 
   const handleCheckInDateChange = (date) => {
@@ -132,13 +149,30 @@ const ReservationFormNoId = ({
     );
   };
 
+  const isValidName = (name) => {
+    const regex = /^[a-zA-Z]{1,20}$/;
+    return regex.test(name);
+  };
+
+  const validatePhoneNumber = (value) => {
+    const isValid = /^\d{10}$/.test(value);
+    setPhoneNumberError(!isValid);
+  };
+
+  const validateEmailAddress = (value) => {
+    const isValid = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+      value
+    );
+    setEmailError(!isValid);
+  };
+
   // Check if all required fields are valid
   const isFormValid =
     firstName &&
     lastName &&
-    phoneNumber &&
+    !firstNameError &&
+    !lastNameError &&
     !phoneNumberError &&
-    emailAddress &&
     !emailError &&
     checkInDate &&
     checkOutDate &&
@@ -161,14 +195,22 @@ const ReservationFormNoId = ({
         disabled={isReadonly}
         label="First Name"
         value={firstName}
-        onChange={handleFirstName}
+        onChange={handleFirstNameChange}
+        error={firstNameError}
+        helperText={
+          firstNameError && "Please enter letters only (max 20 characters)"
+        }
       />
       <TextField
         variant="outlined"
         disabled={isReadonly}
         label="Last Name"
         value={lastName}
-        onChange={handleLastName}
+        onChange={handleLastNameChange}
+        error={lastNameError}
+        helperText={
+          lastNameError && "Please enter letters only (max 20 characters)"
+        }
       />
       <TextField
         variant="outlined"

@@ -80,7 +80,6 @@ const CreateReservation = () => {
       }}
     >
       <div>
-        Add reservation for hotel with id: {params.hotelId}
         <ReservationFormNoId
           formTitle="Add Reservation"
           reservation={reservation}

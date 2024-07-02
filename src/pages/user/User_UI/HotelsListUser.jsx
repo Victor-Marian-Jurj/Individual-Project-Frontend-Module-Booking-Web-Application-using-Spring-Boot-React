@@ -15,6 +15,15 @@ import generatePDF from "../User_UI/FilterHotelsPDFBackendUser";
 import { sendPDFToBackend } from "../../../service/EmailServiceHotels"; // Import sendPDFToBackend function
 import Button from "@mui/material/Button";
 import { format, addDays } from "date-fns"; // Import date-fns format and addDays functions
+import { styled } from "@mui/system"; // Import styled from @mui/system or @mui/material/styles
+
+const Container = styled("div")({
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "10px", // Adjust the gap between items
+  alignItems: "center", // Align items vertically
+  marginBottom: "20px", // Add bottom margin for separation
+});
 
 const HotelsListUser = () => {
   const [nameFilterOptions, setNameFilterOptions] = useState([""]);
@@ -189,33 +198,42 @@ const HotelsListUser = () => {
   };
 
   const getFilteredHotels = () => {
+    // Convert check-in and check-out filter values to Date objects
+    const checkInDate = checkInIntervalFilter
+      ? new Date(checkInIntervalFilter)
+      : null;
+    const checkOutDate = checkOutIntervalFilter
+      ? new Date(checkOutIntervalFilter)
+      : null;
+
     // Apply filters
-    const filteredHotels = hotels.filter((hotel) => {
+    const filtered = hotels.filter((hotel) => {
+      // Convert hotel's check-in and check-out dates to Date objects
+      const hotelCheckInDate = new Date(hotel.checkInInterval);
+      const hotelCheckOutDate = new Date(hotel.checkOutInterval);
+
+      // Check if both check-in and check-out dates are within the hotel's available period
+      const isWithinRange =
+        (!checkInDate || hotelCheckInDate <= checkInDate) &&
+        (!checkOutDate || hotelCheckOutDate >= checkOutDate) &&
+        // Ensure the checkout date is within the hotel's period
+        (!checkOutDate || hotelCheckInDate <= checkOutDate);
+
       return (
         (!locationFilter || hotel.hotelLocation.includes(locationFilter)) &&
         (!nameFilter || hotel.hotelName.includes(nameFilter)) &&
-        (!ratingFilter ||
-          (ratingFilter === "All"
-            ? true
-            : hotel.rating === parseInt(ratingFilter, 10))) &&
+        (!ratingFilter || hotel.rating.toString() === ratingFilter) &&
         (!breakfastFilter || hotel.breakfast.toString() === breakfastFilter) &&
         (!wifiFilter || hotel.wifiConnection.toString() === wifiFilter) &&
         (!parkingFilter || hotel.privateParking.toString() === parkingFilter) &&
         (!minibarFilter || hotel.minibar.toString() === minibarFilter) &&
-        (!roomFilter || hotel.room === roomFilter) &&
-        (!checkInIntervalFilter ||
-          (checkInIntervalFilter.toString() === "All"
-            ? true
-            : hotel.checkInInterval === checkInIntervalFilter)) &&
-        (!checkOutIntervalFilter ||
-          (checkOutIntervalFilter.toString() === "All"
-            ? true
-            : hotel.checkOutInterval === checkOutIntervalFilter))
+        (!roomFilter || hotel.room.includes(roomFilter)) &&
+        isWithinRange
       );
     });
 
     // Sort filtered hotels alphabetically by the first letter of the second name
-    return filteredHotels.sort((a, b) => {
+    return filtered.sort((a, b) => {
       // Extract second names
       const secondNameA = (a.hotelName.split(" ")[1] || "").toUpperCase();
       const secondNameB = (b.hotelName.split(" ")[1] || "").toUpperCase();
@@ -311,7 +329,7 @@ const HotelsListUser = () => {
       <Typography variant="h5" sx={{ color: "#3f51b5" }}>
         Filter hotels
       </Typography>
-      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}>
+      <Container sx={{ backgroundColor: "white", color: "black" }}>
         {/* Add filter components */}
         <TextField
           label="Hotel location"
@@ -332,7 +350,7 @@ const HotelsListUser = () => {
           value={nameFilter}
           onChange={(e) => handleNameChange(e.target.value)}
           select
-          sx={{ width: "130px", marginLeft: "12px" }}
+          sx={{ width: "130px" }}
         >
           {nameFilterOptions.map((name) => (
             <MenuItem key={name} value={name}>
@@ -345,7 +363,7 @@ const HotelsListUser = () => {
           value={parkingFilter}
           onChange={(e) => setParkingFilter(e.target.value)}
           select
-          sx={{ width: "155px", marginLeft: "12px" }}
+          sx={{ width: "155px" }}
         >
           <MenuItem value="">All</MenuItem>
           <MenuItem value="true">True</MenuItem>
@@ -356,7 +374,7 @@ const HotelsListUser = () => {
           value={ratingFilter}
           onChange={(e) => setRatingFilter(e.target.value)}
           select
-          sx={{ width: "95px", marginLeft: "12px" }}
+          sx={{ width: "95px" }}
         >
           {ratingFilterOptions.map((rating) => (
             <MenuItem key={rating} value={rating}>
@@ -369,7 +387,7 @@ const HotelsListUser = () => {
           value={breakfastFilter}
           onChange={(e) => setBreakfastFilter(e.target.value)}
           select
-          sx={{ width: "120px", marginLeft: "12px" }}
+          sx={{ width: "120px" }}
         >
           <MenuItem value="">All</MenuItem>
           <MenuItem value="true">True</MenuItem>
@@ -380,7 +398,7 @@ const HotelsListUser = () => {
           value={wifiFilter}
           onChange={(e) => setWifiFilter(e.target.value)}
           select
-          sx={{ width: "85px", marginLeft: "12px" }}
+          sx={{ width: "85px" }}
         >
           <MenuItem value="">All</MenuItem>
           <MenuItem value="true">True</MenuItem>
@@ -391,7 +409,7 @@ const HotelsListUser = () => {
           value={minibarFilter}
           onChange={(e) => setMinibarFilter(e.target.value)}
           select
-          sx={{ width: "105px", marginLeft: "12px" }}
+          sx={{ width: "105px" }}
         >
           <MenuItem value="">All</MenuItem>
           <MenuItem value="true">True</MenuItem>
@@ -403,7 +421,7 @@ const HotelsListUser = () => {
           value={roomFilter}
           onChange={(e) => setRoomFilter(e.target.value)}
           select
-          sx={{ width: "120px", marginLeft: "12px" }}
+          sx={{ width: "120px" }}
         >
           {roomFilterOptions.map((room) => (
             <MenuItem key={room} value={room}>
@@ -416,7 +434,7 @@ const HotelsListUser = () => {
           value={checkInIntervalFilter}
           onChange={(e) => setCheckInIntervalFilter(e.target.value)}
           type="date"
-          sx={{ width: "110px", marginRight: "12px" }}
+          sx={{ width: "110px" }}
           InputLabelProps={{
             shrink: true,
           }}
@@ -429,7 +447,7 @@ const HotelsListUser = () => {
           value={checkOutIntervalFilter}
           onChange={(e) => setCheckOutIntervalFilter(e.target.value)}
           type="date"
-          sx={{ width: "115px", marginRight: "12px" }}
+          sx={{ width: "115px" }}
           InputLabelProps={{
             shrink: true,
           }}
@@ -447,18 +465,16 @@ const HotelsListUser = () => {
           onChange={handleRecipientEmailChange}
           error={invalidEmail}
           helperText={invalidEmail ? "Invalid email address" : null}
-          sx={{ width: "200px", marginRight: "13px", marginLeft: "13px" }}
+          sx={{ width: "200px" }}
         />
         <Button
           variant="contained"
           onClick={generateAndSendEmail}
           sx={{
-            marginRight: "20px",
             fontSize: "13px", // Set the font size to smaller
             // lineHeight: "1", // Ensure text is on two lines
             whiteSpace: "normal", // Allow text to wrap onto two lines
             // fontWeight: "bold", // Make the text bold
-            padding: "4px 13px", // Increase padding to make the button bigger
             height: "auto", // Adjust height to fit the content
           }}
         >
@@ -481,7 +497,8 @@ const HotelsListUser = () => {
         />
 
         {/* Add similar select components for other filters */}
-      </div>
+      </Container>
+
       <Divider
         sx={{
           backgroundColor: "#3f51b5",

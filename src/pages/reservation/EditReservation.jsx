@@ -23,7 +23,6 @@ const EditReservation = () => {
     lastName,
     phoneNumber,
     emailAddress,
-
     checkInDate,
     checkOutDate,
     roomType,
@@ -58,7 +57,6 @@ const EditReservation = () => {
 
   return reservation ? (
     <div>
-      <Divider sx={{ my: 2 }} />
       <ReservationForm
         formTitle="Edit reservation"
         reservation={reservation}

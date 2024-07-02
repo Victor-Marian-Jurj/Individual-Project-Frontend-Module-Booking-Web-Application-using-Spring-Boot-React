@@ -22,6 +22,15 @@ import { sendPDFToBackend } from "../../service/EmailServiceReservations"; // Im
 import EmailStatusDialog from "../../components/EmailStatusDialog"; // Import EmailStatusDialog component
 import generatePDF from "./FilterReservationsPDFBackend";
 import generateAllReservationsPDF from "./AllReservationsPDFBackend";
+import { styled } from "@mui/system"; // Import styled from @mui/system or @mui/material/styles
+
+const Container = styled("div")({
+  display: "flex",
+  flexWrap: "wrap",
+  gap: "10px", // Adjust the gap between items
+  alignItems: "center", // Align items vertically
+  marginBottom: "20px", // Add bottom margin for separation
+});
 
 const AdminReservationsTable = () => {
   const [reservations, setReservations] = useState([]);
@@ -349,28 +358,13 @@ const AdminReservationsTable = () => {
         Filter reservations
       </Typography>
       <br />
-      <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center" }}>
-        {/* <TextField
-          select
-          label="Username"
-          value={filter.username}
-          onChange={(e) => handleFilterChange(e, "username")}
-          sx={{ width: "155px" }}
-        >
-          <MenuItem value="">All</MenuItem>
-          {uniqueUsernames.map((username) => (
-            <MenuItem key={username} value={username}>
-              {username}
-            </MenuItem>
-          ))}
-        </TextField> */}
-
+      <Container sx={{ backgroundColor: "white", color: "black" }}>
         <TextField
           select
           label="First name"
           value={filter.firstName}
           onChange={(e) => handleFilterChange(e, "firstName")}
-          sx={{ width: "155px", marginLeft: "12px" }}
+          sx={{ width: "155px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueFirstNames.map((firstName) => (
@@ -384,7 +378,7 @@ const AdminReservationsTable = () => {
           label="Last name"
           value={filter.lastName}
           onChange={(e) => handleFilterChange(e, "lastName")}
-          sx={{ width: "155px", marginLeft: "12px" }}
+          sx={{ width: "155px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueLastNames.map((lastName) => (
@@ -398,7 +392,7 @@ const AdminReservationsTable = () => {
           label="Phone number"
           value={filter.phoneNumber}
           onChange={(e) => handleFilterChange(e, "phoneNumber")}
-          sx={{ width: "165px", marginLeft: "12px" }}
+          sx={{ width: "165px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniquePhoneNumber.map((phoneNumber) => (
@@ -412,7 +406,7 @@ const AdminReservationsTable = () => {
           label="Email address"
           value={filter.emailAddress}
           onChange={(e) => handleFilterChange(e, "emailAddress")}
-          sx={{ width: "165px", marginLeft: "12px" }}
+          sx={{ width: "165px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueEmailAddress.map((emailAddress) => (
@@ -426,7 +420,7 @@ const AdminReservationsTable = () => {
           label="Hotel name"
           value={filter.hotelName}
           onChange={(e) => handleFilterChange(e, "hotelName")}
-          sx={{ width: "165px", marginLeft: "12px" }}
+          sx={{ width: "165px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueHotelName.map((hotelName) => (
@@ -440,7 +434,7 @@ const AdminReservationsTable = () => {
           label="Hotel location"
           value={filter.hotelLocation}
           onChange={(e) => handleFilterChange(e, "hotelLocation")}
-          sx={{ width: "155px", marginLeft: "12px" }}
+          sx={{ width: "155px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueHotelLocations.map((location) => (
@@ -454,7 +448,7 @@ const AdminReservationsTable = () => {
           label="Check-in date"
           value={filter.checkInDate}
           onChange={(e) => handleFilterChange(e, "checkInDate")}
-          sx={{ width: "155px", marginLeft: "12px" }}
+          sx={{ width: "155px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueCheckInDate.map((checkInDate) => (
@@ -468,7 +462,7 @@ const AdminReservationsTable = () => {
           label="Check-out date"
           value={filter.checkOutDate}
           onChange={(e) => handleFilterChange(e, "checkOutDate")}
-          sx={{ width: "155px", marginLeft: "12px" }}
+          sx={{ width: "155px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueCheckOutDate.map((checkOutDate) => (
@@ -482,7 +476,7 @@ const AdminReservationsTable = () => {
           label="Room type"
           value={filter.roomType}
           onChange={(e) => handleFilterChange(e, "roomType")}
-          sx={{ width: "155px", marginLeft: "12px" }}
+          sx={{ width: "155px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueRoomType.map((roomType) => (
@@ -497,7 +491,7 @@ const AdminReservationsTable = () => {
           label="Room price"
           value={filter.roomPrice}
           onChange={(e) => handleFilterChange(e, "roomPrice")}
-          sx={{ width: "155px", marginLeft: "12px" }}
+          sx={{ width: "155px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueRoomPrices.map((roomPrice) => (
@@ -512,7 +506,7 @@ const AdminReservationsTable = () => {
           label="Payment method"
           value={filter.paymentMethod}
           onChange={(e) => handleFilterChange(e, "paymentMethod")}
-          sx={{ width: "165px", marginLeft: "12px" }}
+          sx={{ width: "165px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniquePaymentMethods.map((paymentMethod) => (
@@ -526,7 +520,7 @@ const AdminReservationsTable = () => {
           label="Total payment"
           value={filter.totalPayment}
           onChange={(e) => handleFilterChange(e, "totalPayment")}
-          sx={{ width: "155px", marginLeft: "12px" }}
+          sx={{ width: "155px" }}
         >
           <MenuItem value="">All</MenuItem>
           {uniqueTotalPayment.map((totalPayment) => (
@@ -546,19 +540,16 @@ const AdminReservationsTable = () => {
           onChange={handleRecipientEmailChange}
           error={invalidEmail}
           helperText={invalidEmail ? "Invalid email address" : null}
-          sx={{ width: "200px", marginRight: "5px", marginLeft: "13px" }}
+          sx={{ width: "200px" }}
         />
         <Button
           variant="contained"
           onClick={generateAndSendEmail}
           sx={{
-            marginLeft: "10px",
-            marginRight: "20px",
             fontSize: "13px", // Set the font size to smaller
             // lineHeight: "1", // Ensure text is on two lines
             whiteSpace: "normal", // Allow text to wrap onto two lines
             // fontWeight: "bold", // Make the text bold
-            padding: "4px 13px", // Increase padding to make the button bigger
             height: "auto", // Adjust height to fit the content
           }}
         >
@@ -586,7 +577,7 @@ const AdminReservationsTable = () => {
           onChange={handleRecipientEmailChangeAllReservations}
           error={invalidEmail}
           helperText={invalidEmail ? "Invalid email address" : null}
-          sx={{ width: "200px", marginRight: "13px" }}
+          sx={{ width: "200px" }}
         />
 
         {/* Dropdown menu to select the period in minutes */}
@@ -595,7 +586,7 @@ const AdminReservationsTable = () => {
           label="Recurrency period"
           value={selectedMinute}
           onChange={handleMinuteChange}
-          sx={{ width: "150px", marginRight: "13px" }}
+          sx={{ width: "150px" }}
         >
           <MenuItem value="">Select Minute</MenuItem>
           {minutes.map((minute) => (
@@ -613,9 +604,7 @@ const AdminReservationsTable = () => {
           sx={{
             fontSize: "13px",
             whiteSpace: "normal",
-            padding: "4px 13px",
             height: "auto",
-            marginBottom: "12px", // Adjust margin bottom for spacing between button and message
           }}
         >
           Activate Recurring Emails
@@ -627,7 +616,6 @@ const AdminReservationsTable = () => {
             sx={{
               color: "red", // Red color for invalid email message
               fontSize: "12px",
-              marginLeft: "12px", // Adjust margin for spacing
             }}
           >
             {emailMessage}
@@ -638,13 +626,12 @@ const AdminReservationsTable = () => {
             sx={{
               color: "green", // Green color for valid email message
               fontSize: "12px",
-              marginLeft: "12px", // Adjust margin for spacing
             }}
           >
             {emailMessage}
           </Typography>
         )}
-      </div>
+      </Container>
       {/* Render EmailStatusDialog component */}
       <EmailStatusDialog
         isOpen={emailSent || invalidEmail || validEmail} // Open the dialog when emailSent, invalidEmail, or validEmail is true
