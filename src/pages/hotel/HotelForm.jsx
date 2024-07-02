@@ -34,13 +34,14 @@ const HotelForm = ({
   const [longitude, handleLongitudeChange] = useInput(hotel.longitude || "");
   const [rating, handleRatingChange] = useInput(hotel.rating || "");
   const [wifiConnection, handleWifiConnectionChange] = useInput(
-    hotel.wifiConnection || ""
+    hotel.wifiConnection || false
   );
-  const [breakfast, handleBreakfastChange] = useInput(hotel.breakfast || "");
+  const [breakfast, handleBreakfastChange] = useInput(hotel.breakfast || false);
   const [privateParking, handlePrivateParkingChange] = useInput(
-    hotel.privateParking || ""
+    hotel.privateParking || false
   );
-  const [minibar, handleMinibarChange] = useInput(hotel.minibar || "");
+  const [minibar, handleMinibarChange] = useInput(hotel.minibar || false);
+
   const [price, handlePriceChange] = useInput(hotel.price || "");
   const [room, handleRoom] = useInput(hotel.room || "");
   const [checkInInterval, setCheckInInterval] = useState(
@@ -112,13 +113,13 @@ const HotelForm = ({
 
   const handleLatitudeValidation = (event) => {
     const value = event.target.value;
-    const numericValue = value.replace(/\D/g, "");
+    const numericValue = value.replace(/[^0-9.]/g, "");
     handleLatitudeChange({ target: { value: numericValue } });
   };
 
   const handleLongitudeValidation = (event) => {
     const value = event.target.value;
-    const numericValue = value.replace(/\D/g, "");
+    const numericValue = value.replace(/[^0-9.]/g, "");
     handleLongitudeChange({ target: { value: numericValue } });
   };
 
@@ -131,10 +132,10 @@ const HotelForm = ({
       !room ||
       !validatedPrice ||
       !rating ||
-      !breakfast ||
-      !wifiConnection ||
-      !privateParking ||
-      !minibar ||
+      breakfast === undefined ||
+      wifiConnection === undefined ||
+      privateParking === undefined ||
+      minibar === undefined ||
       dateError
     ) {
       setFormError(true);
@@ -162,10 +163,10 @@ const HotelForm = ({
     price &&
     !priceError &&
     rating &&
-    breakfast !== "" &&
-    wifiConnection !== "" &&
-    privateParking !== "" &&
-    minibar !== "" &&
+    breakfast !== undefined &&
+    wifiConnection !== undefined &&
+    privateParking !== undefined &&
+    minibar !== undefined &&
     !dateError;
 
   const handleCancelClick = () => {
@@ -209,7 +210,7 @@ const HotelForm = ({
         label="Latitude"
         value={latitude}
         onChange={handleLatitudeValidation}
-        inputProps={{ maxLength: 15 }} // Adjust the max length as needed
+        inputProps={{ maxLength: 25 }} // Adjust the max length as needed
       />
 
       <TextField
@@ -218,7 +219,7 @@ const HotelForm = ({
         label="Longitude"
         value={longitude}
         onChange={handleLongitudeValidation}
-        inputProps={{ maxLength: 15 }} // Adjust the max length as needed
+        inputProps={{ maxLength: 25 }} // Adjust the max length as needed
       />
 
       <InputLabel>Rating</InputLabel>

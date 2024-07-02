@@ -87,10 +87,10 @@ const HotelFormEditHotel = ({
       !room ||
       !price ||
       !rating ||
-      !breakfast ||
-      !wifiConnection ||
-      !privateParking ||
-      !minibar ||
+      breakfast === undefined ||
+      wifiConnection === undefined ||
+      privateParking === undefined ||
+      minibar === undefined ||
       dateError
     ) {
       setFormError(true); // Set formError to true only when there's a form-level error
@@ -111,10 +111,10 @@ const HotelFormEditHotel = ({
   };
 
   const isFormValid = () =>
+    room &&
     price &&
     !priceError &&
     rating &&
-    room &&
     breakfast !== undefined &&
     wifiConnection !== undefined &&
     privateParking !== undefined &&
