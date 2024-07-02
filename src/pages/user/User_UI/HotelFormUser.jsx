@@ -1,6 +1,19 @@
 import { Box, TextField, Button } from "@mui/material";
 import { useInput } from "..//..//../hooks/useInput";
 import { useSelector } from "react-redux";
+import { format } from "date-fns";
+
+const formatDate = (date) => {
+  if (!date) return "";
+  const [year, month, day] = date.split("-");
+  return `${day}-${month}-${year}`;
+};
+
+const formatInputDate = (date) => {
+  if (!date) return "";
+  const [day, month, year] = date.split("-");
+  return `${year}-${month}-${day}`;
+};
 
 const HotelForm = ({
   hotel,
@@ -14,9 +27,7 @@ const HotelForm = ({
     hotel.hotelLocation
   );
   const [latitude] = useInput(hotel.latitude);
-
   const [longitude] = useInput(hotel.longitude);
-
   const [rating, handleRatingChange] = useInput(hotel.rating);
   const [wifiConnection, handleWifiConnectionChange] = useInput(
     hotel.wifiConnection
@@ -29,10 +40,10 @@ const HotelForm = ({
   const [price, handlePriceChange] = useInput(hotel.price);
   const [room, handleRoomChange] = useInput(hotel.room);
   const [checkInInterval, handleCheckInIntervalChange] = useInput(
-    hotel.checkInInterval
+    formatDate(hotel.checkInInterval)
   );
   const [checkOutInterval, handleCheckOutIntervalChange] = useInput(
-    hotel.checkOutInterval
+    formatDate(hotel.checkOutInterval)
   );
 
   const hotels = useSelector((state) => state.hotelReducer.hotels);
@@ -45,7 +56,7 @@ const HotelForm = ({
         display: "flex",
         flexDirection: "column",
         gap: "16px",
-        alignItem: "center",
+        alignItems: "center",
         justifyContent: "center",
       }}
     >
@@ -90,14 +101,14 @@ const HotelForm = ({
         disabled={isReadonly}
         label="Available check-in"
         value={checkInInterval}
-        onChange={handleCheckInIntervalChange}
+        onChange={(e) => handleCheckInIntervalChange(e.target.value)}
       />
       <TextField
         variant="outlined"
         disabled={isReadonly}
         label="Available check-out"
         value={checkOutInterval}
-        onChange={handleCheckOutIntervalChange}
+        onChange={(e) => handleCheckOutIntervalChange(e.target.value)}
       />
       <TextField
         variant="outlined"
@@ -136,8 +147,8 @@ const HotelForm = ({
               hotelLocation,
               price,
               room,
-              checkInInterval,
-              checkOutInterval,
+              formatInputDate(checkInInterval),
+              formatInputDate(checkOutInterval),
               latitude,
               longitude,
               rating,
