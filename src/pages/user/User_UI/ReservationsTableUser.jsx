@@ -120,79 +120,91 @@ const UserReservationSearch = () => {
               <TableRow>
                 <TableCell
                   align="left"
-                  sx={{ color: "white", fontSize: 14, padding: "13px" }}
+                  sx={{ color: "white", fontSize: 14, padding: "10px" }}
                 >
                   First Name
                 </TableCell>
                 <TableCell
                   align="left"
-                  sx={{ color: "white", fontSize: 14, padding: "13px" }}
+                  sx={{ color: "white", fontSize: 14, padding: "10px" }}
                 >
                   Last Name
                 </TableCell>
                 <TableCell
                   align="left"
-                  sx={{ color: "white", fontSize: 14, padding: "13px" }}
+                  sx={{ color: "white", fontSize: 14, padding: "10px" }}
                 >
                   Phone Number
                 </TableCell>
                 <TableCell
                   align="left"
-                  sx={{ color: "white", fontSize: 14, padding: "13px" }}
+                  sx={{ color: "white", fontSize: 14, padding: "10px" }}
                 >
                   Email Address
                 </TableCell>
                 <TableCell
                   align="left"
-                  sx={{ color: "white", fontSize: 14, padding: "13px" }}
+                  sx={{ color: "white", fontSize: 14, padding: "10px" }}
                 >
                   Hotel Name
                 </TableCell>
                 <TableCell
                   align="left"
-                  sx={{ color: "white", fontSize: 14, padding: "13px" }}
+                  sx={{ color: "white", fontSize: 14, padding: "10px" }}
                 >
                   Hotel Location
                 </TableCell>
                 <TableCell
                   align="left"
-                  sx={{ color: "white", fontSize: 14, padding: "13px" }}
+                  sx={{ color: "white", fontSize: 14, padding: "10px" }}
                 >
                   Check-In Date
                 </TableCell>
                 <TableCell
                   align="left"
-                  sx={{ color: "white", fontSize: 14, padding: "13px" }}
+                  sx={{
+                    color: "white",
+                    fontSize: 14,
+                    padding: "10px",
+                    width: "150px",
+                    whiteSpace: "nowrap",
+                  }}
                 >
                   Check-Out Date
                 </TableCell>
                 <TableCell
                   align="left"
-                  sx={{ color: "white", fontSize: 14, padding: "13px" }}
+                  sx={{
+                    color: "white",
+                    fontSize: 14,
+                    padding: "10px",
+                    width: "150px",
+                    whiteSpace: "nowrap",
+                  }}
                 >
                   Room Type
                 </TableCell>
                 <TableCell
                   align="left"
-                  sx={{ color: "white", fontSize: 14, padding: "13px" }}
+                  sx={{ color: "white", fontSize: 14, padding: "10px" }}
                 >
                   Room Price
                 </TableCell>
                 <TableCell
                   align="left"
-                  sx={{ color: "white", fontSize: 14, padding: "13px" }}
+                  sx={{ color: "white", fontSize: 14, padding: "10px" }}
                 >
                   Payment Method
                 </TableCell>
                 <TableCell
                   align="left"
-                  sx={{ color: "white", fontSize: 14, padding: "13px" }}
+                  sx={{ color: "white", fontSize: 14, padding: "10px" }}
                 >
                   Total Payment
                 </TableCell>
                 <TableCell
                   align="left"
-                  sx={{ color: "white", fontSize: 14, padding: "13px" }}
+                  sx={{ color: "white", fontSize: 14, padding: "10px" }}
                 >
                   Actions
                 </TableCell>
@@ -218,10 +230,16 @@ const UserReservationSearch = () => {
                 <TableCell align="left" sx={{ fontSize: 14 }}>
                   {reservation.hotelLocation}
                 </TableCell>
-                <TableCell align="left" sx={{ fontSize: 14 }}>
+                <TableCell
+                  align="left"
+                  sx={{ fontSize: 14, width: "150px", whiteSpace: "nowrap" }}
+                >
                   {formatDate(reservation.checkInDate)}
                 </TableCell>
-                <TableCell align="left" sx={{ fontSize: 14 }}>
+                <TableCell
+                  align="left"
+                  sx={{ fontSize: 14, width: "150px", whiteSpace: "nowrap" }}
+                >
                   {formatDate(reservation.checkOutDate)}
                 </TableCell>
                 <TableCell align="left" sx={{ fontSize: 14 }}>
