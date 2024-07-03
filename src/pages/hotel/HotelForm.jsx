@@ -345,7 +345,8 @@ const HotelForm = ({
             onClick={handleSaveClick}
             disabled={!isFormValid() || isReadonly} // Disable button if form is invalid or in readonly mode
             sx={{
-              maxWidth: "100px",
+              width: "40%", // Full width for consistency
+              maxWidth: "200px", // Maximum width as needed
             }}
           >
             {buttonLabel}
@@ -354,7 +355,7 @@ const HotelForm = ({
           <Button
             variant="outlined"
             onClick={handleCancelClick}
-            sx={{ width: "100px", marginTop: "15px" }}
+            sx={{ width: "40%", maxWidth: "200px" }} // Full width and maximum width as needed
           >
             Cancel
           </Button>
